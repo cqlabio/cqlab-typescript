@@ -1,16 +1,14 @@
 import { ActionStatusEnum, CQFlowExecutorStateEnum } from '../enums';
 import { CQFlowExecutorStatefulAnswer } from '../cqflow-context/interactive-flow-context';
 
-export interface InteractiveFlowState<I> {
+export interface InteractiveFlowState<I, S = CQFlowExecutorStateEnum> {
   id: string;
 
-  // flowDefinitionId: string;
+  initialData: I;
 
-  status: CQFlowExecutorStateEnum;
+  status: S;
 
   answers: CQFlowExecutorStatefulAnswer[];
 
   actionsTaken: Record<string, ActionStatusEnum>;
-
-  initialData: I;
 }

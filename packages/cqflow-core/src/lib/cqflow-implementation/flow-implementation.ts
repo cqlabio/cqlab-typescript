@@ -79,6 +79,8 @@ export abstract class FlowImplementation<C extends FlowContext<any, any>>
     [DefinitionNodeTypeEnum.EmitData]: {},
   };
 
+  private _boundIds = new Set<string>();
+
   nodes: Record<string, BaseNode<C>> = {};
 
   constructor() {
@@ -131,14 +133,23 @@ export abstract class FlowImplementation<C extends FlowContext<any, any>>
 
   // Record<string, RegisterNode<C>> = {};
 
+  private _checkId(nodeId: string) {
+    if (this._boundIds.has(nodeId)) {
+      throw new Error(
+        `Id should not be registered with implementation more than once: ${nodeId}`
+      );
+    }
+    this._boundIds.add(nodeId);
+  }
+
   registerTrueFalse(nodeId: string, fn: RegisterTrueFalse<C>) {
+    this._checkId(nodeId);
     this.registrar[DefinitionNodeTypeEnum.TrueFalse][nodeId] = fn;
-    // this.registeredNodes[nodeId] = fn;
   }
 
   registerEmitData(nodeId: string, fn: RegisterEmitData<C>) {
+    this._checkId(nodeId);
     this.registrar[DefinitionNodeTypeEnum.EmitData][nodeId] = fn;
-    // this.registeredNodes[nodeId] = fn;
   }
 
   getImplementation(): IFlowImplementation {

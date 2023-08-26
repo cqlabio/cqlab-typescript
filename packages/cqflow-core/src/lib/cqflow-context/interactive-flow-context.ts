@@ -1,7 +1,7 @@
 import { FlowContext } from './cqflow-context';
 import { FlowStepAnswer, IYesNoAnswer } from '../cqflow-steps/answers';
 import { CQFlowExecutorStateEnum, ActionStatusEnum } from '../enums';
-import { InteractiveFlowState } from '../cqflow-executor/flow-instance';
+import { InteractiveFlowState } from '../cqflow-executor/interactive-flow-state';
 import cloneDeep from 'lodash/cloneDeep';
 import { IFlowDefintion } from '../cqflow-definition/cqflow-definition';
 

@@ -1,7 +1,7 @@
 import { IFlowDefintion } from '../../../cqflow-definition/cqflow-definition';
 import { NextTypeEnum, DefinitionNodeTypeEnum } from '../../../enums';
 
-export const simpleFlowDefinition: IFlowDefintion = {
+export const trueFalseFlowDefinition: IFlowDefintion = {
   id: 'simpleFlow',
   bindId: 'simpleFlow',
   version: '0.0.1',
@@ -23,7 +23,7 @@ export const simpleFlowDefinition: IFlowDefintion = {
       next: {
         type: NextTypeEnum.Binary,
         trueId: 'emit_data_1',
-        falseId: 'end_hclreoqf',
+        falseId: 'end_1',
       },
       label: 'Is Female',
     },

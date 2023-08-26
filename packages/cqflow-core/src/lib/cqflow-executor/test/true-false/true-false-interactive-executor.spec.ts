@@ -1,16 +1,16 @@
-import { InteractiveFlowImplementation } from '../../cqflow-implementation/interactive-flow-implementation';
-import { ExecNode } from '../../cqflow-nodes/exec-node';
-import { InteractiveFlowContext } from '../../cqflow-context/interactive-flow-context';
-import { executeInteractiveFlow } from '../cqflow-executor-interactive';
-import { simpleFlowDefinition } from './simple/simple-flow-definition';
-import { InteractiveFlowState } from '../../cqflow-executor/flow-instance';
+import { InteractiveFlowImplementation } from '../../../cqflow-implementation/interactive-flow-implementation';
+import { ExecNode } from '../../../cqflow-nodes/exec-node';
+import { InteractiveFlowContext } from '../../../cqflow-context/interactive-flow-context';
+import { executeInteractiveFlow } from '../../executor-interactive';
+import { trueFalseFlowDefinition } from './true-false-flow-definition';
+import { InteractiveFlowState } from '../../interactive-flow-state';
 import {
   TernaryEnum,
   ImplementationNodeTypeEnum,
   CQFlowExecutorStateEnum,
   AnswerTypeEnum,
-} from '../../enums';
-import { EmitDataNode } from '../../cqflow-nodes';
+} from '../../../enums';
+import { EmitDataNode } from '../../../cqflow-nodes';
 
 interface IntitialData {
   patientId: string;
@@ -96,7 +96,7 @@ describe('Interactive Executor Simple Example', () => {
     };
 
     const context = new SimpleContextBase({
-      flowDefinition: simpleFlowDefinition,
+      flowDefinition: trueFalseFlowDefinition,
       interactiveFlowState: interactiveFlowState,
       onUpdateInteractiveState: onUpdateInteractiveState,
     });
