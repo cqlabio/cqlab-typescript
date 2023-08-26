@@ -13,7 +13,7 @@ export interface ContextInit<I> {
   flowDefinition: IFlowDefintion;
 }
 
-export abstract class FlowContext<I, S> {
+export abstract class FlowContext<I = any, S = any> {
   flowId?: string;
 
   private _initialData: I;

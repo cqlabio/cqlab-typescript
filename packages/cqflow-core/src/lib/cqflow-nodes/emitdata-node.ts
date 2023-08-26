@@ -8,9 +8,7 @@ import { IEmitDataNode } from '../cqflow-definition/cqflow-definition';
 //   dataItems: any[];
 // }
 
-export type ContextDataHook<C extends FlowContext<any, any>> = (
-  context: C
-) => void;
+export type ContextDataHook<C extends FlowContext> = (context: C) => void;
 
 // export type RegisterContextData<S, C> = (data: S, context: C) => void;
 
@@ -51,7 +49,7 @@ export class EmitDataNode<
   //   this.dataItems.push(item);
   // };
 
-  getContextData(context: C): S[] {
+  async getContextData(context: C): Promise<S[]> {
     // if (this.hook) {
     //   this.hook(this.dataItems, context);
     // }

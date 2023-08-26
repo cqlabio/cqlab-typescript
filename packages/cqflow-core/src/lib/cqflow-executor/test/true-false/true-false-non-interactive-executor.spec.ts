@@ -2,7 +2,7 @@ import { TernaryEnum, ImplementationNodeTypeEnum } from '../../../enums';
 import { NonInteractiveFlowImplementation } from '../../../cqflow-implementation/non-interactive-flow-implementation';
 import { ExecNode } from '../../../cqflow-nodes/exec-node';
 import { FlowContext } from '../../../cqflow-context/cqflow-context';
-import { executeNonInteractive } from '../../executor-non-interactive';
+import { executeNonInteractiveFlow } from '../../executor-non-interactive';
 import { trueFalseFlowDefinition } from './true-false-flow-definition';
 import { ExecStep } from '../../../cqflow-steps';
 
@@ -40,7 +40,7 @@ describe('Non-Interactive Executor True/False node', () => {
       flowDefinition: trueFalseFlowDefinition,
     });
 
-    const result = await executeNonInteractive(
+    const result = await executeNonInteractiveFlow(
       trueFalseImplementation,
       context
     );
@@ -67,7 +67,7 @@ describe('Non-Interactive Executor True/False node', () => {
       flowDefinition: trueFalseFlowDefinition,
     });
 
-    const result = await executeNonInteractive(
+    const result = await executeNonInteractiveFlow(
       trueFalseImplementation,
       context
     );
@@ -103,7 +103,7 @@ describe('Non-Interactive Executor True/False node', () => {
       flowDefinition: trueFalseFlowDefinition,
     });
 
-    const result = await executeNonInteractive(
+    const result = await executeNonInteractiveFlow(
       trueFalseImplementation,
       context
     );

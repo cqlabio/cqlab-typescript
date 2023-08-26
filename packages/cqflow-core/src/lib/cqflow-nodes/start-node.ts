@@ -5,7 +5,9 @@ import { FlowContext } from '../cqflow-context/cqflow-context';
 //   nodeType: NodeTypeEnum.Start;
 // }
 
-export class StartNode<C extends FlowContext> extends NextNode<C> {
+export class StartNode<
+  C extends FlowContext = FlowContext
+> extends NextNode<C> {
   nodeType = ImplementationNodeTypeEnum.Start;
   // implements IStartNode
 }

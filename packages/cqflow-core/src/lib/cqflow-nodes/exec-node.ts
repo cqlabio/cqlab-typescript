@@ -1,20 +1,26 @@
 import { BooleanNode } from './abstract/boolean-node';
 import { ImplementationNodeTypeEnum, TernaryEnum } from '../enums';
 import { FlowContext } from '../cqflow-context/cqflow-context';
-import { ITrueFalseNode } from '../cqflow-definition/cqflow-definition';
+import {
+  IFlowDefinitionNode,
+  ITrueFalseNode,
+} from '../cqflow-definition/cqflow-definition';
 // interface IExecNode extends IBaseBooleanNode {
 //   nodeType: NodeTypeEnum.Exec;
 // }
 
-export type ExecNodeExecutor<C extends FlowContext<any, any>> = (
+export type ExecNodeExecutor<C extends FlowContext> = (
   context: C
 ) => TernaryEnum;
 
-export type SupplementalDataResolver<C extends FlowContext<any, any>> = (
+export type SupplementalDataResolver<C extends FlowContext> = (
   context: C
 ) => any;
 
-export class ExecNode<C extends FlowContext<any, any>> extends BooleanNode<C> {
+export class ExecNode<C extends FlowContext = FlowContext> extends BooleanNode<
+  C,
+  ITrueFalseNode
+> {
   // nodeType: NodeTypeEnum.Exec = NodeTypeEnum.Exec;
 
   nodeType = ImplementationNodeTypeEnum.Exec;
@@ -22,8 +28,9 @@ export class ExecNode<C extends FlowContext<any, any>> extends BooleanNode<C> {
   private executor?: ExecNodeExecutor<C>;
   private supplementalDataResolver?: SupplementalDataResolver<C>;
 
-  constructor(node?: ITrueFalseNode) {
+  constructor(node: ITrueFalseNode) {
     super(node);
+    this.defintion = node;
   }
 
   setExecutor(executor: ExecNodeExecutor<C>) {

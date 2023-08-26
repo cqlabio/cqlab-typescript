@@ -5,39 +5,40 @@ import { ImplementationNodeTypeEnum } from '../../enums';
 import { FlowContext } from '../../cqflow-context/cqflow-context';
 import { IFlowDefinitionNode } from '../../cqflow-definition/cqflow-definition';
 
-export abstract class BaseNode<C extends FlowContext<any, any>> {
+export abstract class BaseNode<
+  C extends FlowContext = FlowContext,
+  D extends IFlowDefinitionNode = IFlowDefinitionNode
+> {
   abstract nodeType: ImplementationNodeTypeEnum;
 
   // declare c: C
 
-  private label?: string;
-  private defintion?: IFlowDefinitionNode;
+  private label: string;
+  defintion: D;
 
-  constructor(data?: IFlowDefinitionNode) {
-    if (data) {
-      this.label = data.label;
-      this.defintion = data;
-    }
-  }
-
-  loadDefinition(data: IFlowDefinitionNode) {
+  constructor(data: D) {
+    this.label = data.label || '';
     this.defintion = data;
-    this.label = data.label;
   }
 
-  getDefinition(): IFlowDefinitionNode | null {
-    return this.defintion || null;
+  // loadDefinition(data: IFlowDefinitionNode) {
+  //   this.defintion = data;
+  //   this.label = data.label;
+  // }
+
+  getDefinition(): D {
+    return this.defintion;
   }
 
-  getDefinitionId(): string | null {
-    return this.defintion?.id || null;
+  getDefinitionId(): string {
+    return this.defintion.id;
   }
 
   setLabel(label: string) {
     this.label = label;
   }
 
-  getLabel(context: C) {
+  async getLabel(context: C) {
     if (!context) {
       throw new Error('Context is required');
     }

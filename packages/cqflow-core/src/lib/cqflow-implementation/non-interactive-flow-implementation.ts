@@ -3,7 +3,7 @@ import { FlowContext } from '../cqflow-context/cqflow-context';
 import { FlowDefinitionTypeEnum } from '../enums';
 
 export class NonInteractiveFlowImplementation<
-  C extends FlowContext<any, any>
+  C extends FlowContext = FlowContext
 > extends FlowImplementation<C> {
   getImplementationType() {
     return FlowDefinitionTypeEnum.NonInteractive;

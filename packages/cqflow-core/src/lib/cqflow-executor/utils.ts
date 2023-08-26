@@ -45,7 +45,7 @@ import {
 import { FlowContext } from '../cqflow-context/cqflow-context';
 import { TernaryEnum } from '../enums';
 
-function compileTrueFaleNode<C extends FlowContext<any, any>>(
+function compileTrueFaleNode<C extends FlowContext>(
   flowImplementation: FlowImplementation<C>,
   rawNode: ITrueFalseNode
 ): BaseNode<C> {
@@ -71,7 +71,7 @@ function compileTrueFaleNode<C extends FlowContext<any, any>>(
   }
 }
 
-export function compileNodes<C extends FlowContext<any, any>>(
+export function compileNodes<C extends FlowContext>(
   instance: FlowImplementation<C>,
   flowDefinition: IFlowDefintion
 ): Record<string, BaseNode<C>> {

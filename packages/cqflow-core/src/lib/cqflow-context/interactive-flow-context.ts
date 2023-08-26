@@ -57,7 +57,10 @@ interface InteractiveFlowContextOptions<I> {
   onUpdateInteractiveState: OnUpdateInteractiveState<I>;
 }
 
-export abstract class InteractiveFlowContext<I, S> extends FlowContext<I, S> {
+export abstract class InteractiveFlowContext<
+  I = any,
+  S = any
+> extends FlowContext<I, S> {
   interactiveFlowState: InteractiveFlowState<I>;
 
   onUpdateInteractiveState: OnUpdateInteractiveState<I>;

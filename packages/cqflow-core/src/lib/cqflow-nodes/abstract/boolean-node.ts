@@ -9,22 +9,23 @@ import { IFlowDefinitionBooleanNode } from '../../cqflow-definition/cqflow-defin
 // }
 
 export abstract class BooleanNode<
-  C extends FlowContext<any, any>
-> extends BaseNode<C> {
+  C extends FlowContext,
+  D extends IFlowDefinitionBooleanNode
+> extends BaseNode<C, D> {
   next: INextBinary = {
     type: NextTypeEnum.Binary,
   };
 
-  constructor(node?: IFlowDefinitionBooleanNode) {
+  constructor(node: D) {
     super(node);
     this.next = node?.next || this.next;
   }
 
-  setOnTrueNode(node: BaseNode<C>) {
+  setOnTrueNode(node: BaseNode<C, D>) {
     this.next.trueId = node.getDefinitionId() || undefined;
   }
 
-  setOnFalseNode(node: BaseNode<C>) {
+  setOnFalseNode(node: BaseNode<C, D>) {
     this.next.falseId = node.getDefinitionId() || undefined;
   }
 

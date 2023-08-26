@@ -31,14 +31,14 @@ export interface IFlowImplementation {
 
 export type Newable<T> = new (...args: any[]) => T;
 
-export type RegisterNodeBinding<C extends FlowContext<any, any>> = (
+export type RegisterNodeBinding<C extends FlowContext> = (
   nodeId: string,
   klass: Newable<BaseNode<C>>
 ) => void;
 
 export type RegisterContextExample<T> = (context: T) => void;
 
-export interface IImplementation<C extends FlowContext<any, any>> {
+export interface IImplementation<C extends FlowContext> {
   id?: string;
 
   nodes: Record<string, BaseNode<C>>;
@@ -52,20 +52,20 @@ export interface IImplementation<C extends FlowContext<any, any>> {
   getImplementation(): IFlowImplementation;
 }
 
-export type RegisterTrueFalse<C extends FlowContext<any, any>> = (
+export type RegisterTrueFalse<C extends FlowContext> = (
   trueFalse: ITrueFalseNode
 ) => BaseNode<C>;
 
-export type RegisterEmitData<C extends FlowContext<any, any>> = (
+export type RegisterEmitData<C extends FlowContext> = (
   emitData: IEmitDataNode
 ) => BaseNode<C>;
 
-export interface NodeRegistrar<C extends FlowContext<any, any>> {
+export interface NodeRegistrar<C extends FlowContext> {
   [DefinitionNodeTypeEnum.TrueFalse]: Record<string, RegisterTrueFalse<C>>;
   [DefinitionNodeTypeEnum.EmitData]: Record<string, RegisterEmitData<C>>;
 }
 
-export abstract class FlowImplementation<C extends FlowContext<any, any>>
+export abstract class FlowImplementation<C extends FlowContext>
   implements IImplementation<C>
 {
   private _id?: string;

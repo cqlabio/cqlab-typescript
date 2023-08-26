@@ -3,7 +3,7 @@ import { FlowImplementation } from './flow-implementation';
 import { FlowDefinitionTypeEnum } from '../enums';
 
 export class InteractiveFlowImplementation<
-  C extends InteractiveFlowContext<any, any>
+  C extends InteractiveFlowContext = InteractiveFlowContext
 > extends FlowImplementation<C> {
   getImplementationType() {
     return FlowDefinitionTypeEnum.Interactive;

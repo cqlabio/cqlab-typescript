@@ -14,7 +14,7 @@ import { ExecStep } from './exec-step';
 import { StartStep } from './start-step';
 import { YesNoStep } from './yesno-step';
 import { ActionStep } from './action-step';
-import { ContextDataStep } from './contextdata-step';
+import { EmitDataStep } from './contextdata-step';
 import { EndStep } from './end-step';
 import { BranchChoiceStep } from './branchchoice-step';
 import { MessageStep } from './message-step';
@@ -27,7 +27,7 @@ export type FlowStep =
   | ExecStep
   | StartStep
   | ActionStep
-  | ContextDataStep
+  | EmitDataStep
   | EndStep
   | BranchChoiceStep
   | MessageStep

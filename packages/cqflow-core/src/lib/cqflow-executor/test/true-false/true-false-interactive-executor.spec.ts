@@ -18,31 +18,6 @@ interface IntitialData {
 
 type ContextData = null;
 
-export class SimpleContextBase extends InteractiveFlowContext<
-  IntitialData,
-  ContextData
-> {
-  isFemale(): TernaryEnum {
-    return TernaryEnum.TRUE;
-  }
-}
-
-class IsFemale extends ExecNode<SimpleContextBase> {
-  override async evaluate(context: SimpleContextBase): Promise<TernaryEnum> {
-    return TernaryEnum.UNKNOWN;
-  }
-}
-
-const simpleFlowImplementation =
-  new InteractiveFlowImplementation<SimpleContextBase>();
-
-// simpleFlowImplementation.registerNodeBinding('is_female', IsFemale);
-
-simpleFlowImplementation.registerTrueFalse(
-  'is_female',
-  (def) => new IsFemale(def)
-);
-
 // simpleFlowImplementation.registerEmitData('is_female', (definition) => {
 //   const emitData = new EmitDataNode(definition);
 //   return emitData;
@@ -66,7 +41,7 @@ simpleFlowImplementation.registerTrueFalse(
 // }
 
 // simpleFlowImplementation.registerTrueFalse('is_female', (definition) => {
-//   const someNode = new ExecNode<SimpleContextBase>(definition);
+//   const someNode = new ExecNode<TrueFalseInteractiveContext>(definition);
 
 //   someNode.setExecutor((context) => {
 //     return TernaryEnum.TRUE;
@@ -76,8 +51,100 @@ simpleFlowImplementation.registerTrueFalse(
 // });
 
 // const simpleFlowImplementation =
-describe('Interactive Executor Simple Example', () => {
-  it('should work', async () => {
+describe('Interactive Executor True/False node', () => {
+  it('should default to a YesNo interaction', async () => {
+    class TrueFalseInteractiveContext extends InteractiveFlowContext<
+      IntitialData,
+      ContextData
+    > {}
+
+    const simpleFlowImplementation =
+      new InteractiveFlowImplementation<TrueFalseInteractiveContext>();
+
+    const interactiveFlowState: InteractiveFlowState<IntitialData> = {
+      id: '1234',
+      status: CQFlowExecutorStateEnum.Initiated,
+      answers: [],
+      actionsTaken: {},
+      initialData: {
+        patientId: '123',
+      },
+    };
+
+    const onUpdateInteractiveState = async (
+      state: InteractiveFlowState<IntitialData>
+    ) => state;
+
+    const context = new TrueFalseInteractiveContext({
+      flowDefinition: trueFalseFlowDefinition,
+      interactiveFlowState: interactiveFlowState,
+      onUpdateInteractiveState: onUpdateInteractiveState,
+    });
+
+    let result = await executeInteractiveFlow(
+      simpleFlowImplementation,
+      context
+    );
+
+    // Without an answer, we wait for interaction
+    expect(result.length).toEqual(2);
+    expect(result[0].stepType).toEqual(ImplementationNodeTypeEnum.Start);
+    expect(result[1].stepType).toEqual(ImplementationNodeTypeEnum.YesNo);
+
+    // Add True answer
+    interactiveFlowState.answers.push({
+      stepId: 'true_false_1',
+      answer: {
+        answerType: AnswerTypeEnum.YesNo,
+        value: TernaryEnum.TRUE,
+      },
+    });
+
+    result = await executeInteractiveFlow(simpleFlowImplementation, context);
+
+    expect(result.length).toEqual(4);
+    expect(result[0].stepType).toEqual(ImplementationNodeTypeEnum.Start);
+    expect(result[1].stepType).toEqual(ImplementationNodeTypeEnum.YesNo);
+    expect(result[2].stepType).toEqual(ImplementationNodeTypeEnum.EmitData);
+    expect(result[3].stepType).toEqual(ImplementationNodeTypeEnum.End);
+
+    // Add False answer
+    interactiveFlowState.answers.push({
+      stepId: 'true_false_1',
+      answer: {
+        answerType: AnswerTypeEnum.YesNo,
+        value: TernaryEnum.FALSE,
+      },
+    });
+
+    result = await executeInteractiveFlow(simpleFlowImplementation, context);
+
+    expect(result.length).toEqual(3);
+    expect(result[0].stepType).toEqual(ImplementationNodeTypeEnum.Start);
+    expect(result[1].stepType).toEqual(ImplementationNodeTypeEnum.YesNo);
+    expect(result[2].stepType).toEqual(ImplementationNodeTypeEnum.End);
+  });
+
+  it('should allow answer to be entered when result is UNKNOWN', async () => {
+    class TrueFalseInteractiveContext extends InteractiveFlowContext<
+      IntitialData,
+      ContextData
+    > {}
+
+    class IsFemale extends ExecNode<TrueFalseInteractiveContext> {
+      override async evaluate(): Promise<TernaryEnum> {
+        return TernaryEnum.UNKNOWN;
+      }
+    }
+
+    const simpleFlowImplementation =
+      new InteractiveFlowImplementation<TrueFalseInteractiveContext>();
+
+    simpleFlowImplementation.registerTrueFalse(
+      'is_female',
+      (def) => new IsFemale(def)
+    );
+
     let interactiveFlowState: InteractiveFlowState<IntitialData> = {
       id: '1234',
       status: CQFlowExecutorStateEnum.Initiated,
@@ -95,7 +162,7 @@ describe('Interactive Executor Simple Example', () => {
       return state;
     };
 
-    const context = new SimpleContextBase({
+    const context = new TrueFalseInteractiveContext({
       flowDefinition: trueFalseFlowDefinition,
       interactiveFlowState: interactiveFlowState,
       onUpdateInteractiveState: onUpdateInteractiveState,
@@ -111,7 +178,7 @@ describe('Interactive Executor Simple Example', () => {
     expect(result[0].stepType).toEqual(ImplementationNodeTypeEnum.Start);
     expect(result[1].stepType).toEqual(ImplementationNodeTypeEnum.Exec);
 
-    // Add an answer
+    // Add True answer
     interactiveFlowState.answers.push({
       stepId: 'true_false_1',
       answer: {
@@ -123,6 +190,97 @@ describe('Interactive Executor Simple Example', () => {
     result = await executeInteractiveFlow(simpleFlowImplementation, context);
 
     expect(result.length).toEqual(4);
+    expect(result[0].stepType).toEqual(ImplementationNodeTypeEnum.Start);
+    expect(result[1].stepType).toEqual(ImplementationNodeTypeEnum.Exec);
+    expect(result[2].stepType).toEqual(ImplementationNodeTypeEnum.EmitData);
+    expect(result[3].stepType).toEqual(ImplementationNodeTypeEnum.End);
+
+    // Add False answer
+    interactiveFlowState.answers.push({
+      stepId: 'true_false_1',
+      answer: {
+        answerType: AnswerTypeEnum.YesNo,
+        value: TernaryEnum.FALSE,
+      },
+    });
+
+    result = await executeInteractiveFlow(simpleFlowImplementation, context);
+
+    expect(result.length).toEqual(3);
+    expect(result[0].stepType).toEqual(ImplementationNodeTypeEnum.Start);
+    expect(result[1].stepType).toEqual(ImplementationNodeTypeEnum.Exec);
+    expect(result[2].stepType).toEqual(ImplementationNodeTypeEnum.End);
+  });
+
+  it('should go the true path', async () => {
+    class TrueFalseInteractiveContext extends InteractiveFlowContext<
+      IntitialData,
+      ContextData
+    > {}
+
+    class IsFemale extends ExecNode<TrueFalseInteractiveContext> {
+      override async evaluate(): Promise<TernaryEnum> {
+        return TernaryEnum.TRUE;
+      }
+    }
+
+    const simpleFlowImplementation =
+      new InteractiveFlowImplementation<TrueFalseInteractiveContext>();
+
+    simpleFlowImplementation.registerTrueFalse(
+      'is_female',
+      (def) => new IsFemale(def)
+    );
+
+    let interactiveFlowState: InteractiveFlowState<IntitialData> = {
+      id: '1234',
+      status: CQFlowExecutorStateEnum.Initiated,
+      answers: [],
+      actionsTaken: {},
+      initialData: {
+        patientId: '123',
+      },
+    };
+
+    const onUpdateInteractiveState = async (
+      state: InteractiveFlowState<IntitialData>
+    ) => {
+      interactiveFlowState = state;
+      return state;
+    };
+
+    const context = new TrueFalseInteractiveContext({
+      flowDefinition: trueFalseFlowDefinition,
+      interactiveFlowState: interactiveFlowState,
+      onUpdateInteractiveState: onUpdateInteractiveState,
+    });
+
+    let result = await executeInteractiveFlow(
+      simpleFlowImplementation,
+      context
+    );
+
+    // It should go to end since it's true
+    expect(result.length).toEqual(4);
+    expect(result[0].stepType).toEqual(ImplementationNodeTypeEnum.Start);
+    expect(result[1].stepType).toEqual(ImplementationNodeTypeEnum.Exec);
+    expect(result[2].stepType).toEqual(ImplementationNodeTypeEnum.EmitData);
+    expect(result[3].stepType).toEqual(ImplementationNodeTypeEnum.End);
+
+    // Add False answer
+    interactiveFlowState.answers.push({
+      stepId: 'true_false_1',
+      answer: {
+        answerType: AnswerTypeEnum.YesNo,
+        value: TernaryEnum.FALSE,
+      },
+    });
+
+    result = await executeInteractiveFlow(simpleFlowImplementation, context);
+
+    expect(result.length).toEqual(4);
+    expect(result[0].stepType).toEqual(ImplementationNodeTypeEnum.Start);
+    expect(result[1].stepType).toEqual(ImplementationNodeTypeEnum.Exec);
     expect(result[2].stepType).toEqual(ImplementationNodeTypeEnum.EmitData);
     expect(result[3].stepType).toEqual(ImplementationNodeTypeEnum.End);
   });
