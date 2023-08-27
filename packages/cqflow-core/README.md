@@ -9,3 +9,7 @@ Run `nx build cqflow-core` to build the library.
 ## Running unit tests
 
 Run `nx test cqflow-core` to execute the unit tests via [Jest](https://jestjs.io).
+
+TODO:
+
+- Add jsonSchema/ or Validator for flow inputData

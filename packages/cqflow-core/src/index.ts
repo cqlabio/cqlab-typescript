@@ -2,26 +2,23 @@ import flowDefinitionSchema from './lib/json-schema/flow-definition-json-schema.
 
 export * from './lib/enums';
 
-export * from './lib/cqflow-nodes';
+export * from './lib/flow-nodes';
 
-export * from './lib/cqflow-steps';
-export * from './lib/cqflow-steps/answers';
+export * from './lib/flow-steps';
+export * from './lib/flow-steps/answers';
 
-export * from './lib/cqflow-definition/cqflow-definition';
+export * from './lib/flow-definition/flow-definition';
 
-export * from './lib/cqflow-implementation/non-interactive-flow-implementation';
-export * from './lib/cqflow-implementation/interactive-flow-implementation';
+export * from './lib/flow-implementation/non-interactive-flow-implementation';
+export * from './lib/flow-implementation/interactive-flow-implementation';
 
-export * from './lib/cqflow-context/cqflow-context';
-export * from './lib/cqflow-context/interactive-flow-context';
+export * from './lib/flow-context/flow-context';
+export * from './lib/flow-context/interactive-flow-context';
 
-export * from './lib/cqflow-executor/executor-interactive';
-export * from './lib/cqflow-executor/executor-non-interactive';
-export * from './lib/cqflow-executor/utils';
-export * from './lib/cqflow-executor/interactive-flow-state';
+export * from './lib/flow-executor';
 
-export * from './lib/cqflow-development-repository/flow-repository';
+export * from './lib/flow-repository/flow-repository';
 
-export * from './lib/cqflow-implementation/flow-implementation';
+export * from './lib/flow-implementation/flow-implementation';
 
 export const FlowDefinitionSchema = flowDefinitionSchema;
