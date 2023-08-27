@@ -16,6 +16,7 @@ import { FlowContext } from '../cqflow-context/cqflow-context';
 import { InputDataNode } from '../cqflow-nodes/abstract/inputdata-node';
 import {
   IEmitDataNode,
+  IInputDataNode,
   ITrueFalseNode,
 } from '../cqflow-definition/cqflow-definition';
 
@@ -60,12 +61,17 @@ export type RegisterEmitData<C extends FlowContext> = (
   emitData: IEmitDataNode
 ) => BaseNode<C>;
 
+export type RegisterInputData<C extends FlowContext> = (
+  emitData: IInputDataNode
+) => BaseNode<C>;
+
 export interface NodeRegistrar<C extends FlowContext> {
   [DefinitionNodeTypeEnum.TrueFalse]: Record<string, RegisterTrueFalse<C>>;
   [DefinitionNodeTypeEnum.EmitData]: Record<string, RegisterEmitData<C>>;
+  [DefinitionNodeTypeEnum.InputData]: Record<string, RegisterInputData<C>>;
 }
 
-export abstract class FlowImplementation<C extends FlowContext>
+export abstract class FlowImplementation<C extends FlowContext = FlowContext>
   implements IImplementation<C>
 {
   private _id?: string;
@@ -77,6 +83,7 @@ export abstract class FlowImplementation<C extends FlowContext>
   registrar: NodeRegistrar<C> = {
     [DefinitionNodeTypeEnum.TrueFalse]: {},
     [DefinitionNodeTypeEnum.EmitData]: {},
+    [DefinitionNodeTypeEnum.InputData]: {},
   };
 
   private _boundIds = new Set<string>();
@@ -150,6 +157,11 @@ export abstract class FlowImplementation<C extends FlowContext>
   registerEmitData(nodeId: string, fn: RegisterEmitData<C>) {
     this._checkId(nodeId);
     this.registrar[DefinitionNodeTypeEnum.EmitData][nodeId] = fn;
+  }
+
+  registerInputData(nodeId: string, fn: RegisterInputData<C>) {
+    this._checkId(nodeId);
+    this.registrar[DefinitionNodeTypeEnum.InputData][nodeId] = fn;
   }
 
   getImplementation(): IFlowImplementation {

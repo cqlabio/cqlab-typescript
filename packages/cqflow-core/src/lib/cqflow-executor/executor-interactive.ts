@@ -11,6 +11,7 @@ import {
   FlowStepAnswer,
   IActionAnswer,
   IIndexAnswer,
+  ICustomDataAnswer,
   IYesNoAnswer,
 } from '../cqflow-steps/answers';
 import {
@@ -23,6 +24,7 @@ import {
   NarrativeNode,
   BaseNode,
   YesNoNode,
+  CustomDataInputNode,
 } from '../cqflow-nodes';
 import {
   FlowStep,
@@ -33,6 +35,7 @@ import {
   MessageStep,
   NarrativeStep,
   YesNoStep,
+  CustomDataInputStep,
 } from '../cqflow-steps';
 import {
   executeStartNode,
@@ -72,7 +75,8 @@ export async function executeInteractiveFlow(
       startNode.getDefinitionId(),
       nodes,
       context,
-      steps
+      steps,
+      currentAnswers
     );
   }
 
@@ -83,7 +87,8 @@ export async function recurseInteractiveFlow(
   nodeId: string | null,
   nodes: Record<string, BaseNode>,
   context: InteractiveFlowContext,
-  steps: FlowStep[]
+  steps: FlowStep[],
+  answers: Record<string, FlowStepAnswer>
 ) {
   if (!nodeId || !nodes[nodeId]) {
     return;
@@ -98,11 +103,17 @@ export async function recurseInteractiveFlow(
   } else if (node instanceof EndNode) {
     nextStep = await executeEndNode(node, context);
   } else if (node instanceof YesNoNode) {
-    nextStep = await executeInteractiveYesNoNode(node, context);
+    nextStep = await executeInteractiveYesNoNode(node, context, answers);
   } else if (node instanceof ExecNode) {
-    nextStep = await executeInteractiveExecNode(node, context);
+    nextStep = await executeInteractiveExecNode(node, context, answers);
   } else if (node instanceof EmitDataNode) {
     nextStep = await executeEmitDataNode(node, context);
+  } else if (node instanceof CustomDataInputNode) {
+    nextStep = await executeInteractiveCustomInputDataNode(
+      node,
+      context,
+      answers
+    );
   }
 
   if (!nextStep) {
@@ -110,12 +121,19 @@ export async function recurseInteractiveFlow(
   }
 
   steps.push(nextStep.step);
-  await recurseInteractiveFlow(nextStep.nextNodeId, nodes, context, steps);
+  await recurseInteractiveFlow(
+    nextStep.nextNodeId,
+    nodes,
+    context,
+    steps,
+    answers
+  );
 }
 
 export async function executeInteractiveYesNoNode(
   node: YesNoNode,
-  context: InteractiveFlowContext
+  context: InteractiveFlowContext,
+  answers: Record<string, FlowStepAnswer>
 ): Promise<ReturnStep> {
   const step: YesNoStep = {
     stepType: ImplementationNodeTypeEnum.YesNo,
@@ -125,8 +143,6 @@ export async function executeInteractiveYesNoNode(
     label: await node.getLabel(context),
     answer: null,
   };
-
-  const answers = context.getMergedAnswers();
 
   step.answer = (answers[step.stepId] as IYesNoAnswer) || null;
 
@@ -143,7 +159,8 @@ export async function executeInteractiveYesNoNode(
 
 export async function executeInteractiveExecNode(
   node: ExecNode,
-  context: InteractiveFlowContext
+  context: InteractiveFlowContext,
+  answers: Record<string, FlowStepAnswer>
 ): Promise<ReturnStep> {
   const step: ExecStep = {
     stepType: ImplementationNodeTypeEnum.Exec,
@@ -154,8 +171,6 @@ export async function executeInteractiveExecNode(
     evaluation: await node.evaluate(context),
     supplementalData: await node.resolveSupplementalData(context),
   };
-
-  const answers = context.getMergedAnswers();
 
   step.answer = (answers[step.stepId] as IYesNoAnswer) || null;
 
@@ -172,5 +187,29 @@ export async function executeInteractiveExecNode(
     nextNodeId = node.getOnFalseId();
   }
 
+  return { step, nextNodeId };
+}
+
+export async function executeInteractiveCustomInputDataNode(
+  node: CustomDataInputNode,
+  context: InteractiveFlowContext,
+  answers: Record<string, FlowStepAnswer>
+): Promise<ReturnStep> {
+  const step: CustomDataInputStep = {
+    stepType: ImplementationNodeTypeEnum.CustomDataInput,
+    stepId: node.getDefinition().id,
+    flowDefinitionId: context.getFlowDefinition().id,
+    nodeDefinition: node.getDefinition(),
+    label: await node.getLabel(context),
+    jsonSchema: node.getValueJsonSchema(),
+    answer: null,
+  };
+
+  step.answer = (answers[step.stepId] as ICustomDataAnswer) || null;
+
+  let nextNodeId = null;
+  if (step.answer) {
+    nextNodeId = node.getNextNodeId();
+  }
   return { step, nextNodeId };
 }

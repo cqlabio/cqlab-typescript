@@ -25,7 +25,7 @@ import { ImplementationNodeTypeEnum, TernaryEnum } from '../enums';
 
 // type FlowContext = FlowContext;
 
-export interface SubFlowExecution<C extends FlowContext> {
+interface SubFlowExecution<C extends FlowContext> {
   flowImplementation: NonInteractiveFlowImplementation;
   flowDefinition: IFlowDefintion;
 }

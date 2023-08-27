@@ -15,6 +15,7 @@ import {
   IFlowDefinitionNextNode,
   IFlowDefinitionBooleanNode,
   ITrueFalseNode,
+  IInputDataNode,
 } from '../cqflow-definition/cqflow-definition';
 import {
   BaseNode,
@@ -45,10 +46,10 @@ import {
 import { FlowContext } from '../cqflow-context/cqflow-context';
 import { TernaryEnum } from '../enums';
 
-function compileTrueFaleNode<C extends FlowContext>(
-  flowImplementation: FlowImplementation<C>,
+function compileTrueFaleNode(
+  flowImplementation: FlowImplementation,
   rawNode: ITrueFalseNode
-): BaseNode<C> {
+): BaseNode {
   const trueFalseRegistrar =
     flowImplementation.getRegistrar()[DefinitionNodeTypeEnum.TrueFalse];
 
@@ -60,9 +61,9 @@ function compileTrueFaleNode<C extends FlowContext>(
     flowImplementation.getImplementationType() ===
     FlowDefinitionTypeEnum.Interactive
   ) {
-    return new YesNoNode<C>(rawNode);
+    return new YesNoNode(rawNode);
   } else {
-    const execNode = new ExecNode<C>(rawNode);
+    const execNode = new ExecNode(rawNode);
     // If there is no executor, then we assume it is a false node
     execNode.setExecutor(() => {
       return TernaryEnum.FALSE;
@@ -71,18 +72,34 @@ function compileTrueFaleNode<C extends FlowContext>(
   }
 }
 
-export function compileNodes<C extends FlowContext>(
-  instance: FlowImplementation<C>,
+function compileInputDataNode(
+  flowImplementation: FlowImplementation,
+  rawNode: IInputDataNode
+): BaseNode {
+  const customDataRegistrar =
+    flowImplementation.getRegistrar()[DefinitionNodeTypeEnum.InputData];
+
+  if (rawNode.bindId && customDataRegistrar[rawNode.bindId]) {
+    return customDataRegistrar[rawNode.bindId](rawNode);
+  }
+
+  throw new Error(
+    `Missing custom data registrar for node: ${rawNode.id} with bindId: ${rawNode.bindId} `
+  );
+}
+
+export function compileNodes(
+  instance: FlowImplementation,
   flowDefinition: IFlowDefintion
-): Record<string, BaseNode<C>> {
-  const newNodes: Record<string, BaseNode<C>> = {};
+): Record<string, BaseNode> {
+  const newNodes: Record<string, BaseNode> = {};
 
   const nodes = expandNodes(flowDefinition.nodes);
 
   Object.keys(nodes).forEach((nodeId) => {
     const rawNode = nodes[nodeId];
 
-    let implementationNode: BaseNode<C> | null = null;
+    let implementationNode: BaseNode | null = null;
 
     const registrar = instance.getRegistrar();
 
@@ -114,19 +131,21 @@ export function compileNodes<C extends FlowContext>(
     // } else {
     // Common between implementation types
     if (rawNode.nodeType === DefinitionNodeTypeEnum.Start) {
-      implementationNode = new StartNode<C>(rawNode);
+      implementationNode = new StartNode(rawNode);
     } else if (rawNode.nodeType === DefinitionNodeTypeEnum.End) {
-      implementationNode = new EndNode<C>(rawNode);
+      implementationNode = new EndNode(rawNode);
     } else if (rawNode.nodeType === DefinitionNodeTypeEnum.EmitData) {
-      implementationNode = new EmitDataNode<C, any>(rawNode);
+      implementationNode = new EmitDataNode(rawNode);
     } else if (rawNode.nodeType === DefinitionNodeTypeEnum.Narrative) {
       implementationNode = new NarrativeNode(rawNode);
     } else if (rawNode.nodeType === DefinitionNodeTypeEnum.SubFlow) {
-      instance.nodes[nodeId] = new SubFlowNode<C>(rawNode);
+      instance.nodes[nodeId] = new SubFlowNode(rawNode);
     } else if (rawNode.nodeType === DefinitionNodeTypeEnum.Action) {
-      instance.nodes[nodeId] = new ActionNode<C>(rawNode);
+      instance.nodes[nodeId] = new ActionNode(rawNode);
     } else if (rawNode.nodeType === DefinitionNodeTypeEnum.TrueFalse) {
       instance.nodes[nodeId] = compileTrueFaleNode(instance, rawNode);
+    } else if (rawNode.nodeType === DefinitionNodeTypeEnum.InputData) {
+      instance.nodes[nodeId] = compileInputDataNode(instance, rawNode);
     }
 
     if (

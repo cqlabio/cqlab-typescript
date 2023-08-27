@@ -15,12 +15,12 @@ export * from './lib/cqflow-implementation/interactive-flow-implementation';
 export * from './lib/cqflow-context/cqflow-context';
 export * from './lib/cqflow-context/interactive-flow-context';
 
-export * from './lib/cqflow-executor/executor-interactive.old';
+export * from './lib/cqflow-executor/executor-interactive';
 export * from './lib/cqflow-executor/executor-non-interactive';
 export * from './lib/cqflow-executor/utils';
 export * from './lib/cqflow-executor/interactive-flow-state';
 
-export * from './lib/cqflow-development-repository/cqflow-development-repository';
+export * from './lib/cqflow-development-repository/flow-repository';
 
 export * from './lib/cqflow-implementation/flow-implementation';
 
