@@ -2,7 +2,7 @@ import { FlowContext } from '../../flow-context/flow-context';
 import { BooleanNode } from '../abstract/boolean-node';
 import { ImplementationNodeTypeEnum } from '../../enums';
 
-export class TrueFalseLeaf<C extends FlowContext> extends BooleanNode<C> {
+export class TrueFalseLeaf<C extends FlowContext> extends BooleanNode<C, any> {
   nodeType = ImplementationNodeTypeEnum.TrueFalseLeaf;
   // implements IYesNoNode
   // nodeType: NodeTypeEnum.YesNo = NodeTypeEnum.YesNo;

@@ -1,8 +1,11 @@
 import { BaseNode } from './abstract/base-node';
 import { ImplementationNodeTypeEnum, NextTypeEnum } from '../enums';
-import { INextMulti, INextMultiOption } from '../flow-definition/next';
 import { FlowContext } from '../flow-context/flow-context';
-import { IBranchNode } from '../flow-definition/flow-definition';
+import {
+  IBranchNode,
+  INextMulti,
+  INextMultiOption,
+} from '../flow-definition/flow-definition';
 import { ExecNode } from './exec-node';
 
 // interface IBranchChoiceNode extends IBaseNode {
@@ -27,7 +30,7 @@ export class BranchExecNode<C extends FlowContext> extends BaseNode<C> {
     options: [],
   };
 
-  constructor(node?: IBranchNode) {
+  constructor(node: IBranchNode) {
     super(node);
     this.next = node?.next || this.next;
     this.registerNodeBindings(this.registerNodeBinding);

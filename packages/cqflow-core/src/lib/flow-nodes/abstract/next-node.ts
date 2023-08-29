@@ -1,8 +1,10 @@
 import { BaseNode } from './base-node';
-import { INextUnary } from '../../flow-definition/next';
 import { NextTypeEnum } from '../../enums';
 import { FlowContext } from '../../flow-context/flow-context';
-import { IFlowDefinitionNextNode } from '../../flow-definition/flow-definition';
+import {
+  IFlowDefinitionNextNode,
+  INextUnary,
+} from '../../flow-definition/flow-definition';
 
 // export interface IBaseNextNode extends IBaseNode {
 //   next?: INextUnary;
@@ -13,7 +15,7 @@ export abstract class NextNode<C extends FlowContext> extends BaseNode<C> {
     type: NextTypeEnum.Unary,
   };
 
-  constructor(node?: IFlowDefinitionNextNode) {
+  constructor(node: IFlowDefinitionNextNode) {
     super(node);
     this.next = node?.next || this.next;
   }

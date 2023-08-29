@@ -16,6 +16,7 @@ import {
   IFlowDefinitionBooleanNode,
   ITrueFalseNode,
   IInputDataNode,
+  INextBinary,
 } from '../flow-definition/flow-definition';
 import {
   BaseNode,
@@ -29,7 +30,7 @@ import {
   // ILogicTreeItem,
   // ILogicTreeNode,
   isBooleanNode,
-  INextBinary,
+  // INextBinary,
   isNextNode,
   // IBaseNextNode,
   SubFlowNode,

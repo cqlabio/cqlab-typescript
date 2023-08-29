@@ -51,7 +51,7 @@ interface ContextStateLoader {
   deleteInteractiveFlowState(flowInstanceId: string): Promise<void>;
 }
 
-export interface InteractiveFlowContextOptions<I> {
+export interface InteractiveFlowContextOptions<I = any> {
   flowDefinition: IFlowDefintion;
   interactiveFlowState: InteractiveFlowState<I>;
   onUpdateInteractiveState: OnUpdateInteractiveState<I>;

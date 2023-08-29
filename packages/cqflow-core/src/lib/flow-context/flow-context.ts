@@ -17,8 +17,8 @@ export abstract class FlowContext<I = any, S = any> {
   flowId?: string;
 
   private _initialData: I;
-  private _contextDataStack: ContextStackItem<S>[] = [];
   private _flowDefinition: IFlowDefintion;
+  private _contextDataStack: ContextStackItem<S>[] = [];
 
   constructor(opts: FlowContextOpts<I>) {
     this._initialData = opts.initialData;
@@ -48,11 +48,8 @@ export abstract class FlowContext<I = any, S = any> {
     return this._flowDefinition;
   }
 
+  // TODO: can add a bindId index here so this happens at most once
   getFlowDefinitionNodeByBindId(bindId: string): IFlowDefinitionNode | null {
-    if (!this._flowDefinition) {
-      return null;
-    }
-
     const nodes = Object.values(this._flowDefinition.nodes || {});
     const found = nodes.find((node) => node.bindId === bindId);
     return found || null;

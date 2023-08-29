@@ -22,7 +22,7 @@ export class EmitDataNode<
 
   nodeType = ImplementationNodeTypeEnum.EmitData;
 
-  constructor(node?: IEmitDataNode) {
+  constructor(node: IEmitDataNode) {
     super(node);
   }
 

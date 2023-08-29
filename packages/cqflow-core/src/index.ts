@@ -1,4 +1,4 @@
-import flowDefinitionSchema from './lib/json-schema/flow-definition-json-schema.json';
+// import flowDefinitionSchema from './lib/json-schema/flow-definition-json-schema.json';
 
 export * from './lib/enums';
 
@@ -21,4 +21,5 @@ export * from './lib/flow-repository/flow-repository';
 
 export * from './lib/flow-implementation/flow-implementation';
 
-export const FlowDefinitionSchema = flowDefinitionSchema;
+export { JSONSchema7 } from 'json-schema';
+// export const FlowDefinitionSchema = flowDefinitionSchema;
