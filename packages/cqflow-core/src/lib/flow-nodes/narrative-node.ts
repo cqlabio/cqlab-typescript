@@ -11,7 +11,9 @@ import { FlowContext } from '../flow-context/flow-context';
 
 // export type AlsoRegisterContextData<S, C> = () => (register: RegisterContextData<S>, context: C) => void;
 
-export class NarrativeNode<C extends FlowContext<any>> extends NextNode<C> {
+export class NarrativeNode<
+  C extends FlowContext<any> = FlowContext<any>
+> extends NextNode<C> {
   // implements IEmitDataNode
 
   nodeType = ImplementationNodeTypeEnum.Narrative;

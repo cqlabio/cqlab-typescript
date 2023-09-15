@@ -1,21 +1,21 @@
 {
-  "name": "packages/cqflow-evaluator",
+  "name": "cqdefine",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "packages/cqflow-evaluator/src",
+  "sourceRoot": "packages/cqdefine/src",
   "projectType": "library",
   "targets": {
     "build": {
       "executor": "@nx/js:swc",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/packages/cqflow-evaluator",
-        "main": "packages/cqflow-evaluator/src/index.ts",
-        "tsConfig": "packages/cqflow-evaluator/tsconfig.lib.json",
+        "outputPath": "dist/packages/cqdefine",
+        "main": "packages/cqdefine/src/index.ts",
+        "tsConfig": "packages/cqdefine/tsconfig.lib.json",
         "assets": []
       }
     },
     "publish": {
-      "command": "node tools/scripts/publish.mjs packages/cqflow-evaluator {args.ver} {args.tag}",
+      "command": "node tools/scripts/publish.mjs packages/cqdefine {args.ver} {args.tag}",
       "dependsOn": ["build"]
     },
     "lint": {
@@ -23,8 +23,8 @@
       "outputs": ["{options.outputFile}"],
       "options": {
         "lintFilePatterns": [
-          "packages/cqflow-evaluator/**/*.ts",
-          "packages/cqflow-evaluator/package.json"
+          "packages/cqdefine/**/*.ts",
+          "packages/cqdefine/package.json"
         ]
       }
     },
@@ -33,13 +33,13 @@
       "outputs": ["{options.reportsDirectory}"],
       "options": {
         "passWithNoTests": true,
-        "reportsDirectory": "../../coverage/packages/cqflow-evaluator"
+        "reportsDirectory": "../../coverage/packages/cqdefine"
       }
     },
     "run-thing": {
       "executor": "nx:run-commands",
       "options": {
-        "cwd": "packages/cqflow-evaluator",
+        "cwd": "packages/cqdefine",
         "command": "npx ts-node --project tsconfig.json -r tsconfig-paths/register ./src/index.ts"
       }
     }

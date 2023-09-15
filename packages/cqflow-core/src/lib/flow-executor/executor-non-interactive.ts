@@ -23,8 +23,6 @@ import {
 } from '../flow-steps';
 import { ImplementationNodeTypeEnum, TernaryEnum } from '../enums';
 
-// type FlowContext = FlowContext;
-
 interface SubFlowExecution<C extends FlowContext> {
   flowImplementation: NonInteractiveFlowImplementation;
   flowDefinition: IFlowDefintion;
@@ -82,6 +80,8 @@ export async function recurseNonInteractiveFlow(
     nextStep = await executeExecNode(node, context);
   } else if (node instanceof EmitDataNode) {
     nextStep = await executeEmitDataNode(node, context);
+  } else if (node instanceof NarrativeNode) {
+    nextStep = await executeNarrativeNode(node, context);
   }
 
   if (!nextStep) {
@@ -121,6 +121,22 @@ export async function executeEndNode(
   };
 
   return { step, nextNodeId: null };
+}
+
+export async function executeNarrativeNode(
+  node: NarrativeNode,
+  context: FlowContext
+): Promise<ReturnStep> {
+  const step: NarrativeStep = {
+    stepType: ImplementationNodeTypeEnum.Narrative,
+    stepId: node.getDefinition().id,
+    flowDefinitionId: context.getFlowDefinition().id,
+    nodeDefinition: node.getDefinition(),
+    label: await node.getLabel(context),
+    narrative: node.getDefinition().label || '',
+  };
+
+  return { step, nextNodeId: node.getNextNodeId() };
 }
 
 export async function executeExecNode(

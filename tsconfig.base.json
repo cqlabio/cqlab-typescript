@@ -15,8 +15,8 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@cqlab/cqflow-core": ["packages/cqflow-core/src/index.ts"],
-      "@cqlab/cqflow-evaluator": ["packages/cqflow-evaluator/src/index.ts"]
+      "@cqlab/cqdefine": ["packages/cqdefine/src/index.ts"],
+      "@cqlab/cqflow-core": ["packages/cqflow-core/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

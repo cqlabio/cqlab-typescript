@@ -16,11 +16,23 @@ export interface InteractiveModuleConfigOpts<I = any> {
 }
 
 export class InteractiveFlowModule {
-  public configOpts: InteractiveModuleConfigOpts;
+  private configOpts: InteractiveModuleConfigOpts;
 
   constructor(config: InteractiveModuleConfigOpts) {
     this.configOpts = config;
   }
+
+  getFlowImplementation() {
+    return this.configOpts.flowImplementation;
+  }
+
+  getTestData() {
+    return this.configOpts.testData;
+  }
+
+  createContext = (opts: InteractiveFlowContextOptions<any>) => {
+    return this.configOpts.flowContext(opts);
+  };
 
   execute(contextOpts: InteractiveFlowContextOptions<any>) {
     return executeInteractiveFlow(

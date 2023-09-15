@@ -41,6 +41,7 @@ import {
   executeStartNode,
   executeEndNode,
   executeEmitDataNode,
+  executeNarrativeNode,
 } from './executor-non-interactive';
 
 // type FlowContext = FlowContext;
@@ -102,12 +103,14 @@ export async function recurseInteractiveFlow(
     nextStep = await executeStartNode(node, context);
   } else if (node instanceof EndNode) {
     nextStep = await executeEndNode(node, context);
+  } else if (node instanceof NarrativeNode) {
+    nextStep = await executeNarrativeNode(node, context);
+  } else if (node instanceof EmitDataNode) {
+    nextStep = await executeEmitDataNode(node, context);
   } else if (node instanceof YesNoNode) {
     nextStep = await executeInteractiveYesNoNode(node, context, answers);
   } else if (node instanceof ExecNode) {
     nextStep = await executeInteractiveExecNode(node, context, answers);
-  } else if (node instanceof EmitDataNode) {
-    nextStep = await executeEmitDataNode(node, context);
   } else if (node instanceof CustomDataInputNode) {
     nextStep = await executeInteractiveCustomInputDataNode(
       node,

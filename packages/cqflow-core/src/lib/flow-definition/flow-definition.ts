@@ -10,7 +10,14 @@ import {
 //   TrueFalse = 'TrueFalse',
 // }
 
-export interface INextUnary {
+type HandlePosition = 'top' | 'right' | 'bottom' | 'left';
+
+interface IHandle {
+  fromHandle?: HandlePosition;
+  toHandle?: HandlePosition;
+}
+
+export interface INextUnary extends IHandle {
   type: NextTypeEnum.Unary;
   id?: string;
 }
@@ -19,6 +26,10 @@ export interface INextBinary {
   type: NextTypeEnum.Binary;
   trueId?: string;
   falseId?: string;
+  trueFromHandle?: HandlePosition;
+  trueToHandle?: HandlePosition;
+  falseFromHandle?: HandlePosition;
+  falseToHandle?: HandlePosition;
 }
 
 export interface INextMultiOption {

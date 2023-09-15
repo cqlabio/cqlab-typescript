@@ -53,47 +53,11 @@ export interface BaseFlowModule {
 
 export type FlowModule = NonInteractiveFlowModule | InteractiveFlowModule;
 
-// type RegisterInteractiveModule = (context:InteractiveFlowContextOptions<any> ) => FlowModule
-
 export class FlowRepository {
-  // cqflowModules: Record<string, FlowModule> = {};
-
-  // tempThing: Record<string, InitFunction> = {};
-
   private _interactiveFlowConfigs: Record<string, InteractiveFlowModule> = {};
 
   private _nonInteractiveFlowConfigs: Record<string, NonInteractiveFlowModule> =
     {};
-
-  // registerCQFlowModule<C extends FlowContext>(
-  //   bindId: string,
-  //   flowKlass: Newable<FlowImplementation<C>>,
-  //   contextKlass: Newable<C>,
-  //   testCases: any[]
-  // ) {
-  //   this.cqflowModules[bindId] = {
-  //     bindId: bindId,
-  //     flowKlass,
-  //     contextKlass,
-  //     testCases,
-  //   };
-  // }
-
-  // getModules(): FlowModule<any>[] {
-  //   return Object.values(this.cqflowModules);
-  // }
-
-  // getModuleById(id: string): FlowModule<any> | null {
-  //   return this.cqflowModules[id] || null;
-  // }
-
-  // registerCQFlowModuleNew(bindId: string, closure: InitFunction) {
-  //   this.tempThing[bindId] = closure;
-  // }
-
-  // getModuleByIdAlso(id: string) {
-  //   return this.tempThing[id] || null;
-  // }
 
   registerInteractiveModule<I = any>(
     id: string,

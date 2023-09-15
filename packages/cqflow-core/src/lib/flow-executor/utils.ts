@@ -17,6 +17,7 @@ import {
   ITrueFalseNode,
   IInputDataNode,
   INextBinary,
+  IEmitDataNode,
 } from '../flow-definition/flow-definition';
 import {
   BaseNode,
@@ -89,6 +90,20 @@ function compileInputDataNode(
   );
 }
 
+function compileEmitDataNode(
+  flowImplementation: FlowImplementation,
+  rawNode: IEmitDataNode
+): BaseNode {
+  const customDataRegistrar =
+    flowImplementation.getRegistrar()[DefinitionNodeTypeEnum.EmitData];
+
+  if (rawNode.bindId && customDataRegistrar[rawNode.bindId]) {
+    return customDataRegistrar[rawNode.bindId](rawNode);
+  }
+
+  return new EmitDataNode(rawNode);
+}
+
 export function compileNodes(
   instance: FlowImplementation,
   flowDefinition: IFlowDefintion
@@ -135,9 +150,11 @@ export function compileNodes(
       implementationNode = new StartNode(rawNode);
     } else if (rawNode.nodeType === DefinitionNodeTypeEnum.End) {
       implementationNode = new EndNode(rawNode);
-    } else if (rawNode.nodeType === DefinitionNodeTypeEnum.EmitData) {
-      implementationNode = new EmitDataNode(rawNode);
-    } else if (rawNode.nodeType === DefinitionNodeTypeEnum.Narrative) {
+    }
+    //  else if (rawNode.nodeType === DefinitionNodeTypeEnum.EmitData) {
+    //   implementationNode = new EmitDataNode(rawNode);
+    // }
+    else if (rawNode.nodeType === DefinitionNodeTypeEnum.Narrative) {
       implementationNode = new NarrativeNode(rawNode);
     } else if (rawNode.nodeType === DefinitionNodeTypeEnum.SubFlow) {
       instance.nodes[nodeId] = new SubFlowNode(rawNode);
@@ -147,6 +164,8 @@ export function compileNodes(
       instance.nodes[nodeId] = compileTrueFaleNode(instance, rawNode);
     } else if (rawNode.nodeType === DefinitionNodeTypeEnum.InputData) {
       instance.nodes[nodeId] = compileInputDataNode(instance, rawNode);
+    } else if (rawNode.nodeType === DefinitionNodeTypeEnum.EmitData) {
+      instance.nodes[nodeId] = compileEmitDataNode(instance, rawNode);
     }
 
     if (

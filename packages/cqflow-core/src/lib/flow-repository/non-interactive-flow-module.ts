@@ -9,11 +9,23 @@ export interface NonInteractiveModuleConfigOpts<I = any> {
 }
 
 export class NonInteractiveFlowModule {
-  public configOpts: NonInteractiveModuleConfigOpts;
+  private configOpts: NonInteractiveModuleConfigOpts;
 
   constructor(config: NonInteractiveModuleConfigOpts) {
     this.configOpts = config;
   }
+
+  getFlowImplementation() {
+    return this.configOpts.flowImplementation;
+  }
+
+  getTestData() {
+    return this.configOpts.testData;
+  }
+
+  createContext = (opts: FlowContextOpts<any>) => {
+    return this.configOpts.flowContext(opts);
+  };
 
   execute(contextOpts: FlowContextOpts<any>) {
     return executeNonInteractiveFlow(

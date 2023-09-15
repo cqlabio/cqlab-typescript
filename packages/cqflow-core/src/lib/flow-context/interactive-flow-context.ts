@@ -21,6 +21,7 @@ type OnUpdateInteractiveState<I> = (
   interactiveFlowState: InteractiveFlowState<I>
 ) => Promise<InteractiveFlowState<I>>;
 
+/**
 interface ContextStateLoader {
   //   getStatus(): Promise<CQFlowExecutorStateEnum>;
   //   updateStatus(status: CQFlowExecutorStateEnum): Promise<void>;
@@ -49,7 +50,8 @@ interface ContextStateLoader {
   ): Promise<InteractiveFlowState<any>>;
 
   deleteInteractiveFlowState(flowInstanceId: string): Promise<void>;
-}
+} 
+*/
 
 export interface InteractiveFlowContextOptions<I = any> {
   flowDefinition: IFlowDefintion;
