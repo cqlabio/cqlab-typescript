@@ -17,8 +17,9 @@ export enum DefinitionNodeTypeEnum {
   SubFlow = 'SubFlow',
   LogicTree = 'LogicTree',
   EmitData = 'EmitData',
-  InputData = 'InputData',
   Narrative = 'Narrative',
+  InputData = 'InputData',
+  OptionSelect = 'OptionSelect',
 }
 
 export enum ImplementationNodeTypeEnum {
@@ -38,6 +39,7 @@ export enum ImplementationNodeTypeEnum {
   Exec = 'Exec',
   BranchChoice = 'BranchChoice',
   BranchEvaluate = 'BranchEvaluate',
+
   // decisionTemplate = 'decisionTemplate',
   EmitData = 'EmitData',
   // AndNode = 'AndNode',
@@ -45,6 +47,8 @@ export enum ImplementationNodeTypeEnum {
   Message = 'Message',
   TextInput = 'TextInput',
   CustomDataInput = 'CustomDataInput',
+
+  OptionSelect = 'OptionSelect',
   // graphLink = 'graphLink',
   // narrative = 'Narrative',
   // docLink = 'docLink',
@@ -61,6 +65,7 @@ export enum AnswerTypeEnum {
   Index = 'Index',
   Text = 'Text',
   CustomData = 'CustomData',
+  MultiOption = 'MultiOption',
 }
 
 export enum CQFlowExecutorStateEnum {

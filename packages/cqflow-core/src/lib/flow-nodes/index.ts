@@ -15,6 +15,7 @@ export * from './subflow-node';
 export * from './branchchoice-node';
 export * from './message-node';
 export * from './narrative-node';
+export * from './option-select-node';
 export * from './form/customdata-inputnode';
 
 export * from './form/textinput-node';

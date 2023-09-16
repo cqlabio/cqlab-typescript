@@ -18,6 +18,7 @@ import {
   IInputDataNode,
   INextBinary,
   IEmitDataNode,
+  IOptionSelecNode,
 } from '../flow-definition/flow-definition';
 import {
   BaseNode,
@@ -39,6 +40,7 @@ import {
   MessageNode,
   NarrativeNode,
   CustomDataInputNode,
+  OptionSelectNode,
 } from '../flow-nodes';
 import {
   IFlowDefinitionNode,
@@ -104,6 +106,20 @@ function compileEmitDataNode(
   return new EmitDataNode(rawNode);
 }
 
+function compileOptionSelectNode(
+  flowImplementation: FlowImplementation,
+  rawNode: IOptionSelecNode
+): BaseNode {
+  const customDataRegistrar =
+    flowImplementation.getRegistrar()[DefinitionNodeTypeEnum.OptionSelect];
+
+  if (rawNode.bindId && customDataRegistrar[rawNode.bindId]) {
+    return customDataRegistrar[rawNode.bindId](rawNode);
+  }
+
+  return new OptionSelectNode(rawNode);
+}
+
 export function compileNodes(
   instance: FlowImplementation,
   flowDefinition: IFlowDefintion
@@ -166,6 +182,8 @@ export function compileNodes(
       instance.nodes[nodeId] = compileInputDataNode(instance, rawNode);
     } else if (rawNode.nodeType === DefinitionNodeTypeEnum.EmitData) {
       instance.nodes[nodeId] = compileEmitDataNode(instance, rawNode);
+    } else if (rawNode.nodeType === DefinitionNodeTypeEnum.OptionSelect) {
+      instance.nodes[nodeId] = compileOptionSelectNode(instance, rawNode);
     }
 
     if (
@@ -352,7 +370,7 @@ export function expandNodes(nodes: Record<string, IFlowDefinitionNode>) {
         nextNode.next.id = mapFromOldToNext[nextNode.next?.id as string];
       }
     }
-    node.skipRender = false;
+    // node.skipRender = false;
   }
 
   Object.keys(mapFromOldToNext).forEach((oldId) => {

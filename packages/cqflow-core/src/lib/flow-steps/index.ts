@@ -9,6 +9,7 @@ export * from './message-step';
 export * from './textinput-step';
 export * from './narrative-step';
 export * from './customdata-input-step';
+export * from './option-select-step';
 
 import { ExecStep } from './exec-step';
 import { StartStep } from './start-step';
@@ -21,6 +22,7 @@ import { MessageStep } from './message-step';
 import { TextInputStep } from './textinput-step';
 import { NarrativeStep } from './narrative-step';
 import { CustomDataInputStep } from './customdata-input-step';
+import { OptionSelectStep } from './option-select-step';
 
 export type FlowStep =
   | YesNoStep
@@ -33,4 +35,5 @@ export type FlowStep =
   | MessageStep
   | TextInputStep
   | NarrativeStep
-  | CustomDataInputStep;
+  | CustomDataInputStep
+  | OptionSelectStep;

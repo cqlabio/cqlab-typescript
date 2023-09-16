@@ -48,7 +48,6 @@ export interface IDefinitionBaseNode {
   id: string;
   bindId?: string;
   label?: string;
-  skipRender?: boolean;
   position?: { x: number; y: number; width: number; height: number };
 }
 
@@ -76,6 +75,16 @@ export interface IInputDataNode extends IBaseNextNode {
   nodeType: DefinitionNodeTypeEnum.InputData;
 }
 
+export interface IOptionSelecNodeOption {
+  id: string;
+  label: string;
+  bindId?: string;
+}
+
+export interface IOptionSelecNode extends IBaseNextNode {
+  nodeType: DefinitionNodeTypeEnum.OptionSelect;
+  options: IOptionSelecNodeOption[];
+}
 export interface IBranchNode extends IDefinitionBaseNode {
   nodeType: DefinitionNodeTypeEnum.Branch;
   next?: INextMulti;
@@ -139,7 +148,8 @@ export type IFlowDefinitionNextNode =
   | IInputDataNode
   | IActionNode
   | ISubFlowNode
-  | INarrativeNode;
+  | INarrativeNode
+  | IOptionSelecNode;
 
 export type IFlowDefinitionBooleanNode = ITrueFalseNode | ILogicTreeNode;
 

@@ -25,6 +25,7 @@ import {
   BaseNode,
   YesNoNode,
   CustomDataInputNode,
+  OptionSelectNode,
 } from '../flow-nodes';
 import {
   FlowStep,
@@ -36,6 +37,7 @@ import {
   NarrativeStep,
   YesNoStep,
   CustomDataInputStep,
+  OptionSelectStep,
 } from '../flow-steps';
 import {
   executeStartNode,
@@ -43,6 +45,7 @@ import {
   executeEmitDataNode,
   executeNarrativeNode,
 } from './executor-non-interactive';
+import { IMultiOptionAnswer } from '../flow-steps/answers/multi-option-answer';
 
 // type FlowContext = FlowContext;
 
@@ -111,6 +114,8 @@ export async function recurseInteractiveFlow(
     nextStep = await executeInteractiveYesNoNode(node, context, answers);
   } else if (node instanceof ExecNode) {
     nextStep = await executeInteractiveExecNode(node, context, answers);
+  } else if (node instanceof OptionSelectNode) {
+    nextStep = await executeInteractiveOptionSelectNode(node, context, answers);
   } else if (node instanceof CustomDataInputNode) {
     nextStep = await executeInteractiveCustomInputDataNode(
       node,
@@ -209,6 +214,29 @@ export async function executeInteractiveCustomInputDataNode(
   };
 
   step.answer = (answers[step.stepId] as ICustomDataAnswer) || null;
+
+  let nextNodeId = null;
+  if (step.answer) {
+    nextNodeId = node.getNextNodeId();
+  }
+  return { step, nextNodeId };
+}
+
+export async function executeInteractiveOptionSelectNode(
+  node: OptionSelectNode,
+  context: InteractiveFlowContext,
+  answers: Record<string, FlowStepAnswer>
+): Promise<ReturnStep> {
+  const step: OptionSelectStep = {
+    stepType: ImplementationNodeTypeEnum.OptionSelect,
+    stepId: node.getDefinition().id,
+    flowDefinitionId: context.getFlowDefinition().id,
+    nodeDefinition: node.getDefinition(),
+    label: await node.getLabel(context),
+    answer: null,
+  };
+
+  step.answer = (answers[step.stepId] as IMultiOptionAnswer) || null;
 
   let nextNodeId = null;
   if (step.answer) {
