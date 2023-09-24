@@ -18,7 +18,6 @@ import {
   ExecStep,
   EndStep,
   EmitDataStep,
-  MessageStep,
   NarrativeStep,
 } from '../flow-steps';
 import { ImplementationNodeTypeEnum, TernaryEnum } from '../enums';

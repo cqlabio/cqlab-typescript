@@ -1,3 +1,5 @@
+import { IndexedValueSet } from '@cqlab/cqvocabulary';
+
 export function doCodingsMatch(
   coding1: fhir4.Coding,
   coding2: fhir4.Coding
@@ -12,6 +14,20 @@ export function isCodingInCodeableConcept(
   const codings = codeableConcept?.coding || [];
   for (const coding of codings) {
     if (doCodingsMatch(searchCoding, coding)) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+export function isCodeableConceptInValueSet(
+  codeableConcept: fhir4.CodeableConcept | null,
+  valueSet: IndexedValueSet
+): boolean {
+  const codings = codeableConcept?.coding || [];
+  for (const coding of codings) {
+    if (valueSet.hasCoding(coding)) {
       return true;
     }
   }

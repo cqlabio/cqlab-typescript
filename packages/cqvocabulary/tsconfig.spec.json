@@ -8,9 +8,7 @@
       "vite/client",
       "node",
       "fhir"
-    ],
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
+    ]
   },
   "include": [
     "vite.config.ts",

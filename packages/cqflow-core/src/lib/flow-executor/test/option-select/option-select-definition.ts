@@ -25,6 +25,8 @@ export const optionSelectDefinition: IFlowDefintion = {
         type: NextTypeEnum.Unary,
         id: 'end_1',
       },
+      min: 1,
+      max: null,
       options: [
         {
           id: 'option_1',

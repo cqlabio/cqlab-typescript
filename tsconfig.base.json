@@ -16,7 +16,8 @@
     "baseUrl": ".",
     "paths": {
       "@cqlab/cqdefine": ["packages/cqdefine/src/index.ts"],
-      "@cqlab/cqflow-core": ["packages/cqflow-core/src/index.ts"]
+      "@cqlab/cqflow-core": ["packages/cqflow-core/src/index.ts"],
+      "@cqlab/cqvocabulary": ["packages/cqvocabulary/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

@@ -14,10 +14,10 @@ export type ContextDataHook<C extends FlowContext> = (context: C) => void;
 
 // export type AlsoRegisterContextData<S, C> = () => (register: RegisterContextData<S>, context: C) => void;
 
-export class EmitDataNode<
-  C extends FlowContext<any, S>,
-  S
-> extends NextNode<C> {
+export class EmitDataNode<C extends FlowContext<any, S>, S> extends NextNode<
+  C,
+  IEmitDataNode
+> {
   // implements IEmitDataNode
 
   nodeType = ImplementationNodeTypeEnum.EmitData;

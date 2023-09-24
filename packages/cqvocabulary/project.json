@@ -1,0 +1,41 @@
+{
+  "name": "cqvocabulary",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/cqvocabulary/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:swc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/cqvocabulary",
+        "main": "packages/cqvocabulary/src/index.ts",
+        "tsConfig": "packages/cqvocabulary/tsconfig.lib.json",
+        "assets": ["packages/cqvocabulary/*.md"]
+      }
+    },
+    "publish": {
+      "command": "node tools/scripts/publish.mjs packages/cqvocabulary {args.ver} {args.tag}",
+      "dependsOn": ["build"]
+    },
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": [
+          "packages/cqvocabulary/**/*.ts",
+          "packages/cqvocabulary/package.json"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nx/vite:test",
+      "outputs": ["{options.reportsDirectory}"],
+      "options": {
+        "passWithNoTests": true,
+        "reportsDirectory": "../../coverage/packages/cqvocabulary"
+      }
+    }
+  },
+  "tags": []
+}

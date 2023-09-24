@@ -14,9 +14,10 @@ import {
 } from '../enums';
 import { FlowContext } from '../flow-context/flow-context';
 import {
+  IBranchNode,
   IEmitDataNode,
   IInputDataNode,
-  IOptionSelecNode,
+  IOptionSelectNode,
   ITrueFalseNode,
 } from '../flow-definition/flow-definition';
 
@@ -66,13 +67,18 @@ export type RegisterInputData<C extends FlowContext> = (
 ) => BaseNode<C>;
 
 export type RegisterOptionSelect<C extends FlowContext> = (
-  optionNode: IOptionSelecNode
+  optionNode: IOptionSelectNode
+) => BaseNode<C>;
+
+export type RegisterBranch<C extends FlowContext> = (
+  optionNode: IBranchNode
 ) => BaseNode<C>;
 
 export interface NodeRegistrar<C extends FlowContext> {
   [DefinitionNodeTypeEnum.TrueFalse]: Record<string, RegisterTrueFalse<C>>;
   [DefinitionNodeTypeEnum.EmitData]: Record<string, RegisterEmitData<C>>;
   [DefinitionNodeTypeEnum.InputData]: Record<string, RegisterInputData<C>>;
+  [DefinitionNodeTypeEnum.Branch]: Record<string, RegisterBranch<C>>;
   [DefinitionNodeTypeEnum.OptionSelect]: Record<
     string,
     RegisterOptionSelect<C>
@@ -93,6 +99,7 @@ export abstract class FlowImplementation<C extends FlowContext = FlowContext>
     [DefinitionNodeTypeEnum.EmitData]: {},
     [DefinitionNodeTypeEnum.InputData]: {},
     [DefinitionNodeTypeEnum.OptionSelect]: {},
+    [DefinitionNodeTypeEnum.Branch]: {},
   };
 
   private _boundIds = new Set<string>();
@@ -176,6 +183,11 @@ export abstract class FlowImplementation<C extends FlowContext = FlowContext>
   registerOptionSelect(nodeId: string, fn: RegisterOptionSelect<C>) {
     this._checkId(nodeId);
     this.registrar[DefinitionNodeTypeEnum.OptionSelect][nodeId] = fn;
+  }
+
+  registerBranch(nodeId: string, fn: RegisterBranch<C>) {
+    this._checkId(nodeId);
+    this.registrar[DefinitionNodeTypeEnum.Branch][nodeId] = fn;
   }
 
   getImplementation(): IFlowImplementation {

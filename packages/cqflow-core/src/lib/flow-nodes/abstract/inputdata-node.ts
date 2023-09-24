@@ -1,14 +1,16 @@
 import { NextNode } from '../abstract/next-node';
 // import { NodeTypeEnum } from '../../enums';
 import { FlowContext } from '../../flow-context/flow-context';
+import { IFlowDefinitionNextNode } from '../../flow-definition/flow-definition';
 
 export abstract class InputDataNode<
   C extends FlowContext,
-  D
-> extends NextNode<C> {
-  value?: D;
+  V,
+  D extends IFlowDefinitionNextNode = IFlowDefinitionNextNode
+> extends NextNode<C, D> {
+  value?: V;
 
-  getValue(): D | null {
+  getValue(): V | null {
     return this.value || null;
   }
 }

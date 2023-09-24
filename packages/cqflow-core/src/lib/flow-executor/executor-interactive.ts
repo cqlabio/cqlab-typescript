@@ -9,35 +9,29 @@ import {
 } from '../enums';
 import {
   FlowStepAnswer,
-  IActionAnswer,
-  IIndexAnswer,
   ICustomDataAnswer,
   IYesNoAnswer,
+  IOptionAnswer,
 } from '../flow-steps/answers';
 import {
   ExecNode,
   EmitDataNode,
   StartNode,
   EndNode,
-  SubFlowNode,
-  MessageNode,
   NarrativeNode,
   BaseNode,
   YesNoNode,
   CustomDataInputNode,
   OptionSelectNode,
+  BranchChoiceNode,
 } from '../flow-nodes';
 import {
   FlowStep,
-  StartStep,
   ExecStep,
-  EndStep,
-  EmitDataStep,
-  MessageStep,
-  NarrativeStep,
   YesNoStep,
   CustomDataInputStep,
   OptionSelectStep,
+  BranchChoiceStep,
 } from '../flow-steps';
 import {
   executeStartNode,
@@ -114,6 +108,8 @@ export async function recurseInteractiveFlow(
     nextStep = await executeInteractiveYesNoNode(node, context, answers);
   } else if (node instanceof ExecNode) {
     nextStep = await executeInteractiveExecNode(node, context, answers);
+  } else if (node instanceof BranchChoiceNode) {
+    nextStep = await executeInteractiveBranchChoiceNode(node, context, answers);
   } else if (node instanceof OptionSelectNode) {
     nextStep = await executeInteractiveOptionSelectNode(node, context, answers);
   } else if (node instanceof CustomDataInputNode) {
@@ -198,6 +194,32 @@ export async function executeInteractiveExecNode(
   return { step, nextNodeId };
 }
 
+export async function executeInteractiveBranchChoiceNode(
+  node: BranchChoiceNode,
+  context: InteractiveFlowContext,
+  answers: Record<string, FlowStepAnswer>
+): Promise<ReturnStep> {
+  const step: BranchChoiceStep = {
+    stepType: ImplementationNodeTypeEnum.BranchChoice,
+    stepId: node.getDefinition().id,
+    flowDefinitionId: context.getFlowDefinition().id,
+    nodeDefinition: node.getDefinition(),
+    label: await node.getLabel(context),
+    options: node.getOptions(),
+    answer: null,
+  };
+
+  step.answer = answers[step.stepId] as IOptionAnswer | null;
+
+  let nextNodeId = null;
+  if (step.answer?.selectedId) {
+    const option = step.options.find((o) => o.id === step.answer?.selectedId);
+    nextNodeId = option?.toId || null;
+  }
+
+  return { step, nextNodeId };
+}
+
 export async function executeInteractiveCustomInputDataNode(
   node: CustomDataInputNode,
   context: InteractiveFlowContext,
@@ -234,6 +256,10 @@ export async function executeInteractiveOptionSelectNode(
     nodeDefinition: node.getDefinition(),
     label: await node.getLabel(context),
     answer: null,
+    // TODO: We may want to allow these to be overwritten by the implementation
+    options: node.getOptions(),
+    min: node.getDefinition().min,
+    max: node.getDefinition().max,
   };
 
   step.answer = (answers[step.stepId] as IMultiOptionAnswer) || null;

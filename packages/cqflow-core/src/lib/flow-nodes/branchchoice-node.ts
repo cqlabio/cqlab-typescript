@@ -11,7 +11,9 @@ import {
 //   next?: INextMulti;
 // }
 
-export class BranchChoiceNode<C extends FlowContext> extends BaseNode<C> {
+export class BranchChoiceNode<
+  C extends FlowContext = FlowContext
+> extends BaseNode<C, IBranchNode> {
   nodeType = ImplementationNodeTypeEnum.BranchChoice;
 
   next: INextMulti = {

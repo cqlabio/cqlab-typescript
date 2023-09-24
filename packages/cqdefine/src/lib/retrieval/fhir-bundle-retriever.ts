@@ -1,18 +1,28 @@
-// import flatten from 'lodash/flatten';
-// import { ALL_PATIENTS } from '@roche-cds/packages/patient-generator';
-import { isCodingInCodeableConcept } from './utils';
-// import {
-//   RocheCodingsEnum,
-//   isSearchCodeInCodeableConcept,
-//   getCodingFromRocheLibrary,
-// } from '@roche-cds/packages/vocabulary';
+import {
+  isCodingInCodeableConcept,
+  isCodeableConceptInValueSet,
+} from './utils';
 import { FHIRRetriever } from './fhir-retriever';
+import { IndexedValueSet } from '@cqlab/cqvocabulary';
 
-export type ResourceTypes = 'Patient' | 'Observation';
+export type ResourceTypes =
+  | 'Patient'
+  | 'Observation'
+  | 'MedicationDispense'
+  | 'Condition'
+  | 'Procedure'
+  | 'Encounter';
 
 export interface BundleRetrieverOpts {
   bundle: fhir4.Bundle;
 }
+
+const GetObservationCode = (resource: fhir4.Observation) => resource.code;
+const GetMedicationDispenseCode = (resource: fhir4.MedicationDispense) =>
+  resource.medicationCodeableConcept;
+const GetConditionCode = (resource: fhir4.Condition) => resource.code;
+const GetProcedureCode = (resource: fhir4.Procedure) => resource.code;
+const GetEncounterCode = (resource: fhir4.Encounter) => resource.type;
 
 export class FhirBundleRetriever implements FHIRRetriever {
   bundle: fhir4.Bundle;
@@ -41,7 +51,9 @@ export class FhirBundleRetriever implements FHIRRetriever {
   async getResourcesByCode<R extends fhir4.Resource>(
     searchCode: fhir4.Coding,
     resourceType: ResourceTypes,
-    getFilterCode: (resource: R) => fhir4.CodeableConcept
+    getFilterCode: (
+      resource: R
+    ) => fhir4.CodeableConcept | fhir4.CodeableConcept[] | undefined
   ) {
     const bundle = await this.getPatientBundle();
 
@@ -52,10 +64,48 @@ export class FhirBundleRetriever implements FHIRRetriever {
           if (!resource || resource.resourceType !== resourceType) {
             return false;
           }
-          return isCodingInCodeableConcept(
-            searchCode,
-            getFilterCode(resource as R)
-          );
+          let filterCodes = getFilterCode(resource as R);
+          if (!filterCodes) {
+            return false;
+          }
+          if (!Array.isArray(filterCodes)) {
+            filterCodes = [filterCodes];
+          }
+          return filterCodes.some((filterCode) => {
+            return isCodingInCodeableConcept(searchCode, filterCode);
+          });
+        })
+        .map((entry) => entry.resource as R) || []
+    );
+  }
+
+  async getResourcesByValueSet<R extends fhir4.Resource>(
+    valueSet: IndexedValueSet,
+    resourceType: ResourceTypes,
+    getFilterCode: (
+      resource: R
+    ) => fhir4.CodeableConcept | fhir4.CodeableConcept[] | undefined
+  ) {
+    const bundle = await this.getPatientBundle();
+
+    return (
+      bundle.entry
+        ?.filter((entry) => {
+          const { resource } = entry;
+          if (!resource || resource.resourceType !== resourceType) {
+            return false;
+          }
+
+          let filterCodes = getFilterCode(resource as R);
+          if (!filterCodes) {
+            return false;
+          }
+          if (!Array.isArray(filterCodes)) {
+            filterCodes = [filterCodes];
+          }
+          return filterCodes.some((filterCode) => {
+            return isCodeableConceptInValueSet(filterCode, valueSet);
+          });
         })
         .map((entry) => entry.resource as R) || []
     );
@@ -67,7 +117,97 @@ export class FhirBundleRetriever implements FHIRRetriever {
     return this.getResourcesByCode<fhir4.Observation>(
       searchCode,
       'Observation',
-      (resource) => resource.code
+      GetObservationCode
+    );
+  }
+
+  async getConditionsByCode(
+    searchCode: fhir4.Coding
+  ): Promise<fhir4.Condition[]> {
+    return this.getResourcesByCode<fhir4.Condition>(
+      searchCode,
+      'Condition',
+      GetConditionCode
+    );
+  }
+
+  async getProceduresByCode(
+    searchCode: fhir4.Coding
+  ): Promise<fhir4.Procedure[]> {
+    return this.getResourcesByCode<fhir4.Procedure>(
+      searchCode,
+      'Procedure',
+      GetProcedureCode
+    );
+  }
+
+  async getMedicationDispensesByCode(
+    searchCode: fhir4.Coding
+  ): Promise<fhir4.MedicationDispense[]> {
+    return this.getResourcesByCode<fhir4.MedicationDispense>(
+      searchCode,
+      'MedicationDispense',
+      GetMedicationDispenseCode
+    );
+  }
+
+  async getEncountersByCode(
+    searchCode: fhir4.Coding
+  ): Promise<fhir4.Encounter[]> {
+    return this.getResourcesByCode<fhir4.Encounter>(
+      searchCode,
+      'Encounter',
+      GetEncounterCode
+    );
+  }
+
+  async getObservationsByValueSet(
+    valueSet: IndexedValueSet
+  ): Promise<fhir4.Observation[]> {
+    return this.getResourcesByValueSet<fhir4.Observation>(
+      valueSet,
+      'Observation',
+      GetObservationCode
+    );
+  }
+
+  async getConditionsByValueSet(
+    valueSet: IndexedValueSet
+  ): Promise<fhir4.Condition[]> {
+    return this.getResourcesByValueSet<fhir4.Condition>(
+      valueSet,
+      'Condition',
+      GetConditionCode
+    );
+  }
+
+  async getProceduresByValueSet(
+    valueSet: IndexedValueSet
+  ): Promise<fhir4.Procedure[]> {
+    return this.getResourcesByValueSet<fhir4.Procedure>(
+      valueSet,
+      'Procedure',
+      GetProcedureCode
+    );
+  }
+
+  async getMedicationDispensesByValueSet(
+    valueSet: IndexedValueSet
+  ): Promise<fhir4.MedicationDispense[]> {
+    return this.getResourcesByValueSet<fhir4.MedicationDispense>(
+      valueSet,
+      'MedicationDispense',
+      GetMedicationDispenseCode
+    );
+  }
+
+  async getEncountersByValueSet(
+    valueSet: IndexedValueSet
+  ): Promise<fhir4.Encounter[]> {
+    return this.getResourcesByValueSet<fhir4.Encounter>(
+      valueSet,
+      'Encounter',
+      GetEncounterCode
     );
   }
 }

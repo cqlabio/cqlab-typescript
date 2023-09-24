@@ -18,7 +18,8 @@ import {
   IInputDataNode,
   INextBinary,
   IEmitDataNode,
-  IOptionSelecNode,
+  IOptionSelectNode,
+  IBranchNode,
 } from '../flow-definition/flow-definition';
 import {
   BaseNode,
@@ -106,9 +107,23 @@ function compileEmitDataNode(
   return new EmitDataNode(rawNode);
 }
 
+function compileBranchNode(
+  flowImplementation: FlowImplementation,
+  rawNode: IBranchNode
+): BaseNode {
+  const customDataRegistrar =
+    flowImplementation.getRegistrar()[DefinitionNodeTypeEnum.Branch];
+
+  if (rawNode.bindId && customDataRegistrar[rawNode.bindId]) {
+    return customDataRegistrar[rawNode.bindId](rawNode);
+  }
+
+  return new BranchChoiceNode(rawNode);
+}
+
 function compileOptionSelectNode(
   flowImplementation: FlowImplementation,
-  rawNode: IOptionSelecNode
+  rawNode: IOptionSelectNode
 ): BaseNode {
   const customDataRegistrar =
     flowImplementation.getRegistrar()[DefinitionNodeTypeEnum.OptionSelect];
@@ -184,6 +199,8 @@ export function compileNodes(
       instance.nodes[nodeId] = compileEmitDataNode(instance, rawNode);
     } else if (rawNode.nodeType === DefinitionNodeTypeEnum.OptionSelect) {
       instance.nodes[nodeId] = compileOptionSelectNode(instance, rawNode);
+    } else if (rawNode.nodeType === DefinitionNodeTypeEnum.Branch) {
+      instance.nodes[nodeId] = compileBranchNode(instance, rawNode);
     }
 
     if (

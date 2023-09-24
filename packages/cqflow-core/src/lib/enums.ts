@@ -62,7 +62,7 @@ export enum ImplementationNodeTypeEnum {
 export enum AnswerTypeEnum {
   YesNo = 'YesNo',
   Action = 'Action',
-  Index = 'Index',
+  SingleOption = 'SingleOption',
   Text = 'Text',
   CustomData = 'CustomData',
   MultiOption = 'MultiOption',

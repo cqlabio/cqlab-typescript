@@ -4,15 +4,16 @@ import {
   Define,
   Documentation,
   Params,
-} from './library-decorators';
-import { LibraryContainer } from './library-container';
+} from '../library-decorators';
+import { LibraryContainer } from '../library-container';
 import { z } from 'zod';
-import { FhirLibrary } from './fhir-library';
+import { FhirLibrary } from '../fhir-library';
 import { TernaryEnum } from '@cqlab/cqflow-core';
-import { FhirBundleRetriever } from './retrieval/fhir-bundle-retriever';
+import { FhirBundleRetriever } from '../retrieval/fhir-bundle-retriever';
 
-const testDataOne = {
+const testDataOne: fhir4.Bundle = {
   resourceType: 'Bundle',
+  type: 'collection',
   entry: [
     {
       resource: {

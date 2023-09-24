@@ -32,10 +32,13 @@ export interface INextBinary {
   falseToHandle?: HandlePosition;
 }
 
-export interface INextMultiOption {
+export interface INextMultiOption extends IHandle {
+  id: string;
+  toId?: string;
   label?: string;
-  id?: string;
+  bindId: string;
 }
+
 export interface INextMulti {
   type: NextTypeEnum.Multi;
   options: INextMultiOption[];
@@ -75,16 +78,19 @@ export interface IInputDataNode extends IBaseNextNode {
   nodeType: DefinitionNodeTypeEnum.InputData;
 }
 
-export interface IOptionSelecNodeOption {
+export interface IOptionSelectNodeOption {
   id: string;
   label: string;
   bindId?: string;
 }
 
-export interface IOptionSelecNode extends IBaseNextNode {
+export interface IOptionSelectNode extends IBaseNextNode {
   nodeType: DefinitionNodeTypeEnum.OptionSelect;
-  options: IOptionSelecNodeOption[];
+  options: IOptionSelectNodeOption[];
+  min: number;
+  max: number | null;
 }
+
 export interface IBranchNode extends IDefinitionBaseNode {
   nodeType: DefinitionNodeTypeEnum.Branch;
   next?: INextMulti;
@@ -149,7 +155,7 @@ export type IFlowDefinitionNextNode =
   | IActionNode
   | ISubFlowNode
   | INarrativeNode
-  | IOptionSelecNode;
+  | IOptionSelectNode;
 
 export type IFlowDefinitionBooleanNode = ITrueFalseNode | ILogicTreeNode;
 

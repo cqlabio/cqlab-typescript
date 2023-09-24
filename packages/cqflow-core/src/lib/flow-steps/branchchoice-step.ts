@@ -1,10 +1,13 @@
 import { BaseStep } from './base-step';
 import { ImplementationNodeTypeEnum } from '../enums';
-import { IIndexAnswer } from './answers';
-import { INextMultiOption } from '../flow-definition/flow-definition';
+import { IOptionAnswer } from './answers';
+import {
+  IBranchNode,
+  INextMultiOption,
+} from '../flow-definition/flow-definition';
 
-export interface BranchChoiceStep extends BaseStep {
+export interface BranchChoiceStep extends BaseStep<IBranchNode> {
   stepType: ImplementationNodeTypeEnum.BranchChoice;
   options: INextMultiOption[];
-  answer: IIndexAnswer | null;
+  answer: IOptionAnswer | null;
 }
