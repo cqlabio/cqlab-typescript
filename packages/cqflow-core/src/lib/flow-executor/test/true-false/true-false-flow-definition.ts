@@ -1,7 +1,7 @@
-import { IFlowDefintion } from '../../../flow-definition/flow-definition';
+import { IFlowDefinition } from '../../../flow-definition/flow-definition';
 import { NextTypeEnum, DefinitionNodeTypeEnum } from '../../../enums';
 
-export const trueFalseFlowDefinition: IFlowDefintion = {
+export const trueFalseFlowDefinition: IFlowDefinition = {
   id: 'simpleFlow',
   bindId: 'simpleFlow',
   version: '0.0.1',

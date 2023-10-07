@@ -1,5 +1,5 @@
 import {
-  IFlowDefintion,
+  IFlowDefinition,
   IFlowDefinitionNode,
 } from '../flow-definition/flow-definition';
 
@@ -10,14 +10,14 @@ export interface ContextStackItem<S> {
 
 export interface FlowContextOpts<I> {
   initialData: I;
-  flowDefinition: IFlowDefintion;
+  flowDefinition: IFlowDefinition;
 }
 
 export abstract class FlowContext<I = any, S = any> {
   flowId?: string;
 
   private _initialData: I;
-  private _flowDefinition: IFlowDefintion;
+  private _flowDefinition: IFlowDefinition;
   private _contextDataStack: ContextStackItem<S>[] = [];
 
   constructor(opts: FlowContextOpts<I>) {
@@ -40,11 +40,11 @@ export abstract class FlowContext<I = any, S = any> {
     });
   }
 
-  // setFlowDefinition(flowDefinition: IFlowDefintion) {
+  // setFlowDefinition(flowDefinition: IFlowDefinition) {
   //   this._flowDefinition = flowDefinition;
   // }
 
-  getFlowDefinition(): IFlowDefintion {
+  getFlowDefinition(): IFlowDefinition {
     return this._flowDefinition;
   }
 

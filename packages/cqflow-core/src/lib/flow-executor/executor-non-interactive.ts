@@ -1,5 +1,5 @@
 import { compileNodes } from './utils';
-import { IFlowDefintion } from '../flow-definition/flow-definition';
+import { IFlowDefinition } from '../flow-definition/flow-definition';
 import { FlowContext } from '../flow-context/flow-context';
 import { NonInteractiveFlowImplementation } from '../flow-implementation/non-interactive-flow-implementation';
 import {
@@ -24,7 +24,7 @@ import { ImplementationNodeTypeEnum, TernaryEnum } from '../enums';
 
 interface SubFlowExecution<C extends FlowContext> {
   flowImplementation: NonInteractiveFlowImplementation;
-  flowDefinition: IFlowDefintion;
+  flowDefinition: IFlowDefinition;
 }
 
 interface ReturnStep {

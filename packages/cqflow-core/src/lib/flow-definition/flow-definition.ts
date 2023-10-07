@@ -165,7 +165,7 @@ export type IFlowDefinitionNode =
   | IBranchNode
   | IEndNode;
 
-export interface IFlowDefintion {
+export interface IFlowDefinition {
   id: string;
   bindId?: string;
   // type: FlowDefinitionTypeEnum;

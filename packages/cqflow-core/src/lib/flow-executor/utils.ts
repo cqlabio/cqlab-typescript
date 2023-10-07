@@ -10,7 +10,7 @@ import {
   FlowDefinitionTypeEnum,
 } from '../enums';
 import {
-  IFlowDefintion,
+  IFlowDefinition,
   ILogicLeaf,
   IFlowDefinitionNextNode,
   IFlowDefinitionBooleanNode,
@@ -137,7 +137,7 @@ function compileOptionSelectNode(
 
 export function compileNodes(
   instance: FlowImplementation,
-  flowDefinition: IFlowDefintion
+  flowDefinition: IFlowDefinition
 ): Record<string, BaseNode> {
   const newNodes: Record<string, BaseNode> = {};
 
@@ -257,7 +257,7 @@ export function compileNodes(
 
 // export function compileNodes<C extends FlowContext<any,any>>(
 //   instance: FlowImplementation<C>,
-//   flowDefinition: IFlowDefintion
+//   flowDefinition: IFlowDefinition
 // ): Record<string, BaseNode<C>> {
 //   const newNodes: Record<string, BaseNode<C>> = {};
 

@@ -13,7 +13,7 @@
 //   NarrativeNode,
 //   CustomDataInputNode,
 // } from '../flow-nodes';
-// import { IFlowDefintion } from '../cqflow-definition/cqflow-definition';
+// import { IFlowDefinition } from '../cqflow-definition/cqflow-definition';
 
 // import {
 //   FlowStep,

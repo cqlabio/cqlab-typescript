@@ -1,7 +1,7 @@
-import { IFlowDefintion } from '../../../flow-definition/flow-definition';
+import { IFlowDefinition } from '../../../flow-definition/flow-definition';
 import { NextTypeEnum, DefinitionNodeTypeEnum } from '../../../enums';
 
-export const emitDataFlowDefinition: IFlowDefintion = {
+export const emitDataFlowDefinition: IFlowDefinition = {
   id: 'emitDataFlow',
   bindId: 'emitDataFlow',
   version: '0.0.1',

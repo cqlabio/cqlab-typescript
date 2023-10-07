@@ -3,7 +3,7 @@ import { FlowStepAnswer, IYesNoAnswer } from '../flow-steps/answers';
 import { CQFlowExecutorStateEnum, ActionStatusEnum } from '../enums';
 import { InteractiveFlowState } from '../flow-executor/interactive-flow-state';
 import cloneDeep from 'lodash/cloneDeep';
-import { IFlowDefintion } from '../flow-definition/flow-definition';
+import { IFlowDefinition } from '../flow-definition/flow-definition';
 
 export interface CQFlowExecutorStatefulAnswer {
   stepId: string;
@@ -54,7 +54,7 @@ interface ContextStateLoader {
 */
 
 export interface InteractiveFlowContextOptions<I = any> {
-  flowDefinition: IFlowDefintion;
+  flowDefinition: IFlowDefinition;
   interactiveFlowState: InteractiveFlowState<I>;
   onUpdateInteractiveState: OnUpdateInteractiveState<I>;
 }

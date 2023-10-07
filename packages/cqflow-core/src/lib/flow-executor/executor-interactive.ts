@@ -1,5 +1,5 @@
 import { compileNodes } from './utils';
-import { IFlowDefintion } from '../flow-definition/flow-definition';
+import { IFlowDefinition } from '../flow-definition/flow-definition';
 import { InteractiveFlowContext } from '../flow-context/interactive-flow-context';
 import { InteractiveFlowImplementation } from '../flow-implementation/interactive-flow-implementation';
 import {
@@ -45,7 +45,7 @@ import { IMultiOptionAnswer } from '../flow-steps/answers/multi-option-answer';
 
 export interface SubFlowExecution<C extends InteractiveFlowContext> {
   flowImplementation: InteractiveFlowImplementation;
-  flowDefinition: IFlowDefintion;
+  flowDefinition: IFlowDefinition;
 }
 
 interface ReturnStep {
