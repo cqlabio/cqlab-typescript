@@ -11,7 +11,7 @@ import {
   AnswerTypeEnum,
 } from '../../../enums';
 import { EmitDataNode } from '../../../flow-nodes';
-import { BranchChoiceStep } from '../../../flow-steps';
+import { IBranchChoiceStep } from '../../../flow-steps';
 
 interface IntitialData {
   patientId: string;
@@ -71,7 +71,7 @@ describe('Interactive Executor Branch node', () => {
     result = await executeInteractiveFlow(branchChoiceImplementation, context);
 
     expect(result.length).toEqual(3);
-    expect((result[1] as BranchChoiceStep).answer?.selectedId).toEqual(
+    expect((result[1] as IBranchChoiceStep).answer?.selectedId).toEqual(
       'option_1'
     );
     expect(result[2].stepType).toEqual(ImplementationNodeTypeEnum.End);

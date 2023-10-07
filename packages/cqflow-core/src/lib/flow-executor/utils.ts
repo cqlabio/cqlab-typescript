@@ -20,7 +20,7 @@ import {
   IEmitDataNode,
   IOptionSelectNode,
   IBranchNode,
-} from '../flow-definition/flow-definition';
+} from '../flow-definition';
 import {
   BaseNode,
   FlowNode,
@@ -43,10 +43,7 @@ import {
   CustomDataInputNode,
   OptionSelectNode,
 } from '../flow-nodes';
-import {
-  IFlowDefinitionNode,
-  ILogicTreeNode,
-} from '../flow-definition/flow-definition';
+import { IFlowDefinitionNode, ILogicTreeNode } from '../flow-definition';
 // import { IBaseBooleanNode } from '../flow-nodes/abstract/boolean-node';
 import { FlowContext } from '../flow-context/flow-context';
 import { TernaryEnum } from '../enums';

@@ -1,10 +1,7 @@
 import { BaseNode } from './base-node';
 import { NextTypeEnum } from '../../enums';
 import { FlowContext } from '../../flow-context/flow-context';
-import {
-  IFlowDefinitionBooleanNode,
-  INextBinary,
-} from '../../flow-definition/flow-definition';
+import { IFlowDefinitionBooleanNode, INextBinary } from '../../flow-definition';
 
 // export interface IBaseBooleanNode extends IBaseNode {
 //   next?: INextBinary;

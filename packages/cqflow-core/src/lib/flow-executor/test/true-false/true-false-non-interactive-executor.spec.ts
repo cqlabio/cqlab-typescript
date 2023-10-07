@@ -4,7 +4,7 @@ import { ExecNode } from '../../../flow-nodes/exec-node';
 import { FlowContext } from '../../../flow-context/flow-context';
 import { executeNonInteractiveFlow } from '../../executor-non-interactive';
 import { trueFalseFlowDefinition } from './true-false-flow-definition';
-import { ExecStep } from '../../../flow-steps';
+import { IExecStep } from '../../../flow-steps';
 
 interface IntitialData {
   patientId: string;
@@ -49,7 +49,7 @@ describe('Non-Interactive Executor True/False node', () => {
     expect(result[0].stepType).toEqual(ImplementationNodeTypeEnum.Start);
     expect(result[1].stepType).toEqual(ImplementationNodeTypeEnum.Exec);
 
-    const execResult = result[1] as ExecStep;
+    const execResult = result[1] as IExecStep;
     expect(execResult.evaluation).toEqual(TernaryEnum.TRUE);
     expect(result[1].stepType).toEqual(ImplementationNodeTypeEnum.Exec);
     expect(result[2].stepType).toEqual(ImplementationNodeTypeEnum.EmitData);
@@ -76,7 +76,7 @@ describe('Non-Interactive Executor True/False node', () => {
     expect(result[0].stepType).toEqual(ImplementationNodeTypeEnum.Start);
     expect(result[1].stepType).toEqual(ImplementationNodeTypeEnum.Exec);
 
-    const execResult = result[1] as ExecStep;
+    const execResult = result[1] as IExecStep;
     expect(execResult.evaluation).toEqual(TernaryEnum.FALSE);
     expect(result[2].stepType).toEqual(ImplementationNodeTypeEnum.End);
   });
@@ -112,7 +112,7 @@ describe('Non-Interactive Executor True/False node', () => {
     expect(result[0].stepType).toEqual(ImplementationNodeTypeEnum.Start);
     expect(result[1].stepType).toEqual(ImplementationNodeTypeEnum.Exec);
 
-    const execResult = result[1] as ExecStep;
+    const execResult = result[1] as IExecStep;
     expect(execResult.evaluation).toEqual(TernaryEnum.UNKNOWN);
     expect(result[2].stepType).toEqual(ImplementationNodeTypeEnum.End);
   });

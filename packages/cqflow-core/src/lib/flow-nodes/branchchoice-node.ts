@@ -1,11 +1,7 @@
 import { BaseNode } from './abstract/base-node';
 import { ImplementationNodeTypeEnum, NextTypeEnum } from '../enums';
 import { FlowContext } from '../flow-context/flow-context';
-import {
-  IBranchNode,
-  INextMulti,
-  INextMultiOption,
-} from '../flow-definition/flow-definition';
+import { IBranchNode, INextMulti, INextMultiOption } from '../flow-definition';
 // interface IBranchChoiceNode extends IBaseNode {
 //   nodeType: NodeTypeEnum.BranchChoice;
 //   next?: INextMulti;

@@ -1,4 +1,4 @@
-import { IFlowDefinition } from '../../../flow-definition/flow-definition';
+import { IFlowDefinition } from '../../../flow-definition';
 import { NextTypeEnum, DefinitionNodeTypeEnum } from '../../../enums';
 
 export const optionSelectDefinition: IFlowDefinition = {

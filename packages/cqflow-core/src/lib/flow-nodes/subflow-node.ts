@@ -1,10 +1,7 @@
 import { NextNode } from './abstract/next-node';
 import { ImplementationNodeTypeEnum } from '../enums';
 import { FlowContext } from '../flow-context/flow-context';
-import {
-  IFlowDefinitionNode,
-  ISubFlowNode,
-} from '../flow-definition/flow-definition';
+import { IFlowDefinitionNode, ISubFlowNode } from '../flow-definition';
 
 // interface ISubFlowNode extends IBaseNextNode {
 //   nodeType: NodeTypeEnum.SubFlow;

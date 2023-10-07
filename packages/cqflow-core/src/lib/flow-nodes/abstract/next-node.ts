@@ -1,11 +1,8 @@
 import { BaseNode } from './base-node';
 import { NextTypeEnum } from '../../enums';
 import { FlowContext } from '../../flow-context/flow-context';
-import { IFlowDefinitionNode } from '../../flow-definition/flow-definition';
-import {
-  IFlowDefinitionNextNode,
-  INextUnary,
-} from '../../flow-definition/flow-definition';
+import { IFlowDefinitionNode } from '../../flow-definition';
+import { IFlowDefinitionNextNode, INextUnary } from '../../flow-definition';
 
 // export interface IBaseNextNode extends IBaseNode {
 //   next?: INextUnary;

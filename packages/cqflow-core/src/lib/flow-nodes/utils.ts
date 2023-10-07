@@ -1,4 +1,4 @@
-import { IFlowDefinitionNode } from '../flow-definition/flow-definition';
+import { IFlowDefinitionNode } from '../flow-definition';
 import { DefinitionNodeTypeEnum } from '../enums';
 
 export function isBooleanNode(node: IFlowDefinitionNode) {

@@ -19,7 +19,7 @@ import {
   IInputDataNode,
   IOptionSelectNode,
   ITrueFalseNode,
-} from '../flow-definition/flow-definition';
+} from '../flow-definition';
 
 type NodeBinding = {
   nodeType: ImplementationNodeTypeEnum;

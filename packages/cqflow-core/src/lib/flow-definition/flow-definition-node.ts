@@ -1,14 +1,4 @@
-// import { IFlowDefinitionNode } from '../flow-nodes';
-import {
-  // FlowDefinitionTypeEnum,
-  NextTypeEnum,
-  DefinitionNodeTypeEnum,
-  LogicEnum,
-} from '../enums';
-
-// export enum INewDefinitionNodeTypeEnum {
-//   TrueFalse = 'TrueFalse',
-// }
+import { NextTypeEnum, DefinitionNodeTypeEnum, LogicEnum } from '../enums';
 
 type HandlePosition = 'top' | 'right' | 'bottom' | 'left';
 
@@ -77,6 +67,11 @@ export interface IEmitDataNode extends IBaseNextNode {
 export interface IInputDataNode extends IBaseNextNode {
   nodeType: DefinitionNodeTypeEnum.InputData;
 }
+
+// export interface IFormFieldNode extends IBaseNextNode {
+//   nodeType: DefinitionNodeTypeEnum.FormField;
+//   fieldType: string;
+// }
 
 export interface IOptionSelectNodeOption {
   id: string;
@@ -164,11 +159,3 @@ export type IFlowDefinitionNode =
   | IFlowDefinitionBooleanNode
   | IBranchNode
   | IEndNode;
-
-export interface IFlowDefinition {
-  id: string;
-  bindId?: string;
-  // type: FlowDefinitionTypeEnum;
-  nodes: Record<string, IFlowDefinitionNode>;
-  version: string;
-}

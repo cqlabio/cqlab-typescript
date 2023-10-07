@@ -1,7 +1,4 @@
-import {
-  IFlowDefinition,
-  IFlowDefinitionNode,
-} from '../flow-definition/flow-definition';
+import { IFlowDefinition, IFlowDefinitionNode } from '../flow-definition';
 
 export interface ContextStackItem<S> {
   nodeId: string;

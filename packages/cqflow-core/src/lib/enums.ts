@@ -20,6 +20,7 @@ export enum DefinitionNodeTypeEnum {
   Narrative = 'Narrative',
   InputData = 'InputData',
   OptionSelect = 'OptionSelect',
+  FormField = 'FormField',
 }
 
 export enum ImplementationNodeTypeEnum {

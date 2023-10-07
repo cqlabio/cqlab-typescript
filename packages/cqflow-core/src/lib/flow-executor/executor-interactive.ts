@@ -1,5 +1,5 @@
 import { compileNodes } from './utils';
-import { IFlowDefinition } from '../flow-definition/flow-definition';
+import { IFlowDefinition } from '../flow-definition';
 import { InteractiveFlowContext } from '../flow-context/interactive-flow-context';
 import { InteractiveFlowImplementation } from '../flow-implementation/interactive-flow-implementation';
 import {
@@ -8,7 +8,7 @@ import {
   AnswerTypeEnum,
 } from '../enums';
 import {
-  FlowStepAnswer,
+  IFlowStepAnswer,
   ICustomDataAnswer,
   IYesNoAnswer,
   IOptionAnswer,
@@ -26,12 +26,12 @@ import {
   BranchChoiceNode,
 } from '../flow-nodes';
 import {
-  FlowStep,
-  ExecStep,
-  YesNoStep,
-  CustomDataInputStep,
-  OptionSelectStep,
-  BranchChoiceStep,
+  IFlowStep,
+  IExecStep,
+  IYesNoStep,
+  ICustomDataInputStep,
+  IOptionSelectStep,
+  IBranchChoiceStep,
 } from '../flow-steps';
 import {
   executeStartNode,
@@ -49,7 +49,7 @@ export interface SubFlowExecution<C extends InteractiveFlowContext> {
 }
 
 interface ReturnStep {
-  step: FlowStep;
+  step: IFlowStep;
   nextNodeId: string | null;
 }
 
@@ -57,8 +57,8 @@ export async function executeInteractiveFlow(
   flowImplementation: InteractiveFlowImplementation,
   context: InteractiveFlowContext,
   subFlows: null | Record<string, SubFlowExecution<InteractiveFlowContext>> = {}
-): Promise<FlowStep[]> {
-  const steps: FlowStep[] = [];
+): Promise<IFlowStep[]> {
+  const steps: IFlowStep[] = [];
 
   const currentAnswers = context.getMergedAnswers();
 
@@ -85,8 +85,8 @@ export async function recurseInteractiveFlow(
   nodeId: string | null,
   nodes: Record<string, BaseNode>,
   context: InteractiveFlowContext,
-  steps: FlowStep[],
-  answers: Record<string, FlowStepAnswer>
+  steps: IFlowStep[],
+  answers: Record<string, IFlowStepAnswer>
 ) {
   if (!nodeId || !nodes[nodeId]) {
     return;
@@ -137,9 +137,9 @@ export async function recurseInteractiveFlow(
 export async function executeInteractiveYesNoNode(
   node: YesNoNode,
   context: InteractiveFlowContext,
-  answers: Record<string, FlowStepAnswer>
+  answers: Record<string, IFlowStepAnswer>
 ): Promise<ReturnStep> {
-  const step: YesNoStep = {
+  const step: IYesNoStep = {
     stepType: ImplementationNodeTypeEnum.YesNo,
     stepId: node.getDefinition().id,
     flowDefinitionId: context.getFlowDefinition().id,
@@ -164,9 +164,9 @@ export async function executeInteractiveYesNoNode(
 export async function executeInteractiveExecNode(
   node: ExecNode,
   context: InteractiveFlowContext,
-  answers: Record<string, FlowStepAnswer>
+  answers: Record<string, IFlowStepAnswer>
 ): Promise<ReturnStep> {
-  const step: ExecStep = {
+  const step: IExecStep = {
     stepType: ImplementationNodeTypeEnum.Exec,
     stepId: node.getDefinition().id,
     flowDefinitionId: context.getFlowDefinition().id,
@@ -197,9 +197,9 @@ export async function executeInteractiveExecNode(
 export async function executeInteractiveBranchChoiceNode(
   node: BranchChoiceNode,
   context: InteractiveFlowContext,
-  answers: Record<string, FlowStepAnswer>
+  answers: Record<string, IFlowStepAnswer>
 ): Promise<ReturnStep> {
-  const step: BranchChoiceStep = {
+  const step: IBranchChoiceStep = {
     stepType: ImplementationNodeTypeEnum.BranchChoice,
     stepId: node.getDefinition().id,
     flowDefinitionId: context.getFlowDefinition().id,
@@ -223,9 +223,9 @@ export async function executeInteractiveBranchChoiceNode(
 export async function executeInteractiveCustomInputDataNode(
   node: CustomDataInputNode,
   context: InteractiveFlowContext,
-  answers: Record<string, FlowStepAnswer>
+  answers: Record<string, IFlowStepAnswer>
 ): Promise<ReturnStep> {
-  const step: CustomDataInputStep = {
+  const step: ICustomDataInputStep = {
     stepType: ImplementationNodeTypeEnum.CustomDataInput,
     stepId: node.getDefinition().id,
     flowDefinitionId: context.getFlowDefinition().id,
@@ -247,9 +247,9 @@ export async function executeInteractiveCustomInputDataNode(
 export async function executeInteractiveOptionSelectNode(
   node: OptionSelectNode,
   context: InteractiveFlowContext,
-  answers: Record<string, FlowStepAnswer>
+  answers: Record<string, IFlowStepAnswer>
 ): Promise<ReturnStep> {
-  const step: OptionSelectStep = {
+  const step: IOptionSelectStep = {
     stepType: ImplementationNodeTypeEnum.OptionSelect,
     stepId: node.getDefinition().id,
     flowDefinitionId: context.getFlowDefinition().id,

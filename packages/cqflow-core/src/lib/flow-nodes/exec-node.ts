@@ -1,10 +1,7 @@
 import { BooleanNode } from './abstract/boolean-node';
 import { ImplementationNodeTypeEnum, TernaryEnum } from '../enums';
 import { FlowContext } from '../flow-context/flow-context';
-import {
-  IFlowDefinitionNode,
-  ITrueFalseNode,
-} from '../flow-definition/flow-definition';
+import { IFlowDefinitionNode, ITrueFalseNode } from '../flow-definition';
 // interface IExecNode extends IBaseBooleanNode {
 //   nodeType: NodeTypeEnum.Exec;
 // }

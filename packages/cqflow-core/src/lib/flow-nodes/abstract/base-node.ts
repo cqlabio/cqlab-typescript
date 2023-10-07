@@ -3,7 +3,7 @@ import { ImplementationNodeTypeEnum } from '../../enums';
 // import { v4 as uuidv4 } from 'uuid';
 // import { Exclude } from 'class-transformer';
 import { FlowContext } from '../../flow-context/flow-context';
-import { IFlowDefinitionNode } from '../../flow-definition/flow-definition';
+import { IFlowDefinitionNode } from '../../flow-definition';
 
 export abstract class BaseNode<
   C extends FlowContext = FlowContext,

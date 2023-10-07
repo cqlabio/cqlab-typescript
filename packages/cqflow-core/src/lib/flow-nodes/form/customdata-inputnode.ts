@@ -2,7 +2,7 @@ import { InputDataNode } from '../abstract/inputdata-node';
 import { ImplementationNodeTypeEnum } from '../../enums';
 import { FlowContext } from '../../flow-context/flow-context';
 import { JSONSchema7 } from 'json-schema';
-import { IInputDataNode } from '../../flow-definition/flow-definition';
+import { IInputDataNode } from '../../flow-definition';
 
 export abstract class CustomDataInputNode<
   C extends FlowContext = FlowContext,

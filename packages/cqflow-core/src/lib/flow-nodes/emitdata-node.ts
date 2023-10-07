@@ -1,7 +1,7 @@
 import { NextNode } from './abstract/next-node';
 import { ImplementationNodeTypeEnum } from '../enums';
 import { FlowContext } from '../flow-context/flow-context';
-import { IEmitDataNode } from '../flow-definition/flow-definition';
+import { IEmitDataNode } from '../flow-definition';
 
 // interface IEmitDataNode extends IBaseNextNode {
 //   nodeType: NodeTypeEnum.ContextData;

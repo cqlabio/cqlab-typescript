@@ -1,5 +1,5 @@
 import { compileNodes } from './utils';
-import { IFlowDefinition } from '../flow-definition/flow-definition';
+import { IFlowDefinition } from '../flow-definition';
 import { FlowContext } from '../flow-context/flow-context';
 import { NonInteractiveFlowImplementation } from '../flow-implementation/non-interactive-flow-implementation';
 import {
@@ -13,12 +13,12 @@ import {
   BaseNode,
 } from '../flow-nodes';
 import {
-  FlowStep,
-  StartStep,
-  ExecStep,
-  EndStep,
-  EmitDataStep,
-  NarrativeStep,
+  IFlowStep,
+  IStartStep,
+  IExecStep,
+  IEndStep,
+  IEmitDataStep,
+  INarrativeStep,
 } from '../flow-steps';
 import { ImplementationNodeTypeEnum, TernaryEnum } from '../enums';
 
@@ -28,7 +28,7 @@ interface SubFlowExecution<C extends FlowContext> {
 }
 
 interface ReturnStep {
-  step: FlowStep;
+  step: IFlowStep;
   nextNodeId: string | null;
 }
 
@@ -36,8 +36,8 @@ export async function executeNonInteractiveFlow(
   flowImplementation: NonInteractiveFlowImplementation,
   context: FlowContext,
   subFlows: null | Record<string, SubFlowExecution<FlowContext>> = {}
-): Promise<FlowStep[]> {
-  const steps: FlowStep[] = [];
+): Promise<IFlowStep[]> {
+  const steps: IFlowStep[] = [];
 
   const nodes = compileNodes(flowImplementation, context.getFlowDefinition());
 
@@ -61,7 +61,7 @@ export async function recurseNonInteractiveFlow(
   nodeId: string | null,
   nodes: Record<string, BaseNode>,
   context: FlowContext,
-  steps: FlowStep[]
+  steps: IFlowStep[]
 ) {
   if (!nodeId || !nodes[nodeId]) {
     return;
@@ -95,7 +95,7 @@ export async function executeStartNode(
   node: StartNode,
   context: FlowContext
 ): Promise<ReturnStep> {
-  const step: StartStep = {
+  const step: IStartStep = {
     stepType: ImplementationNodeTypeEnum.Start,
     stepId: node.getDefinition().id,
     flowDefinitionId: context.getFlowDefinition().id,
@@ -111,7 +111,7 @@ export async function executeEndNode(
   node: EndNode,
   context: FlowContext
 ): Promise<ReturnStep> {
-  const step: EndStep = {
+  const step: IEndStep = {
     stepType: ImplementationNodeTypeEnum.End,
     stepId: node.getDefinition().id,
     flowDefinitionId: context.getFlowDefinition().id,
@@ -126,7 +126,7 @@ export async function executeNarrativeNode(
   node: NarrativeNode,
   context: FlowContext
 ): Promise<ReturnStep> {
-  const step: NarrativeStep = {
+  const step: INarrativeStep = {
     stepType: ImplementationNodeTypeEnum.Narrative,
     stepId: node.getDefinition().id,
     flowDefinitionId: context.getFlowDefinition().id,
@@ -142,7 +142,7 @@ export async function executeExecNode(
   node: ExecNode,
   context: FlowContext
 ): Promise<ReturnStep> {
-  const step: ExecStep = {
+  const step: IExecStep = {
     stepType: ImplementationNodeTypeEnum.Exec,
     stepId: node.getDefinition().id,
     flowDefinitionId: context.getFlowDefinition().id,
@@ -165,7 +165,7 @@ export async function executeEmitDataNode(
   node: EmitDataNode<FlowContext, any>,
   context: FlowContext
 ): Promise<ReturnStep> {
-  const step: EmitDataStep = {
+  const step: IEmitDataStep = {
     stepType: ImplementationNodeTypeEnum.EmitData,
     stepId: node.getDefinitionId(),
     flowDefinitionId: context.getFlowDefinition().id,
@@ -212,7 +212,7 @@ export async function executeEmitDataNode(
 
 //   /**
 //   else if (node instanceof StartNode) {
-//     const step: StartStep = {
+//     const step: IStartStep = {
 //       ...nextStep,
 //       stepType: ImplementationNodeTypeEnum.Start,
 //       initialData: context.getInitialData(),
@@ -221,7 +221,7 @@ export async function executeEmitDataNode(
 //     steps.push(step);
 //     await recurseNode(node.getNextNodeId(), currentFlowDefinitionId);
 //   } else if (node instanceof EndNode) {
-//     const step: EndStep = {
+//     const step: IEndStep = {
 //       ...nextStep,
 //       stepType: ImplementationNodeTypeEnum.End,
 //     };
@@ -237,7 +237,7 @@ export async function executeEmitDataNode(
 //     steps.push(step);
 //     await recurseNode(node.getNextNodeId(), currentFlowDefinitionId);
 //   } else if (node instanceof NarrativeNode) {
-//     const step: NarrativeStep = {
+//     const step: INarrativeStep = {
 //       ...nextStep,
 //       stepType: ImplementationNodeTypeEnum.Narrative,
 //       label: node.getLabel(context),
@@ -247,7 +247,7 @@ export async function executeEmitDataNode(
 //     steps.push(step);
 //     await recurseNode(node.getNextNodeId(), currentFlowDefinitionId);
 //   } else if (node instanceof ExecNode) {
-//     const step: ExecStep = {
+//     const step: IExecStep = {
 //       ...nextStep,
 //       label: node.getLabel(context),
 //       stepType: ImplementationNodeTypeEnum.Exec,
@@ -266,7 +266,7 @@ export async function executeEmitDataNode(
 //       await recurseNode(node.getOnFalseId(), currentFlowDefinitionId);
 //     }
 //   } else if (node instanceof EmitDataNode) {
-//     const step: EmitDataStep = {
+//     const step: IEmitDataStep = {
 //       ...nextStep,
 //       stepType: ImplementationNodeTypeEnum.EmitData,
 //       label: await node.getLabel(context),

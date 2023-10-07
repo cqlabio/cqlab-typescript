@@ -1,13 +1,13 @@
 import { FlowContext } from './flow-context';
-import { FlowStepAnswer, IYesNoAnswer } from '../flow-steps/answers';
+import { IFlowStepAnswer, IYesNoAnswer } from '../flow-steps/answers';
 import { CQFlowExecutorStateEnum, ActionStatusEnum } from '../enums';
 import { InteractiveFlowState } from '../flow-executor/interactive-flow-state';
 import cloneDeep from 'lodash/cloneDeep';
-import { IFlowDefinition } from '../flow-definition/flow-definition';
+import { IFlowDefinition } from '../flow-definition';
 
 export interface CQFlowExecutorStatefulAnswer {
   stepId: string;
-  answer: FlowStepAnswer;
+  answer: IFlowStepAnswer;
 }
 
 // interface ContextState {
@@ -110,10 +110,10 @@ export abstract class InteractiveFlowContext<
     await this._updateInteractiveFlowStatee(nextInstance);
   }
 
-  getMergedAnswers(): Record<string, FlowStepAnswer> {
+  getMergedAnswers(): Record<string, IFlowStepAnswer> {
     const answers = this.interactiveFlowState.answers || [];
 
-    const currentAnswers: Record<string, FlowStepAnswer> = {};
+    const currentAnswers: Record<string, IFlowStepAnswer> = {};
 
     // Grab the latest answer
     for (const answer of answers) {
@@ -123,7 +123,7 @@ export abstract class InteractiveFlowContext<
     return currentAnswers;
   }
 
-  getAnswerByNodeBinding(nodeBinding: string): FlowStepAnswer | null {
+  getAnswerByNodeBinding(nodeBinding: string): IFlowStepAnswer | null {
     const node = this.getFlowDefinitionNodeByBindId(nodeBinding);
     const answers = this.getMergedAnswers();
     return (node && answers[node.id]) || null;

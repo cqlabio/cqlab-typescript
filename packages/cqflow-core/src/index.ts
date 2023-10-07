@@ -7,7 +7,7 @@ export * from './lib/flow-nodes';
 export * from './lib/flow-steps';
 export * from './lib/flow-steps/answers';
 
-export * from './lib/flow-definition/flow-definition';
+export * from './lib/flow-definition';
 
 export * from './lib/flow-implementation/non-interactive-flow-implementation';
 export * from './lib/flow-implementation/interactive-flow-implementation';

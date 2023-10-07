@@ -16,19 +16,19 @@
 // import { IFlowDefinition } from '../cqflow-definition/cqflow-definition';
 
 // import {
-//   FlowStep,
-//   StartStep,
-//   ExecStep,
-//   YesNoStep,
-//   ActionStep,
-//   EmitDataStep,
-//   EndStep,
-//   TextInputStep,
-//   NarrativeStep,
-//   CustomDataInputStep,
+//   IFlowStep,
+//   IStartStep,
+//   IExecStep,
+//   IYesNoStep,
+//   IActionStep,
+//   IEmitDataStep,
+//   IEndStep,
+//   ITextInputStep,
+//   INarrativeStep,
+//   ICustomDataInputStep,
 // } from '../cqflow-steps';
 // import {
-//   FlowStepAnswer,
+//   IFlowStepAnswer,
 //   IActionAnswer,
 //   IIndexAnswer,
 //   IYesNoAnswer,
@@ -41,7 +41,7 @@
 //   TernaryEnum,
 //   CQFlowExecutorStateEnum,
 // } from '../enums';
-// import { BranchChoiceStep } from '../cqflow-steps/branchchoice-step';
+// import { IBranchChoiceStep } from '../cqflow-steps/branchchoice-step';
 // import { ActionStatusEnum } from '../enums';
 // import { ITextAnswer } from '../cqflow-steps/answers/text-answer';
 // import { ICustomDataAnswer } from '../cqflow-steps/answers/custom-data-answer';
@@ -49,7 +49,7 @@
 // export async function executeInteractiveFlow(
 //   flowImplementation: FlowImplementation<InteractiveFlowContext<any, any>>,
 //   context: InteractiveFlowContext<any, any>
-// ): Promise<FlowStep[]> {
+// ): Promise<IFlowStep[]> {
 //   // TODO: is there a better way to give context access to this?
 //   // context.setFlowDefinition(flowDefinition);
 
@@ -66,7 +66,7 @@
 
 //   const currentAnswers = context.getMergedAnswers();
 
-//   const steps: FlowStep[] = [];
+//   const steps: IFlowStep[] = [];
 
 //   async function recurseNode(
 //     nodeId: string | null,
@@ -84,7 +84,7 @@
 //     const node = nodes[nodeId];
 
 //     if (node instanceof StartNode) {
-//       const step: StartStep = {
+//       const step: IStartStep = {
 //         ...nextStep,
 //         stepType: ImplementationNodeTypeEnum.Start,
 //         initialData: context.getInitialData(),
@@ -93,14 +93,14 @@
 //       steps.push(step);
 //       await recurseNode(node.getNextNodeId(), currentFlowDefinitionId);
 //     } else if (node instanceof EndNode) {
-//       const step: EndStep = {
+//       const step: IEndStep = {
 //         ...nextStep,
 //         stepType: ImplementationNodeTypeEnum.End,
 //       };
 
 //       steps.push(step);
 //     } else if (node instanceof ExecNode) {
-//       const step: ExecStep = {
+//       const step: IExecStep = {
 //         ...nextStep,
 //         label: node.getLabel(context),
 //         stepType: ImplementationNodeTypeEnum.Exec,
@@ -130,7 +130,7 @@
 //         }
 //       }
 //     } else if (node instanceof YesNoNode) {
-//       const step: YesNoStep = {
+//       const step: IYesNoStep = {
 //         ...nextStep,
 //         label: node.getLabel(context),
 //         stepType: ImplementationNodeTypeEnum.YesNo,
@@ -150,7 +150,7 @@
 //         }
 //       }
 //     } else if (node instanceof NarrativeNode) {
-//       const step: NarrativeStep = {
+//       const step: INarrativeStep = {
 //         ...nextStep,
 //         stepType: ImplementationNodeTypeEnum.Narrative,
 //         label: node.getLabel(context),
@@ -160,7 +160,7 @@
 //       steps.push(step);
 //       await recurseNode(node.getNextNodeId(), currentFlowDefinitionId);
 //     } else if (node instanceof EmitDataNode) {
-//       const step: EmitDataStep = {
+//       const step: IEmitDataStep = {
 //         ...nextStep,
 //         stepType: ImplementationNodeTypeEnum.EmitData,
 //         label: node.getLabel(context),
@@ -175,7 +175,7 @@
 
 //       await recurseNode(node.getNextNodeId(), currentFlowDefinitionId);
 //     } else if (node instanceof ActionNode) {
-//       const step: ActionStep = {
+//       const step: IActionStep = {
 //         ...nextStep,
 //         stepType: ImplementationNodeTypeEnum.Action,
 //         label: node.getLabel(context),
@@ -196,7 +196,7 @@
 //         await recurseNode(node.getNextNodeId(), currentFlowDefinitionId);
 //       }
 //     } else if (node instanceof BranchChoiceNode) {
-//       const step: BranchChoiceStep = {
+//       const step: IBranchChoiceStep = {
 //         ...nextStep,
 //         stepType: ImplementationNodeTypeEnum.BranchChoice,
 //         label: node.getLabel(context),
@@ -215,7 +215,7 @@
 //         await recurseNode(option.id || null, currentFlowDefinitionId);
 //       }
 //     } else if (node instanceof TextInputNode) {
-//       const step: TextInputStep = {
+//       const step: ITextInputStep = {
 //         ...nextStep,
 //         stepType: ImplementationNodeTypeEnum.TextInput,
 //         label: node.getLabel(context),
@@ -231,7 +231,7 @@
 //         await recurseNode(node.getNextNodeId(), currentFlowDefinitionId);
 //       }
 //     } else if (node instanceof CustomDataInputNode) {
-//       const step: CustomDataInputStep = {
+//       const step: ICustomDataInputStep = {
 //         ...nextStep,
 //         stepType: ImplementationNodeTypeEnum.CustomDataInput,
 //         label: node.getLabel(context),
@@ -274,7 +274,7 @@
 //     this.context = context;
 //   }
 
-//   addAnswer(stepId: string, answer: FlowStepAnswer) {
+//   addAnswer(stepId: string, answer: IFlowStepAnswer) {
 //     if (this.context.getState() === CQFlowExecutorStateEnum.Completed) {
 //       return;
 //     }
@@ -307,8 +307,8 @@
 //     return null;
 //   }
 
-//   getActiveSteps(): FlowStep[] {
-//     const steps: FlowStep[] = [];
+//   getActiveSteps(): IFlowStep[] {
+//     const steps: IFlowStep[] = [];
 //     const startNode = this.getStartNode();
 //     const currentAnswers = this.context.getMergedAnswers();
 
@@ -318,7 +318,7 @@
 //       }
 
 //       if (node instanceof StartNode) {
-//         const step: StartStep = {
+//         const step: IStartStep = {
 //           stepType: ImplementationNodeTypeEnum.Start,
 //           nodeId: node.id,
 //         };
@@ -326,7 +326,7 @@
 //         steps.push(step);
 //         recurseNode(node.getNextNode());
 //       } else if (node instanceof ExecNode) {
-//         const step: ExecStep = {
+//         const step: IExecStep = {
 //           label: node.label,
 //           stepType: ImplementationNodeTypeEnum.Exec,
 //           nodeId: node.id,
@@ -347,7 +347,7 @@
 //           recurseNode(node.getOnFalseNode());
 //         }
 //       } else if (node instanceof YesNoNode) {
-//         const step: YesNoStep = {
+//         const step: IYesNoStep = {
 //           label: node.label,
 //           stepType: ImplementationNodeTypeEnum.YesNo,
 //           nodeId: node.id,
@@ -369,7 +369,7 @@
 //           }
 //         }
 //       } else if (node instanceof EmitDataNode) {
-//         const step: EmitDataStep = {
+//         const step: IEmitDataStep = {
 //           stepType: ImplementationNodeTypeEnum.ContextData,
 //           label: node.label,
 //           nodeId: node.id,
@@ -379,7 +379,7 @@
 
 //         recurseNode(node.getNextNode());
 //       } else if (node instanceof ActionNode) {
-//         const step: ActionStep = {
+//         const step: IActionStep = {
 //           stepType: ImplementationNodeTypeEnum.Action,
 //           label: node.label,
 //           nodeId: node.id,
