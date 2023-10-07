@@ -5,9 +5,9 @@ import { BaseRetriever } from './retrieval/base-retriever';
 
 type Newable<T> = new (...args: any[]) => T;
 
-export interface ExampleDataItem {
+export interface MockDataRef {
+  id: string;
   label: string;
-  data: any;
 }
 
 const getElName = (el: string) => el.split(':')[1];
@@ -25,7 +25,7 @@ export interface LibraryRegistry {
   label: string;
   klass: any;
   definitions: Record<string, LibraryFunctionRegistry>;
-  exampleData?: ExampleDataItem[];
+  mockData?: MockDataRef[];
 }
 
 export type LibraryContainerRegistry = Record<string, LibraryRegistry>;
@@ -68,12 +68,12 @@ export class LibraryContainer<R extends BaseRetriever = BaseRetriever> {
           };
         }
 
-        if (!this.registry[libName].exampleData) {
-          this.registry[libName].exampleData = [];
+        if (!this.registry[libName].mockData) {
+          this.registry[libName].mockData = [];
         }
 
         if (examples.exampleData) {
-          this.registry[libName].exampleData?.push(...examples.exampleData);
+          this.registry[libName].mockData?.push(...examples.exampleData);
         }
       }
 

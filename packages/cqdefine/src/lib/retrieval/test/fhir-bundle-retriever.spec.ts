@@ -1,5 +1,5 @@
 import { IndexedValueSet } from '@cqlab/cqvocabulary';
-import { FhirBundleRetriever } from '../fhir-bundle-retriever';
+import { LazyFhirBundleRetriever } from '../lazy-fhir-bundle-retriever';
 
 const valueSet: fhir4.ValueSet = {
   resourceType: 'ValueSet',
@@ -53,10 +53,16 @@ const bundle: fhir4.Bundle = {
   ],
 };
 
+class TestBundleRetriever extends LazyFhirBundleRetriever {
+  async loadPatientBundle(): Promise<fhir4.Bundle> {
+    return bundle;
+  }
+}
+
 describe('FHIR bundle executor', () => {
   it('should default to a BranchChoice interaction', async () => {
     const vs = new IndexedValueSet(valueSet);
-    const retriever = new FhirBundleRetriever({ bundle });
+    const retriever = new TestBundleRetriever({ bundleId: 'test' });
 
     const observations = await retriever.getObservationsByValueSet(vs);
     expect(observations.length).toBe(1);

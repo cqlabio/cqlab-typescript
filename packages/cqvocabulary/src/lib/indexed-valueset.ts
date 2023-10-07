@@ -36,24 +36,40 @@ export class IndexedValueSet {
     }
 
     return systemMap.has(coding.code);
+  }
 
-    // const id = makeCodeAndSystemKey(coding.code, coding.system);
-    // return this.codeIndex?.has(id) || false;
+  getAllCodes(): fhir4.Coding[] {
+    return this._gatherCodesFromValueSet();
   }
 
   private _buildCodeIndex() {
     const codeIndex: SystemCodeIndex = new Map();
 
-    this.valueset.expansion?.contains?.forEach((code) => {
+    const codes = this._gatherCodesFromValueSet();
+
+    codes.forEach((code) => {
       if (code.code && code.system) {
         if (!codeIndex.has(code.system)) {
           codeIndex.set(code.system, new Set());
         }
-
         codeIndex.get(code.system)?.add(code.code);
       }
     });
 
     this.codeIndex = codeIndex;
+  }
+
+  private _gatherCodesFromValueSet(): fhir4.Coding[] {
+    const codings: fhir4.Coding[] = [];
+
+    this.valueset.expansion?.contains?.forEach((code) => {
+      codings.push({
+        code: code.code,
+        system: code.system,
+        display: code.display,
+      });
+    });
+
+    return codings;
   }
 }

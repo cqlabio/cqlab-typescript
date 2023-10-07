@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 import { z } from 'zod';
-import { ExampleDataItem } from './library-container';
+import { MockDataRef } from './library-container';
 
 export function Library(label: string) {
   return function (target: any) {
@@ -8,7 +8,7 @@ export function Library(label: string) {
   };
 }
 
-export function ExampleData(exampleData: ExampleDataItem[]) {
+export function MockData(exampleData: MockDataRef[]) {
   return function (target: any) {
     Reflect.defineMetadata(
       `exampleData`,

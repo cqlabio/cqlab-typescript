@@ -14,7 +14,7 @@ export type ResourceTypes =
   | 'Encounter';
 
 export interface BundleRetrieverOpts {
-  bundle: fhir4.Bundle;
+  bundleId: string;
 }
 
 const GetObservationCode = (resource: fhir4.Observation) => resource.code;
@@ -24,14 +24,20 @@ const GetConditionCode = (resource: fhir4.Condition) => resource.code;
 const GetProcedureCode = (resource: fhir4.Procedure) => resource.code;
 const GetEncounterCode = (resource: fhir4.Encounter) => resource.type;
 
-export class FhirBundleRetriever implements FHIRRetriever {
-  bundle: fhir4.Bundle;
+export abstract class LazyFhirBundleRetriever implements FHIRRetriever {
+  bundleId: string;
+  bundle?: fhir4.Bundle;
 
   constructor(opts: BundleRetrieverOpts) {
-    this.bundle = opts.bundle;
+    this.bundleId = opts.bundleId;
   }
 
+  abstract loadPatientBundle(bundleId: string): Promise<fhir4.Bundle>;
+
   async getPatientBundle(): Promise<fhir4.Bundle> {
+    if (!this.bundle) {
+      this.bundle = await this.loadPatientBundle(this.bundleId);
+    }
     return this.bundle;
   }
 

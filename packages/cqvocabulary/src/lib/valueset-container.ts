@@ -3,12 +3,15 @@ import { IndexedValueSet } from './indexed-valueset';
 export class ValueSetContainer {
   valuesets: Record<string, IndexedValueSet> = {};
 
-  addValueset(vs: fhir4.ValueSet) {
-    const valuesetWrapper = new IndexedValueSet(vs);
-    this.valuesets[valuesetWrapper.getId()] = valuesetWrapper;
+  addValueset(vs: IndexedValueSet) {
+    this.valuesets[vs.getId()] = vs;
   }
 
   getValuesetById(id: string): IndexedValueSet {
     return this.valuesets[id];
+  }
+
+  getAllValueSets(): IndexedValueSet[] {
+    return Object.values(this.valuesets);
   }
 }

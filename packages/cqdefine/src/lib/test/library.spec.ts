@@ -1,6 +1,6 @@
 import {
   Library,
-  ExampleData,
+  MockData,
   Define,
   Documentation,
   Params,
@@ -9,7 +9,7 @@ import { LibraryContainer } from '../library-container';
 import { z } from 'zod';
 import { FhirLibrary } from '../fhir-library';
 import { TernaryEnum } from '@cqlab/cqflow-core';
-import { FhirBundleRetriever } from '../retrieval/fhir-bundle-retriever';
+import { LazyFhirBundleRetriever } from '../retrieval/lazy-fhir-bundle-retriever';
 
 const testDataOne: fhir4.Bundle = {
   resourceType: 'Bundle',
@@ -24,45 +24,70 @@ const testDataOne: fhir4.Bundle = {
   ],
 };
 
+class TestBundleRetriever extends LazyFhirBundleRetriever {
+  async loadPatientBundle(): Promise<fhir4.Bundle> {
+    return testDataOne;
+  }
+}
+
+const overAge = z.object({
+  age: z.number(),
+});
+
+type OverAge = z.infer<typeof overAge>;
+
+const mockData = [
+  {
+    label: 'Example 1',
+    id: 'Example 1',
+  },
+];
+
+@Library('Heart Disease')
+@MockData(mockData)
+class HeartDiseaseLibrary extends FhirLibrary {
+  @Define('Is Male')
+  @Documentation('Determines if gender is male')
+  isMale(): TernaryEnum {
+    return TernaryEnum.TRUE;
+  }
+
+  @Define('Is Over Age')
+  @Documentation('Determines if over a certain age')
+  @Params(overAge)
+  isOverAge(args: OverAge): TernaryEnum {
+    console.log('being accessed');
+    return TernaryEnum.TRUE;
+  }
+}
+
+const libraryContainer = new LibraryContainer();
+
+libraryContainer.add(HeartDiseaseLibrary);
+
 describe('packagesCqflowEvaluator', () => {
-  it('should work', async () => {
-    const overAge = z.object({
-      age: z.number(),
-    });
-
-    type OverAge = z.infer<typeof overAge>;
-
-    const examples = [
-      {
-        label: 'Example 1',
-        data: testDataOne,
-      },
-    ];
-
-    @Library('HeartDisease')
-    @ExampleData(examples)
-    class HeartDiseaseLibrary extends FhirLibrary {
-      @Define('Is Male')
-      @Documentation('Determines if gender is male')
-      isMale(): TernaryEnum {
-        return TernaryEnum.TRUE;
-      }
-
-      @Define('Is Over Age')
-      @Documentation('Determines if over a certain age')
-      @Params(overAge)
-      isOverAge(args: OverAge): TernaryEnum {
-        console.log('being accessed');
-        return TernaryEnum.TRUE;
-      }
-    }
-
-    const libraryContainer = new LibraryContainer();
-
-    libraryContainer.add(HeartDiseaseLibrary);
+  it('should validate the registry', async () => {
     const registry = libraryContainer.getRegistry();
 
-    const bundleRetriever = new FhirBundleRetriever({ bundle: testDataOne });
+    expect(registry['HeartDiseaseLibrary'].label).toEqual('Heart Disease');
+    expect(registry['HeartDiseaseLibrary'].className).toEqual(
+      'HeartDiseaseLibrary'
+    );
+    expect(registry['HeartDiseaseLibrary'].mockData).toEqual(mockData);
+    expect(
+      registry['HeartDiseaseLibrary'].definitions['isMale'].funcName
+    ).toEqual('isMale');
+    expect(
+      registry['HeartDiseaseLibrary'].definitions['isMale'].documentation
+    ).toEqual('Determines if gender is male');
+    expect(registry['HeartDiseaseLibrary'].definitions['isMale'].label).toEqual(
+      'Is Male'
+    );
+    // expect(registry['HeartDiseaseLibrary'].definitions['isMale'].returnType).toEqual('Is Male')
+  });
+
+  it('should execute the library', async () => {
+    const bundleRetriever = new TestBundleRetriever({ bundleId: 'test' });
 
     const executor = libraryContainer.getLogic(
       'HeartDiseaseLibrary',
