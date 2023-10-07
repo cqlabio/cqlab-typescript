@@ -8,6 +8,7 @@ import {
   DefinitionNodeTypeEnum,
   NextTypeEnum,
   FlowDefinitionTypeEnum,
+  FieldTypeEnum,
 } from '../enums';
 import {
   IFlowDefinition,
@@ -15,11 +16,12 @@ import {
   IFlowDefinitionNextNode,
   IFlowDefinitionBooleanNode,
   ITrueFalseNode,
-  IInputDataNode,
+  ICustomFormNode,
   INextBinary,
   IEmitDataNode,
-  IOptionSelectNode,
+  IOptionFieldNode,
   IBranchNode,
+  ITextFieldNode,
 } from '../flow-definition';
 import {
   BaseNode,
@@ -40,15 +42,17 @@ import {
   BranchChoiceNode,
   MessageNode,
   NarrativeNode,
-  CustomDataInputNode,
-  OptionSelectNode,
+  CustomFormNode,
+  OptionFieldNode,
+  TextFieldNode,
 } from '../flow-nodes';
 import { IFlowDefinitionNode, ILogicTreeNode } from '../flow-definition';
 // import { IBaseBooleanNode } from '../flow-nodes/abstract/boolean-node';
 import { FlowContext } from '../flow-context/flow-context';
 import { TernaryEnum } from '../enums';
+import { JSONSchema7 } from 'json-schema';
 
-function compileTrueFaleNode(
+function compileTrueFalseNode(
   flowImplementation: FlowImplementation,
   rawNode: ITrueFalseNode
 ): BaseNode {
@@ -73,21 +77,35 @@ function compileTrueFaleNode(
     return execNode;
   }
 }
+class DefaultCustomFormNode extends CustomFormNode {
+  getValueJsonSchema(): JSONSchema7 {
+    return {
+      type: 'object',
+      properties: {
+        value: {
+          type: 'string',
+          description:
+            'Dummy configuration. Must me implemented with Flow Implementation',
+        },
+      },
+    };
+  }
+}
 
-function compileInputDataNode(
+function compileCustomFormNode(
   flowImplementation: FlowImplementation,
-  rawNode: IInputDataNode
+  rawNode: ICustomFormNode
 ): BaseNode {
   const customDataRegistrar =
-    flowImplementation.getRegistrar()[DefinitionNodeTypeEnum.InputData];
+    flowImplementation.getRegistrar()[DefinitionNodeTypeEnum.CustomForm];
 
   if (rawNode.bindId && customDataRegistrar[rawNode.bindId]) {
     return customDataRegistrar[rawNode.bindId](rawNode);
   }
 
-  throw new Error(
-    `Missing custom data registrar for node: ${rawNode.id} with bindId: ${rawNode.bindId} `
-  );
+  const formNode = new DefaultCustomFormNode(rawNode);
+
+  return formNode;
 }
 
 function compileEmitDataNode(
@@ -118,18 +136,34 @@ function compileBranchNode(
   return new BranchChoiceNode(rawNode);
 }
 
-function compileOptionSelectNode(
+function compileTextFieldNode(
   flowImplementation: FlowImplementation,
-  rawNode: IOptionSelectNode
+  rawNode: ITextFieldNode
 ): BaseNode {
-  const customDataRegistrar =
-    flowImplementation.getRegistrar()[DefinitionNodeTypeEnum.OptionSelect];
+  const textRegistrar =
+    flowImplementation.getRegistrar()[DefinitionNodeTypeEnum.FormField][
+      FieldTypeEnum.Text
+    ];
 
-  if (rawNode.bindId && customDataRegistrar[rawNode.bindId]) {
-    return customDataRegistrar[rawNode.bindId](rawNode);
+  if (rawNode.bindId && textRegistrar[rawNode.bindId]) {
+    return textRegistrar[rawNode.bindId](rawNode);
   }
 
-  return new OptionSelectNode(rawNode);
+  return new TextFieldNode(rawNode);
+}
+
+function compileOptionFieldNode(
+  flowImplementation: FlowImplementation,
+  rawNode: IOptionFieldNode
+): BaseNode {
+  // const customDataRegistrar =
+  //   flowImplementation.getRegistrar()[DefinitionNodeTypeEnum.OptionSelect];
+
+  // if (rawNode.bindId && customDataRegistrar[rawNode.bindId]) {
+  //   return customDataRegistrar[rawNode.bindId](rawNode);
+  // }
+
+  return new OptionFieldNode(rawNode);
 }
 
 export function compileNodes(
@@ -145,35 +179,6 @@ export function compileNodes(
 
     let implementationNode: BaseNode | null = null;
 
-    const registrar = instance.getRegistrar();
-
-    // if (rawNode.nodeType === DefinitionNodeTypeEnum.TrueFalse) {
-    //   const trueFalseRegistrar = registrar[DefinitionNodeTypeEnum.TrueFalse];
-
-    //   const func = rawNode.id in trueFalseRegistrar
-    //     ? trueFalseRegistrar[rawNode.id]
-    //     : null
-
-    //   if (func) {
-    //     implementationNode = func(rawNode);
-    //   }
-    // }
-
-    // const klass =
-    //   instance.boundKlasses[rawNode.bindId as string] ||
-    //   instance.boundKlasses[rawNode.id];
-
-    // if (rawNode.nodeType ===DefinitionNodeTypeEnum.EmitData ) {
-
-    //     const func = instance.registeredNodes[rawNode.id]
-    //     const node = func(rawNode)
-    // }
-
-    // if (klass) {
-    //   implementationNode = new klass(rawNode);
-    //   // instance.nodes[nodeId] = new klass(rawNode);
-    // } else {
-    // Common between implementation types
     if (rawNode.nodeType === DefinitionNodeTypeEnum.Start) {
       implementationNode = new StartNode(rawNode);
     } else if (rawNode.nodeType === DefinitionNodeTypeEnum.End) {
@@ -185,19 +190,29 @@ export function compileNodes(
     else if (rawNode.nodeType === DefinitionNodeTypeEnum.Narrative) {
       implementationNode = new NarrativeNode(rawNode);
     } else if (rawNode.nodeType === DefinitionNodeTypeEnum.SubFlow) {
-      instance.nodes[nodeId] = new SubFlowNode(rawNode);
+      implementationNode = new SubFlowNode(rawNode);
     } else if (rawNode.nodeType === DefinitionNodeTypeEnum.Action) {
-      instance.nodes[nodeId] = new ActionNode(rawNode);
+      implementationNode = new ActionNode(rawNode);
     } else if (rawNode.nodeType === DefinitionNodeTypeEnum.TrueFalse) {
-      instance.nodes[nodeId] = compileTrueFaleNode(instance, rawNode);
-    } else if (rawNode.nodeType === DefinitionNodeTypeEnum.InputData) {
-      instance.nodes[nodeId] = compileInputDataNode(instance, rawNode);
+      implementationNode = compileTrueFalseNode(instance, rawNode);
     } else if (rawNode.nodeType === DefinitionNodeTypeEnum.EmitData) {
-      instance.nodes[nodeId] = compileEmitDataNode(instance, rawNode);
-    } else if (rawNode.nodeType === DefinitionNodeTypeEnum.OptionSelect) {
-      instance.nodes[nodeId] = compileOptionSelectNode(instance, rawNode);
+      implementationNode = compileEmitDataNode(instance, rawNode);
     } else if (rawNode.nodeType === DefinitionNodeTypeEnum.Branch) {
-      instance.nodes[nodeId] = compileBranchNode(instance, rawNode);
+      implementationNode = compileBranchNode(instance, rawNode);
+    } else if (rawNode.nodeType === DefinitionNodeTypeEnum.CustomForm) {
+      implementationNode = compileCustomFormNode(instance, rawNode);
+    } else if (rawNode.nodeType === DefinitionNodeTypeEnum.FormField) {
+      if (rawNode.fieldType === FieldTypeEnum.Text) {
+        implementationNode = compileTextFieldNode(instance, rawNode);
+      } else if (rawNode.fieldType === FieldTypeEnum.Option) {
+        implementationNode = compileOptionFieldNode(instance, rawNode);
+      }
+
+      // else if (rawNode.nodeType === DefinitionNodeTypeEnum.OptionSelect) {
+      //   instance.nodes[nodeId] = compileOptionSelectNode(instance, rawNode);
+      // }
+
+      // instance.nodes[nodeId] = new CustomFormNode(rawNode);
     }
 
     if (
@@ -241,8 +256,7 @@ export function compileNodes(
     // }
 
     if (implementationNode && implementationNode.getDefinitionId()) {
-      instance.nodes[implementationNode.getDefinitionId() as string] =
-        implementationNode;
+      instance.nodes[implementationNode.getDefinitionId()] = implementationNode;
     }
   });
 

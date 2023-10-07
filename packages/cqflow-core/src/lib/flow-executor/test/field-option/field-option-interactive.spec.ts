@@ -2,7 +2,7 @@ import { InteractiveFlowImplementation } from '../../../flow-implementation/inte
 import { ExecNode } from '../../../flow-nodes/exec-node';
 import { InteractiveFlowContext } from '../../../flow-context/interactive-flow-context';
 import { executeInteractiveFlow } from '../../executor-interactive';
-import { optionSelectDefinition } from './option-select-definition';
+import { optionSelectDefinition } from './field-option-definition';
 import { InteractiveFlowState } from '../../interactive-flow-state';
 import {
   TernaryEnum,
@@ -56,7 +56,7 @@ describe('Interactive Executor Option Select node', () => {
     // Without an answer, we wait for interaction
     expect(result.length).toEqual(2);
     expect(result[0].stepType).toEqual(ImplementationNodeTypeEnum.Start);
-    expect(result[1].stepType).toEqual(ImplementationNodeTypeEnum.OptionSelect);
+    expect(result[1].stepType).toEqual(ImplementationNodeTypeEnum.OptionField);
 
     // Add True answer
     interactiveFlowState.answers.push({
@@ -70,6 +70,14 @@ describe('Interactive Executor Option Select node', () => {
     result = await executeInteractiveFlow(simpleFlowImplementation, context);
 
     expect(result.length).toEqual(3);
+
+    const optionStep = result[1];
+
+    if (optionStep.stepType !== ImplementationNodeTypeEnum.OptionField) {
+      throw new Error('Expected OptionField');
+    }
+    expect(optionStep.answer?.selectedIds.includes('option_1')).toEqual(true);
+
     expect(result[2].stepType).toEqual(ImplementationNodeTypeEnum.End);
   });
 });

@@ -9,9 +9,9 @@
 //   EmitDataNode,
 //   EndNode,
 //   BranchChoiceNode,
-//   TextInputNode,
+//   TextFieldNode,
 //   NarrativeNode,
-//   CustomDataInputNode,
+//   CustomFormNode,
 // } from '../flow-nodes';
 // import { IFlowDefinition } from '../cqflow-definition/cqflow-definition';
 
@@ -214,7 +214,7 @@
 //         const option = step.options[answer.value];
 //         await recurseNode(option.id || null, currentFlowDefinitionId);
 //       }
-//     } else if (node instanceof TextInputNode) {
+//     } else if (node instanceof TextFieldNode) {
 //       const step: ITextInputStep = {
 //         ...nextStep,
 //         stepType: ImplementationNodeTypeEnum.TextInput,
@@ -230,7 +230,7 @@
 //       if (answer?.value) {
 //         await recurseNode(node.getNextNodeId(), currentFlowDefinitionId);
 //       }
-//     } else if (node instanceof CustomDataInputNode) {
+//     } else if (node instanceof CustomFormNode) {
 //       const step: ICustomDataInputStep = {
 //         ...nextStep,
 //         stepType: ImplementationNodeTypeEnum.CustomDataInput,

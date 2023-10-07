@@ -1,4 +1,9 @@
-import { NextTypeEnum, DefinitionNodeTypeEnum, LogicEnum } from '../enums';
+import {
+  NextTypeEnum,
+  DefinitionNodeTypeEnum,
+  LogicEnum,
+  FieldTypeEnum,
+} from '../enums';
 
 type HandlePosition = 'top' | 'right' | 'bottom' | 'left';
 
@@ -64,27 +69,40 @@ export interface IEmitDataNode extends IBaseNextNode {
   nodeType: DefinitionNodeTypeEnum.EmitData;
 }
 
-export interface IInputDataNode extends IBaseNextNode {
-  nodeType: DefinitionNodeTypeEnum.InputData;
+export interface ICustomFormNode extends IBaseNextNode {
+  nodeType: DefinitionNodeTypeEnum.CustomForm;
 }
 
-// export interface IFormFieldNode extends IBaseNextNode {
-//   nodeType: DefinitionNodeTypeEnum.FormField;
-//   fieldType: string;
-// }
+interface IFormFieldNodeBase extends IBaseNextNode {
+  nodeType: DefinitionNodeTypeEnum.FormField;
+  fieldType: FieldTypeEnum;
+}
 
-export interface IOptionSelectNodeOption {
+export interface ITextFieldNode extends IFormFieldNodeBase {
+  fieldType: FieldTypeEnum.Text;
+}
+
+export interface IFieldOption {
   id: string;
   label: string;
   bindId?: string;
 }
 
-export interface IOptionSelectNode extends IBaseNextNode {
-  nodeType: DefinitionNodeTypeEnum.OptionSelect;
-  options: IOptionSelectNodeOption[];
+export interface IOptionFieldNode extends IFormFieldNodeBase {
+  fieldType: FieldTypeEnum.Option;
+  options: IFieldOption[];
   min: number;
   max: number | null;
 }
+
+export type IFormFieldNode = ITextFieldNode | IOptionFieldNode;
+
+// export interface IOptionSelectNode extends IBaseNextNode {
+//   nodeType: DefinitionNodeTypeEnum.OptionSelect;
+//   options: IOptionSelectNodeOption[];
+//   min: number;
+//   max: number | null;
+// }
 
 export interface IBranchNode extends IDefinitionBaseNode {
   nodeType: DefinitionNodeTypeEnum.Branch;
@@ -146,11 +164,11 @@ export interface ILogicTreeNode extends IBaseBooleanNode {
 export type IFlowDefinitionNextNode =
   | IStartNode
   | IEmitDataNode
-  | IInputDataNode
   | IActionNode
   | ISubFlowNode
   | INarrativeNode
-  | IOptionSelectNode;
+  | ICustomFormNode
+  | IFormFieldNode;
 
 export type IFlowDefinitionBooleanNode = ITrueFalseNode | ILogicTreeNode;
 

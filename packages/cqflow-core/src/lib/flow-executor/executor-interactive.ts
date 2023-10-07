@@ -12,6 +12,7 @@ import {
   ICustomDataAnswer,
   IYesNoAnswer,
   IOptionAnswer,
+  ITextAnswer,
 } from '../flow-steps/answers';
 import {
   ExecNode,
@@ -21,17 +22,19 @@ import {
   NarrativeNode,
   BaseNode,
   YesNoNode,
-  CustomDataInputNode,
-  OptionSelectNode,
+  CustomFormNode,
+  OptionFieldNode,
   BranchChoiceNode,
+  TextFieldNode,
 } from '../flow-nodes';
 import {
   IFlowStep,
   IExecStep,
   IYesNoStep,
   ICustomDataInputStep,
-  IOptionSelectStep,
+  IOptionFieldStep,
   IBranchChoiceStep,
+  ITextFieldStep,
 } from '../flow-steps';
 import {
   executeStartNode,
@@ -39,7 +42,7 @@ import {
   executeEmitDataNode,
   executeNarrativeNode,
 } from './executor-non-interactive';
-import { IMultiOptionAnswer } from '../flow-steps/answers/multi-option-answer';
+import { IMultiOptionAnswer } from '../flow-steps/answers';
 
 // type FlowContext = FlowContext;
 
@@ -110,14 +113,12 @@ export async function recurseInteractiveFlow(
     nextStep = await executeInteractiveExecNode(node, context, answers);
   } else if (node instanceof BranchChoiceNode) {
     nextStep = await executeInteractiveBranchChoiceNode(node, context, answers);
-  } else if (node instanceof OptionSelectNode) {
-    nextStep = await executeInteractiveOptionSelectNode(node, context, answers);
-  } else if (node instanceof CustomDataInputNode) {
-    nextStep = await executeInteractiveCustomInputDataNode(
-      node,
-      context,
-      answers
-    );
+  } else if (node instanceof CustomFormNode) {
+    nextStep = await executeInteractiveCustomFormNode(node, context, answers);
+  } else if (node instanceof OptionFieldNode) {
+    nextStep = await executeInteractiveOptionFieldNode(node, context, answers);
+  } else if (node instanceof TextFieldNode) {
+    nextStep = await executeInteractiveTextFieldNode(node, context, answers);
   }
 
   if (!nextStep) {
@@ -220,8 +221,8 @@ export async function executeInteractiveBranchChoiceNode(
   return { step, nextNodeId };
 }
 
-export async function executeInteractiveCustomInputDataNode(
-  node: CustomDataInputNode,
+export async function executeInteractiveCustomFormNode(
+  node: CustomFormNode,
   context: InteractiveFlowContext,
   answers: Record<string, IFlowStepAnswer>
 ): Promise<ReturnStep> {
@@ -236,21 +237,17 @@ export async function executeInteractiveCustomInputDataNode(
   };
 
   step.answer = (answers[step.stepId] as ICustomDataAnswer) || null;
-
-  let nextNodeId = null;
-  if (step.answer) {
-    nextNodeId = node.getNextNodeId();
-  }
+  const nextNodeId = step.answer ? node.getNextNodeId() : null;
   return { step, nextNodeId };
 }
 
-export async function executeInteractiveOptionSelectNode(
-  node: OptionSelectNode,
+export async function executeInteractiveOptionFieldNode(
+  node: OptionFieldNode,
   context: InteractiveFlowContext,
   answers: Record<string, IFlowStepAnswer>
 ): Promise<ReturnStep> {
-  const step: IOptionSelectStep = {
-    stepType: ImplementationNodeTypeEnum.OptionSelect,
+  const step: IOptionFieldStep = {
+    stepType: ImplementationNodeTypeEnum.OptionField,
     stepId: node.getDefinition().id,
     flowDefinitionId: context.getFlowDefinition().id,
     nodeDefinition: node.getDefinition(),
@@ -268,5 +265,35 @@ export async function executeInteractiveOptionSelectNode(
   if (step.answer) {
     nextNodeId = node.getNextNodeId();
   }
+  return { step, nextNodeId };
+}
+
+export async function executeInteractiveTextFieldNode(
+  node: TextFieldNode,
+  context: InteractiveFlowContext,
+  answers: Record<string, IFlowStepAnswer>
+): Promise<ReturnStep> {
+  const step: ITextFieldStep = {
+    stepType: ImplementationNodeTypeEnum.TextField,
+    stepId: node.getDefinition().id,
+    flowDefinitionId: context.getFlowDefinition().id,
+    nodeDefinition: node.getDefinition(),
+    label: await node.getLabel(context),
+  };
+
+  const calculatedValue = await node.getValue(context);
+
+  if (calculatedValue) {
+    step.evaluation = {
+      answerType: AnswerTypeEnum.Text,
+      value: calculatedValue,
+    };
+  } else {
+    step.answer = (answers[step.stepId] as ITextAnswer) || null;
+  }
+
+  const nextNodeId =
+    step.evaluation || step.answer ? node.getNextNodeId() : null;
+
   return { step, nextNodeId };
 }

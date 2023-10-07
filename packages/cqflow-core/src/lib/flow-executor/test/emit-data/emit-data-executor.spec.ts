@@ -12,7 +12,7 @@ import {
   CQFlowExecutorStateEnum,
   AnswerTypeEnum,
 } from '../../../enums';
-import { CustomDataInputNode } from '../../../flow-nodes';
+import { CustomFormNode } from '../../../flow-nodes';
 import { InteractiveFlowContext } from '../../../flow-context/interactive-flow-context';
 
 interface IntitialData {

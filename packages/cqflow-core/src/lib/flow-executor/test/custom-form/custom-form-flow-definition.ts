@@ -19,7 +19,7 @@ export const inputDataFlowDefinition: IFlowDefinition = {
     input_data_1: {
       id: 'input_data_1',
       bindId: 'enter_weight',
-      nodeType: DefinitionNodeTypeEnum.InputData,
+      nodeType: DefinitionNodeTypeEnum.CustomForm,
       next: {
         type: NextTypeEnum.Unary,
         id: 'true_false_1',

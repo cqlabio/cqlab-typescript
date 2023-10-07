@@ -15,10 +15,10 @@ export * from './subflow-node';
 export * from './branchchoice-node';
 export * from './message-node';
 export * from './narrative-node';
-export * from './option-select-node';
+export * from './form/option-field-node';
 export * from './form/customdata-inputnode';
 
-export * from './form/textinput-node';
+export * from './form/text-field-node';
 
 export * from './utils';
 
@@ -33,7 +33,7 @@ import { SubFlowNode } from './subflow-node';
 import { BranchChoiceNode } from './branchchoice-node';
 import { MessageNode } from './message-node';
 import { NarrativeNode } from './narrative-node';
-import { CustomDataInputNode } from './form/customdata-inputnode';
+import { CustomFormNode } from './form/customdata-inputnode';
 // import { IBaseBooleanNode } from './abstract/boolean-node';
 // import { IBaseNextNode } from './abstract/next-node';
 
@@ -49,7 +49,7 @@ export type FlowNode =
   | BranchChoiceNode<any>
   | MessageNode<any>
   | NarrativeNode<any>
-  | CustomDataInputNode<any, any>;
+  | CustomFormNode<any, any>;
 
 // export type INextNode =
 //   | IStartNode

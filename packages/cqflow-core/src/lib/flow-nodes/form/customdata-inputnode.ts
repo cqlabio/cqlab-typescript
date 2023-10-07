@@ -2,12 +2,12 @@ import { InputDataNode } from '../abstract/inputdata-node';
 import { ImplementationNodeTypeEnum } from '../../enums';
 import { FlowContext } from '../../flow-context/flow-context';
 import { JSONSchema7 } from 'json-schema';
-import { IInputDataNode } from '../../flow-definition';
+import { ICustomFormNode } from '../../flow-definition';
 
-export abstract class CustomDataInputNode<
+export abstract class CustomFormNode<
   C extends FlowContext = FlowContext,
   D = any
-> extends InputDataNode<C, D, IInputDataNode> {
+> extends InputDataNode<C, D, ICustomFormNode> {
   nodeType = ImplementationNodeTypeEnum.TextInput;
 
   abstract getValueJsonSchema(): JSONSchema7;

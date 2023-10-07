@@ -18,8 +18,8 @@ export enum DefinitionNodeTypeEnum {
   LogicTree = 'LogicTree',
   EmitData = 'EmitData',
   Narrative = 'Narrative',
-  InputData = 'InputData',
-  OptionSelect = 'OptionSelect',
+  // OptionSelect = 'OptionSelect',
+  CustomForm = 'CustomForm',
   FormField = 'FormField',
 }
 
@@ -49,7 +49,9 @@ export enum ImplementationNodeTypeEnum {
   TextInput = 'TextInput',
   CustomDataInput = 'CustomDataInput',
 
-  OptionSelect = 'OptionSelect',
+  TextField = 'TextField',
+  OptionField = 'OptionField',
+  // OptionSelect = 'OptionSelect',
   // graphLink = 'graphLink',
   // narrative = 'Narrative',
   // docLink = 'docLink',
@@ -58,6 +60,12 @@ export enum ImplementationNodeTypeEnum {
   // redirect = 'redirect',
   // documentation = 'documentation',
   TrueFalseLeaf = 'TrueFalseLeaf',
+}
+
+export enum FieldTypeEnum {
+  Text = 'Text',
+  Option = 'Option',
+  //email, date, range, number, quantity
 }
 
 export enum AnswerTypeEnum {

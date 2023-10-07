@@ -11,14 +11,16 @@ import {
   FlowDefinitionTypeEnum,
   ImplementationNodeTypeEnum,
   DefinitionNodeTypeEnum,
+  FieldTypeEnum,
 } from '../enums';
 import { FlowContext } from '../flow-context/flow-context';
 import {
   IBranchNode,
   IEmitDataNode,
-  IInputDataNode,
-  IOptionSelectNode,
+  ICustomFormNode,
   ITrueFalseNode,
+  IFormFieldNode,
+  ITextFieldNode,
 } from '../flow-definition';
 
 type NodeBinding = {
@@ -62,27 +64,29 @@ export type RegisterEmitData<C extends FlowContext> = (
   emitData: IEmitDataNode
 ) => BaseNode<C>;
 
-export type RegisterInputData<C extends FlowContext> = (
-  inputDataNode: IInputDataNode
+export type RegisterCustomForm<C extends FlowContext> = (
+  inputDataNode: ICustomFormNode
 ) => BaseNode<C>;
 
-export type RegisterOptionSelect<C extends FlowContext> = (
-  optionNode: IOptionSelectNode
+export type RegisterTextField<C extends FlowContext> = (
+  optionNode: ITextFieldNode
 ) => BaseNode<C>;
 
 export type RegisterBranch<C extends FlowContext> = (
   optionNode: IBranchNode
 ) => BaseNode<C>;
 
+interface FormFieldRegistrar<C extends FlowContext> {
+  [FieldTypeEnum.Text]: Record<string, RegisterTextField<C>>;
+  [FieldTypeEnum.Option]: Record<string, RegisterTextField<C>>;
+}
+
 export interface NodeRegistrar<C extends FlowContext> {
   [DefinitionNodeTypeEnum.TrueFalse]: Record<string, RegisterTrueFalse<C>>;
   [DefinitionNodeTypeEnum.EmitData]: Record<string, RegisterEmitData<C>>;
-  [DefinitionNodeTypeEnum.InputData]: Record<string, RegisterInputData<C>>;
+  [DefinitionNodeTypeEnum.CustomForm]: Record<string, RegisterCustomForm<C>>;
   [DefinitionNodeTypeEnum.Branch]: Record<string, RegisterBranch<C>>;
-  [DefinitionNodeTypeEnum.OptionSelect]: Record<
-    string,
-    RegisterOptionSelect<C>
-  >;
+  [DefinitionNodeTypeEnum.FormField]: FormFieldRegistrar<C>;
 }
 
 export abstract class FlowImplementation<C extends FlowContext = FlowContext>
@@ -92,14 +96,15 @@ export abstract class FlowImplementation<C extends FlowContext = FlowContext>
 
   declare c: C;
 
-  // boundKlasses: Record<string, Newable<BaseNode<C>>> = {};
-
   registrar: NodeRegistrar<C> = {
     [DefinitionNodeTypeEnum.TrueFalse]: {},
     [DefinitionNodeTypeEnum.EmitData]: {},
-    [DefinitionNodeTypeEnum.InputData]: {},
-    [DefinitionNodeTypeEnum.OptionSelect]: {},
+    [DefinitionNodeTypeEnum.CustomForm]: {},
     [DefinitionNodeTypeEnum.Branch]: {},
+    [DefinitionNodeTypeEnum.FormField]: {
+      [FieldTypeEnum.Text]: {},
+      [FieldTypeEnum.Option]: {},
+    },
   };
 
   private _boundIds = new Set<string>();
@@ -175,14 +180,16 @@ export abstract class FlowImplementation<C extends FlowContext = FlowContext>
     this.registrar[DefinitionNodeTypeEnum.EmitData][nodeId] = fn;
   }
 
-  registerInputData(nodeId: string, fn: RegisterInputData<C>) {
+  registerCustomForm(nodeId: string, fn: RegisterCustomForm<C>) {
     this._checkId(nodeId);
-    this.registrar[DefinitionNodeTypeEnum.InputData][nodeId] = fn;
+    this.registrar[DefinitionNodeTypeEnum.CustomForm][nodeId] = fn;
   }
 
-  registerOptionSelect(nodeId: string, fn: RegisterOptionSelect<C>) {
+  registerTextField(nodeId: string, fn: RegisterTextField<C>) {
     this._checkId(nodeId);
-    this.registrar[DefinitionNodeTypeEnum.OptionSelect][nodeId] = fn;
+    this.registrar[DefinitionNodeTypeEnum.FormField][FieldTypeEnum.Text][
+      nodeId
+    ] = fn;
   }
 
   registerBranch(nodeId: string, fn: RegisterBranch<C>) {

@@ -18,12 +18,13 @@ import {
   INarrativeNode,
   ITrueFalseNode,
   IEmitDataNode,
-  IInputDataNode,
+  ICustomFormNode,
   IActionNode,
   IBranchNode,
-  IOptionSelectNode,
-  IOptionSelectNodeOption,
+  IOptionFieldNode,
+  IFieldOption,
   INextMultiOption,
+  ITextFieldNode,
 } from '../flow-definition';
 
 interface IBaseStep<D extends IFlowDefinitionNode> {
@@ -72,25 +73,30 @@ export interface IActionStep extends IBaseStep<IActionNode> {
   actionStatus: ActionStatusEnum;
 }
 
-export interface ICustomDataInputStep extends IBaseStep<IInputDataNode> {
+export interface ICustomDataInputStep extends IBaseStep<ICustomFormNode> {
   stepType: ImplementationNodeTypeEnum.CustomDataInput;
   answer: ICustomDataAnswer | null;
   jsonSchema: JSONSchema7;
 }
 
-export interface ITextInputStep extends IBaseStep<IInputDataNode> {
-  stepType: ImplementationNodeTypeEnum.TextInput;
-  answer: ITextAnswer | null;
-}
+// export interface ITextInputStep extends IBaseStep<ICustomFormNode> {
+//   stepType: ImplementationNodeTypeEnum.TextInput;
+//   answer: ITextAnswer | null;
+// }
 
-export interface IOptionSelectStep extends IBaseStep<IOptionSelectNode> {
-  stepType: ImplementationNodeTypeEnum.OptionSelect;
-  options: IOptionSelectNodeOption[];
+export interface IOptionFieldStep extends IBaseStep<IOptionFieldNode> {
+  stepType: ImplementationNodeTypeEnum.OptionField;
+  options: IFieldOption[];
   answer?: IMultiOptionAnswer | null;
   min: number;
   max: number | null;
 }
 
+export interface ITextFieldStep extends IBaseStep<ITextFieldNode> {
+  stepType: ImplementationNodeTypeEnum.TextField;
+  answer?: ITextAnswer;
+  evaluation?: ITextAnswer;
+}
 export interface IBranchChoiceStep extends IBaseStep<IBranchNode> {
   stepType: ImplementationNodeTypeEnum.BranchChoice;
   options: INextMultiOption[];
@@ -105,8 +111,7 @@ export type IFlowStep =
   | IEmitDataStep
   | IEndStep
   | IBranchChoiceStep
-  // | MessageStep
-  | ITextInputStep
   | INarrativeStep
   | ICustomDataInputStep
-  | IOptionSelectStep;
+  | ITextFieldStep
+  | IOptionFieldStep;
