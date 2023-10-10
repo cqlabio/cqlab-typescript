@@ -19,9 +19,11 @@ import {
   ICustomFormNode,
   INextBinary,
   IEmitDataNode,
-  IOptionFieldNode,
+  IMultiOptionFieldNode,
   IBranchNode,
   ITextFieldNode,
+  IFormFieldNode,
+  INumberFieldNode,
 } from '../flow-definition';
 import {
   BaseNode,
@@ -43,14 +45,61 @@ import {
   MessageNode,
   NarrativeNode,
   CustomFormNode,
-  OptionFieldNode,
+  MultiOptionFieldNode,
   TextFieldNode,
+  NumberFieldNode,
 } from '../flow-nodes';
 import { IFlowDefinitionNode, ILogicTreeNode } from '../flow-definition';
 // import { IBaseBooleanNode } from '../flow-nodes/abstract/boolean-node';
 import { FlowContext } from '../flow-context/flow-context';
 import { TernaryEnum } from '../enums';
 import { JSONSchema7 } from 'json-schema';
+
+export function compileNodes(
+  instance: FlowImplementation,
+  flowDefinition: IFlowDefinition
+): Record<string, BaseNode> {
+  const newNodes: Record<string, BaseNode> = {};
+
+  const nodes = expandNodes(flowDefinition.nodes);
+
+  Object.keys(nodes).forEach((nodeId) => {
+    const rawNode = nodes[nodeId];
+
+    let implementationNode: BaseNode | null = null;
+
+    if (rawNode.nodeType === DefinitionNodeTypeEnum.Start) {
+      implementationNode = new StartNode(rawNode);
+    } else if (rawNode.nodeType === DefinitionNodeTypeEnum.End) {
+      implementationNode = new EndNode(rawNode);
+    } else if (rawNode.nodeType === DefinitionNodeTypeEnum.Narrative) {
+      implementationNode = new NarrativeNode(rawNode);
+    } else if (rawNode.nodeType === DefinitionNodeTypeEnum.SubFlow) {
+      implementationNode = new SubFlowNode(rawNode);
+    } else if (rawNode.nodeType === DefinitionNodeTypeEnum.Action) {
+      implementationNode = new ActionNode(rawNode);
+    } else if (rawNode.nodeType === DefinitionNodeTypeEnum.TrueFalse) {
+      implementationNode = compileTrueFalseNode(instance, rawNode);
+    } else if (rawNode.nodeType === DefinitionNodeTypeEnum.EmitData) {
+      implementationNode = compileEmitDataNode(instance, rawNode);
+    } else if (rawNode.nodeType === DefinitionNodeTypeEnum.Branch) {
+      implementationNode = compileBranchNode(instance, rawNode);
+    } else if (rawNode.nodeType === DefinitionNodeTypeEnum.CustomForm) {
+      implementationNode = compileCustomFormNode(instance, rawNode);
+    } else if (rawNode.nodeType === DefinitionNodeTypeEnum.FormField) {
+      implementationNode = compileFormFieldNode(instance, rawNode);
+    }
+
+    if (implementationNode && implementationNode.getDefinitionId()) {
+      instance.nodes[implementationNode.getDefinitionId()] = implementationNode;
+    }
+  });
+
+  return {
+    ...instance.nodes,
+    ...newNodes,
+  };
+}
 
 function compileTrueFalseNode(
   flowImplementation: FlowImplementation,
@@ -136,6 +185,20 @@ function compileBranchNode(
   return new BranchChoiceNode(rawNode);
 }
 
+function compileFormFieldNode(
+  flowImplementation: FlowImplementation,
+  rawNode: IFormFieldNode
+): BaseNode {
+  if (rawNode.fieldType === FieldTypeEnum.Text) {
+    return compileTextFieldNode(flowImplementation, rawNode);
+  } else if (rawNode.fieldType === FieldTypeEnum.Number) {
+    return compileNumberFieldNode(flowImplementation, rawNode);
+  } else if (rawNode.fieldType === FieldTypeEnum.MultiOption) {
+    return compileMultiOptionFieldNode(flowImplementation, rawNode);
+  }
+  throw new Error(`Unexpected field type for node: ` + rawNode);
+}
+
 function compileTextFieldNode(
   flowImplementation: FlowImplementation,
   rawNode: ITextFieldNode
@@ -152,9 +215,24 @@ function compileTextFieldNode(
   return new TextFieldNode(rawNode);
 }
 
-function compileOptionFieldNode(
+function compileNumberFieldNode(
   flowImplementation: FlowImplementation,
-  rawNode: IOptionFieldNode
+  rawNode: INumberFieldNode
+): BaseNode {
+  const numberRegistrar =
+    flowImplementation.getRegistrar()[DefinitionNodeTypeEnum.FormField][
+      FieldTypeEnum.Number
+    ];
+
+  if (rawNode.bindId && numberRegistrar[rawNode.bindId]) {
+    return numberRegistrar[rawNode.bindId](rawNode);
+  }
+
+  return new NumberFieldNode(rawNode);
+}
+function compileMultiOptionFieldNode(
+  flowImplementation: FlowImplementation,
+  rawNode: IMultiOptionFieldNode
 ): BaseNode {
   // const customDataRegistrar =
   //   flowImplementation.getRegistrar()[DefinitionNodeTypeEnum.OptionSelect];
@@ -163,107 +241,7 @@ function compileOptionFieldNode(
   //   return customDataRegistrar[rawNode.bindId](rawNode);
   // }
 
-  return new OptionFieldNode(rawNode);
-}
-
-export function compileNodes(
-  instance: FlowImplementation,
-  flowDefinition: IFlowDefinition
-): Record<string, BaseNode> {
-  const newNodes: Record<string, BaseNode> = {};
-
-  const nodes = expandNodes(flowDefinition.nodes);
-
-  Object.keys(nodes).forEach((nodeId) => {
-    const rawNode = nodes[nodeId];
-
-    let implementationNode: BaseNode | null = null;
-
-    if (rawNode.nodeType === DefinitionNodeTypeEnum.Start) {
-      implementationNode = new StartNode(rawNode);
-    } else if (rawNode.nodeType === DefinitionNodeTypeEnum.End) {
-      implementationNode = new EndNode(rawNode);
-    }
-    //  else if (rawNode.nodeType === DefinitionNodeTypeEnum.EmitData) {
-    //   implementationNode = new EmitDataNode(rawNode);
-    // }
-    else if (rawNode.nodeType === DefinitionNodeTypeEnum.Narrative) {
-      implementationNode = new NarrativeNode(rawNode);
-    } else if (rawNode.nodeType === DefinitionNodeTypeEnum.SubFlow) {
-      implementationNode = new SubFlowNode(rawNode);
-    } else if (rawNode.nodeType === DefinitionNodeTypeEnum.Action) {
-      implementationNode = new ActionNode(rawNode);
-    } else if (rawNode.nodeType === DefinitionNodeTypeEnum.TrueFalse) {
-      implementationNode = compileTrueFalseNode(instance, rawNode);
-    } else if (rawNode.nodeType === DefinitionNodeTypeEnum.EmitData) {
-      implementationNode = compileEmitDataNode(instance, rawNode);
-    } else if (rawNode.nodeType === DefinitionNodeTypeEnum.Branch) {
-      implementationNode = compileBranchNode(instance, rawNode);
-    } else if (rawNode.nodeType === DefinitionNodeTypeEnum.CustomForm) {
-      implementationNode = compileCustomFormNode(instance, rawNode);
-    } else if (rawNode.nodeType === DefinitionNodeTypeEnum.FormField) {
-      if (rawNode.fieldType === FieldTypeEnum.Text) {
-        implementationNode = compileTextFieldNode(instance, rawNode);
-      } else if (rawNode.fieldType === FieldTypeEnum.Option) {
-        implementationNode = compileOptionFieldNode(instance, rawNode);
-      }
-
-      // else if (rawNode.nodeType === DefinitionNodeTypeEnum.OptionSelect) {
-      //   instance.nodes[nodeId] = compileOptionSelectNode(instance, rawNode);
-      // }
-
-      // instance.nodes[nodeId] = new CustomFormNode(rawNode);
-    }
-
-    if (
-      instance.getImplementationType() === FlowDefinitionTypeEnum.Interactive
-    ) {
-      // Assume it's an interactive node
-      // if (rawNode.nodeType === DefinitionNodeTypeEnum.TrueFalse) {
-      //   implementationNode = new YesNoNode<C>(rawNode);
-      // } else
-
-      if (rawNode.nodeType === DefinitionNodeTypeEnum.Branch) {
-        implementationNode = new BranchChoiceNode(rawNode);
-      }
-    }
-
-    // else if (
-    //   instance.getImplementationType() ===
-    //   FlowDefinitionTypeEnum.NonInteractive
-    // ) {
-    //   if (rawNode.nodeType === DefinitionNodeTypeEnum.TrueFalse) {
-    //     const execNode = new ExecNode<C>(rawNode);
-
-    //     // If there is no executor, then we assume it is a false node
-    //     execNode.setExecutor(() => {
-    //       return TernaryEnum.FALSE;
-    //     });
-    //     implementationNode = execNode;
-    //   }
-    // }
-
-    // else if (rawNode.nodeType === NodeTypeEnum.Action) {
-    // implementationNode = new ActionNode<C>(rawNode);
-
-    // else if (rawNode.nodeType === NodeTypeEnum.BranchChoice) {
-    //   instance.nodes[nodeId] = new BranchChoiceNode<C>(rawNode);
-    // } else if (rawNode.nodeType === NodeTypeEnum.Message) {
-    //   instance.nodes[nodeId] = new MessageNode<C>(rawNode);
-    // } else {
-    //   throw new Error(`Unknown node type ${rawNode.nodeType}`);
-    // }
-    // }
-
-    if (implementationNode && implementationNode.getDefinitionId()) {
-      instance.nodes[implementationNode.getDefinitionId()] = implementationNode;
-    }
-  });
-
-  return {
-    ...instance.nodes,
-    ...newNodes,
-  };
+  return new MultiOptionFieldNode(rawNode);
 }
 
 // export function compileNodes<C extends FlowContext<any,any>>(

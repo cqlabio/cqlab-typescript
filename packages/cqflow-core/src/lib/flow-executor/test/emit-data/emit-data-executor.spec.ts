@@ -15,7 +15,7 @@ import {
 import { CustomFormNode } from '../../../flow-nodes';
 import { InteractiveFlowContext } from '../../../flow-context/interactive-flow-context';
 
-interface IntitialData {
+interface InitialData {
   patientId: string;
 }
 
@@ -26,7 +26,7 @@ describe('Interactive Executor Emit and Narrative node', () => {
       message: string;
     }
 
-    class EmitDataExampleContext extends FlowContext<IntitialData, OutData> {}
+    class EmitDataExampleContext extends FlowContext<InitialData, OutData> {}
 
     const simpleFlowImplementation =
       new NonInteractiveFlowImplementation<EmitDataExampleContext>();
@@ -81,7 +81,7 @@ describe('Interactive Executor Emit and Narrative node', () => {
     }
 
     class EmitDataExampleContext extends InteractiveFlowContext<
-      IntitialData,
+      InitialData,
       OutData
     > {}
 
@@ -108,7 +108,7 @@ describe('Interactive Executor Emit and Narrative node', () => {
       (def) => new EmitHeartFailureConfirmed(def)
     );
 
-    const interactiveFlowState: InteractiveFlowState<IntitialData> = {
+    const interactiveFlowState: InteractiveFlowState<InitialData> = {
       id: '1234',
       status: CQFlowExecutorStateEnum.Initiated,
       answers: [],
@@ -119,7 +119,7 @@ describe('Interactive Executor Emit and Narrative node', () => {
     };
 
     const onUpdateInteractiveState = async (
-      state: InteractiveFlowState<IntitialData>
+      state: InteractiveFlowState<InitialData>
     ) => state;
 
     const context = new EmitDataExampleContext({

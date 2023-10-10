@@ -13,8 +13,9 @@ import {
   AnswerTypeEnum,
 } from '../../../enums';
 import { CustomFormNode } from '../../../flow-nodes';
+import { ICustomFormStep } from '../../../flow-steps';
 
-interface IntitialData {
+interface InitialData {
   patientId: string;
 }
 
@@ -22,9 +23,9 @@ type ContextData = null;
 
 // const simpleFlowImplementation =
 describe('Interactive Executor custom form node', () => {
-  it('should evaluate with bound node', async () => {
+  it('should evaluate with user input', async () => {
     class CustomFormContext extends InteractiveFlowContext<
-      IntitialData,
+      InitialData,
       ContextData
     > {}
 
@@ -76,7 +77,7 @@ describe('Interactive Executor custom form node', () => {
       (def) => new IsWeightOver100(def)
     );
 
-    const interactiveFlowState: InteractiveFlowState<IntitialData> = {
+    const interactiveFlowState: InteractiveFlowState<InitialData> = {
       id: '1234',
       status: CQFlowExecutorStateEnum.Initiated,
       answers: [],
@@ -87,7 +88,7 @@ describe('Interactive Executor custom form node', () => {
     };
 
     const onUpdateInteractiveState = async (
-      state: InteractiveFlowState<IntitialData>
+      state: InteractiveFlowState<InitialData>
     ) => state;
 
     const context = new CustomFormContext({
@@ -104,9 +105,7 @@ describe('Interactive Executor custom form node', () => {
     // Without an answer, we wait for interaction
     expect(result.length).toEqual(2);
     expect(result[0].stepType).toEqual(ImplementationNodeTypeEnum.Start);
-    expect(result[1].stepType).toEqual(
-      ImplementationNodeTypeEnum.CustomDataInput
-    );
+    expect(result[1].stepType).toEqual(ImplementationNodeTypeEnum.CustomForm);
 
     // Add positive weight
     interactiveFlowState.answers.push({
@@ -123,9 +122,7 @@ describe('Interactive Executor custom form node', () => {
 
     expect(result.length).toEqual(4);
     expect(result[0].stepType).toEqual(ImplementationNodeTypeEnum.Start);
-    expect(result[1].stepType).toEqual(
-      ImplementationNodeTypeEnum.CustomDataInput
-    );
+    expect(result[1].stepType).toEqual(ImplementationNodeTypeEnum.CustomForm);
     expect(result[2].stepType).toEqual(ImplementationNodeTypeEnum.Exec);
     expect(result[3].stepType).toEqual(ImplementationNodeTypeEnum.End);
     expect(result[3].stepId).toEqual('end_true');
@@ -145,18 +142,15 @@ describe('Interactive Executor custom form node', () => {
 
     expect(result.length).toEqual(4);
     expect(result[0].stepType).toEqual(ImplementationNodeTypeEnum.Start);
-    expect(result[1].stepType).toEqual(
-      ImplementationNodeTypeEnum.CustomDataInput
-    );
+    expect(result[1].stepType).toEqual(ImplementationNodeTypeEnum.CustomForm);
     expect(result[2].stepType).toEqual(ImplementationNodeTypeEnum.Exec);
     expect(result[3].stepType).toEqual(ImplementationNodeTypeEnum.End);
     expect(result[3].stepId).toEqual('end_false');
   });
-  it('should evaluate default to a text when missing a bound node', async () => {
-    const DUMMY_VAL = 'Dummy';
 
+  it('should evaluate with a calculation', async () => {
     class CustomFormContext extends InteractiveFlowContext<
-      IntitialData,
+      InitialData,
       ContextData
     > {}
 
@@ -167,7 +161,59 @@ describe('Interactive Executor custom form node', () => {
       weight: number;
     }
 
-    const interactiveFlowState: InteractiveFlowState<IntitialData> = {
+    class InputWeight extends CustomFormNode<CustomFormContext, WeightData> {
+      override getValue(
+        context: CustomFormContext
+      ): Promise<WeightData | null> {
+        return Promise.resolve({
+          weight: 200,
+        });
+      }
+      override getValueJsonSchema(): JSONSchema7 {
+        return {
+          type: 'object',
+          properties: {
+            weight: {
+              type: 'number',
+              description: 'Units in lbs',
+            },
+          },
+        };
+      }
+    }
+
+    class IsWeightOver100 extends ExecNode<CustomFormContext> {
+      override async evaluate(
+        context: CustomFormContext
+      ): Promise<TernaryEnum> {
+        const previousStep = context.getFlowStepByBindId(
+          'enter_weight'
+        ) as ICustomFormStep | null;
+
+        if (!previousStep) {
+          throw new Error('Previous step not found');
+        }
+
+        const value = previousStep.evaluation?.value as WeightData | null;
+
+        if (!value) {
+          return TernaryEnum.UNKNOWN;
+        }
+
+        return value.weight > 100 ? TernaryEnum.TRUE : TernaryEnum.FALSE;
+      }
+    }
+
+    simpleFlowImplementation.registerCustomForm(
+      'enter_weight',
+      (def) => new InputWeight(def)
+    );
+    simpleFlowImplementation.registerTrueFalse(
+      'is_above_100_lbs',
+      (def) => new IsWeightOver100(def)
+    );
+
+    const interactiveFlowState: InteractiveFlowState<InitialData> = {
       id: '1234',
       status: CQFlowExecutorStateEnum.Initiated,
       answers: [],
@@ -178,7 +224,56 @@ describe('Interactive Executor custom form node', () => {
     };
 
     const onUpdateInteractiveState = async (
-      state: InteractiveFlowState<IntitialData>
+      state: InteractiveFlowState<InitialData>
+    ) => state;
+
+    const context = new CustomFormContext({
+      flowDefinition: inputDataFlowDefinition,
+      interactiveFlowState: interactiveFlowState,
+      onUpdateInteractiveState: onUpdateInteractiveState,
+    });
+
+    let result = await executeInteractiveFlow(
+      simpleFlowImplementation,
+      context
+    );
+
+    result = await executeInteractiveFlow(simpleFlowImplementation, context);
+
+    expect(result.length).toEqual(4);
+    expect(result[0].stepType).toEqual(ImplementationNodeTypeEnum.Start);
+    expect(result[1].stepType).toEqual(ImplementationNodeTypeEnum.CustomForm);
+    expect(result[2].stepType).toEqual(ImplementationNodeTypeEnum.Exec);
+    expect(result[3].stepType).toEqual(ImplementationNodeTypeEnum.End);
+    expect(result[3].stepId).toEqual('end_true');
+  });
+  it('should evaluate default to a text when missing a bound node', async () => {
+    const DUMMY_VAL = 'Dummy';
+
+    class CustomFormContext extends InteractiveFlowContext<
+      InitialData,
+      ContextData
+    > {}
+
+    const simpleFlowImplementation =
+      new InteractiveFlowImplementation<CustomFormContext>();
+
+    interface WeightData {
+      weight: number;
+    }
+
+    const interactiveFlowState: InteractiveFlowState<InitialData> = {
+      id: '1234',
+      status: CQFlowExecutorStateEnum.Initiated,
+      answers: [],
+      actionsTaken: {},
+      initialData: {
+        patientId: '123',
+      },
+    };
+
+    const onUpdateInteractiveState = async (
+      state: InteractiveFlowState<InitialData>
     ) => state;
 
     const context = new CustomFormContext({
@@ -195,9 +290,7 @@ describe('Interactive Executor custom form node', () => {
     // Without an answer, we wait for interaction
     expect(result.length).toEqual(2);
     expect(result[0].stepType).toEqual(ImplementationNodeTypeEnum.Start);
-    expect(result[1].stepType).toEqual(
-      ImplementationNodeTypeEnum.CustomDataInput
-    );
+    expect(result[1].stepType).toEqual(ImplementationNodeTypeEnum.CustomForm);
 
     // Add positive weight
     interactiveFlowState.answers.push({
@@ -216,14 +309,12 @@ describe('Interactive Executor custom form node', () => {
 
     const formStep = result[1];
 
-    if (formStep.stepType !== ImplementationNodeTypeEnum.CustomDataInput) {
+    if (formStep.stepType !== ImplementationNodeTypeEnum.CustomForm) {
       throw new Error('Expected a custom data input step');
     }
 
     expect(result[0].stepType).toEqual(ImplementationNodeTypeEnum.Start);
-    expect(formStep.stepType).toEqual(
-      ImplementationNodeTypeEnum.CustomDataInput
-    );
+    expect(formStep.stepType).toEqual(ImplementationNodeTypeEnum.CustomForm);
     expect(formStep.answer?.value?.value).toEqual(DUMMY_VAL);
   });
 });

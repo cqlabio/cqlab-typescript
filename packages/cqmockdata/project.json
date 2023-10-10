@@ -1,0 +1,41 @@
+{
+  "name": "cqmockdata",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/cqmockdata/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:swc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/cqmockdata",
+        "main": "packages/cqmockdata/src/index.ts",
+        "tsConfig": "packages/cqmockdata/tsconfig.lib.json",
+        "assets": ["packages/cqmockdata/*.md"]
+      }
+    },
+    "publish": {
+      "command": "node tools/scripts/publish.mjs cqmockdata {args.ver} {args.tag}",
+      "dependsOn": ["build"]
+    },
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": [
+          "packages/cqmockdata/**/*.ts",
+          "packages/cqmockdata/package.json"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nx/vite:test",
+      "outputs": ["{options.reportsDirectory}"],
+      "options": {
+        "passWithNoTests": true,
+        "reportsDirectory": "../../coverage/packages/cqmockdata"
+      }
+    }
+  },
+  "tags": []
+}

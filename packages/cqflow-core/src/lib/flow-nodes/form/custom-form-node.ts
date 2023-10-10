@@ -8,7 +8,7 @@ export abstract class CustomFormNode<
   C extends FlowContext = FlowContext,
   D = any
 > extends InputDataNode<C, D, ICustomFormNode> {
-  nodeType = ImplementationNodeTypeEnum.TextInput;
+  nodeType = ImplementationNodeTypeEnum.CustomForm;
 
   abstract getValueJsonSchema(): JSONSchema7;
 

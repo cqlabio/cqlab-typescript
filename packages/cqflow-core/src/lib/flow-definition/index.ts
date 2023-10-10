@@ -1,4 +1,5 @@
 export * from './flow-definition-node';
+export * from './form-field-node';
 import { IFlowDefinitionNode } from './flow-definition-node';
 
 export interface IFlowDefinition {

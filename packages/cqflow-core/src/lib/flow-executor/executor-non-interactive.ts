@@ -37,7 +37,8 @@ export async function executeNonInteractiveFlow(
   context: FlowContext,
   subFlows: null | Record<string, SubFlowExecution<FlowContext>> = {}
 ): Promise<IFlowStep[]> {
-  const steps: IFlowStep[] = [];
+  // A context should have fresh steps each times its used
+  context.clearSteps();
 
   const nodes = compileNodes(flowImplementation, context.getFlowDefinition());
 
@@ -49,19 +50,17 @@ export async function executeNonInteractiveFlow(
     await recurseNonInteractiveFlow(
       startNode.getDefinitionId(),
       nodes,
-      context,
-      steps
+      context
     );
   }
 
-  return steps;
+  return context.getFlowSteps();
 }
 
 export async function recurseNonInteractiveFlow(
   nodeId: string | null,
   nodes: Record<string, BaseNode>,
-  context: FlowContext,
-  steps: IFlowStep[]
+  context: FlowContext
 ) {
   if (!nodeId || !nodes[nodeId]) {
     return;
@@ -87,8 +86,10 @@ export async function recurseNonInteractiveFlow(
     throw new Error(`Executor can not be found for nodeType: ${node.nodeType}`);
   }
 
-  steps.push(nextStep.step);
-  await recurseNonInteractiveFlow(nextStep.nextNodeId, nodes, context, steps);
+  // Add step to the context
+  context.addFlowStep(nextStep.step);
+
+  await recurseNonInteractiveFlow(nextStep.nextNodeId, nodes, context);
 }
 
 export async function executeStartNode(

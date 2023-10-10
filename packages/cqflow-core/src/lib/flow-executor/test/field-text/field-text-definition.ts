@@ -26,6 +26,9 @@ export const fieldTextDef: IFlowDefinition = {
       label: 'Choose Option',
       nodeType: DefinitionNodeTypeEnum.FormField,
       fieldType: FieldTypeEnum.Text,
+      field: {
+        fieldType: FieldTypeEnum.Text,
+      },
       next: {
         type: NextTypeEnum.Unary,
         id: 'end_1',

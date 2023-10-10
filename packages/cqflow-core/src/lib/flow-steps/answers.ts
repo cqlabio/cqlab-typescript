@@ -29,6 +29,11 @@ export interface ITextAnswer extends IBaseAnswer {
   value: string | null;
 }
 
+export interface INumberAnswer extends IBaseAnswer {
+  answerType: AnswerTypeEnum.Number;
+  value: number | null;
+}
+
 export interface IActionAnswer extends IBaseAnswer {
   answerType: AnswerTypeEnum.Action;
   submitted: boolean;
@@ -38,6 +43,7 @@ export type IFlowStepAnswer =
   | IYesNoAnswer
   | IActionAnswer
   | IOptionAnswer
-  | ITextAnswer
   | ICustomDataAnswer
+  | ITextAnswer
+  | INumberAnswer
   | IMultiOptionAnswer;

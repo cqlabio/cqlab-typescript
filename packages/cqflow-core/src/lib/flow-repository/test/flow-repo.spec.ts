@@ -9,20 +9,20 @@ import { InteractiveFlowContext } from '../../flow-context/interactive-flow-cont
 
 describe('Flow Repository configuration and executor', () => {
   it('should work for non-interactive flows', async () => {
-    interface IntitialData {
+    interface InitialData {
       patientId: string;
     }
 
     type ContextData = null;
 
-    class TrueFalseContext extends FlowContext<IntitialData, ContextData> {}
+    class TrueFalseContext extends FlowContext<InitialData, ContextData> {}
 
     const trueFalseImplementation =
       new NonInteractiveFlowImplementation<TrueFalseContext>();
 
     const flowRepository = new FlowRepository();
 
-    flowRepository.registerNonInteractiveModule<IntitialData>('my_flow', {
+    flowRepository.registerNonInteractiveModule<InitialData>('my_flow', {
       flowImplementation: trueFalseImplementation,
       flowContext: (contextOpts) => new TrueFalseContext(contextOpts),
       testData: [{ patientId: '1234' }],
@@ -46,14 +46,14 @@ describe('Flow Repository configuration and executor', () => {
   });
 
   it('should work for interactive flows', async () => {
-    interface IntitialData {
+    interface InitialData {
       patientId: string;
     }
 
     type ContextData = null;
 
     class TrueFalseContext extends InteractiveFlowContext<
-      IntitialData,
+      InitialData,
       ContextData
     > {
       isFemale(): TernaryEnum {
@@ -64,7 +64,7 @@ describe('Flow Repository configuration and executor', () => {
     const trueFalseImplementation =
       new InteractiveFlowImplementation<TrueFalseContext>();
 
-    const interactiveFlowState: InteractiveFlowState<IntitialData> = {
+    const interactiveFlowState: InteractiveFlowState<InitialData> = {
       id: '1234',
       status: CQFlowExecutorStateEnum.Initiated,
       answers: [],
@@ -75,12 +75,12 @@ describe('Flow Repository configuration and executor', () => {
     };
 
     const onUpdateInteractiveState = async (
-      state: InteractiveFlowState<IntitialData>
+      state: InteractiveFlowState<InitialData>
     ) => state;
 
     const flowRepository = new FlowRepository();
 
-    flowRepository.registerInteractiveModule<IntitialData>('my_flow', {
+    flowRepository.registerInteractiveModule<InitialData>('my_flow', {
       flowImplementation: trueFalseImplementation,
       flowContext: (contextOpts) => new TrueFalseContext(contextOpts),
       testData: [{ patientId: '1234' }],

@@ -10,23 +10,23 @@ import {
 } from '../../../enums';
 import { TextFieldNode } from '../../../flow-nodes';
 
-interface IntitialData {
+interface InitialData {
   patientId: string;
 }
 
 type ContextData = null;
 
-describe('Interactive Executor Option Select node', () => {
-  it('should default to a YesNo interaction', async () => {
+describe('Interactive Executor Text Field', () => {
+  it('should work in default case', async () => {
     class TextFieldContext extends InteractiveFlowContext<
-      IntitialData,
+      InitialData,
       ContextData
     > {}
 
     const simpleFlowImplementation =
       new InteractiveFlowImplementation<TextFieldContext>();
 
-    const interactiveFlowState: InteractiveFlowState<IntitialData> = {
+    const interactiveFlowState: InteractiveFlowState<InitialData> = {
       id: '1234',
       status: CQFlowExecutorStateEnum.Initiated,
       answers: [],
@@ -37,7 +37,7 @@ describe('Interactive Executor Option Select node', () => {
     };
 
     const onUpdateInteractiveState = async (
-      state: InteractiveFlowState<IntitialData>
+      state: InteractiveFlowState<InitialData>
     ) => state;
 
     const context = new TextFieldContext({
@@ -79,11 +79,11 @@ describe('Interactive Executor Option Select node', () => {
     expect(result[2].stepType).toEqual(ImplementationNodeTypeEnum.End);
   });
 
-  it('should default to a YesNo interaction', async () => {
+  it('should work in override case', async () => {
     const MY_DISEASE = 'my disease';
 
     class TextFieldContext extends InteractiveFlowContext<
-      IntitialData,
+      InitialData,
       ContextData
     > {}
 
@@ -103,7 +103,7 @@ describe('Interactive Executor Option Select node', () => {
       (nodeDef) => new EnterTextDisease(nodeDef)
     );
 
-    const interactiveFlowState: InteractiveFlowState<IntitialData> = {
+    const interactiveFlowState: InteractiveFlowState<InitialData> = {
       id: '1234',
       status: CQFlowExecutorStateEnum.Initiated,
       answers: [],
@@ -114,7 +114,7 @@ describe('Interactive Executor Option Select node', () => {
     };
 
     const onUpdateInteractiveState = async (
-      state: InteractiveFlowState<IntitialData>
+      state: InteractiveFlowState<InitialData>
     ) => state;
 
     const context = new TextFieldContext({

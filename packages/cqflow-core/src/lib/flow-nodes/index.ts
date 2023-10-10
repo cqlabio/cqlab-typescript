@@ -15,10 +15,10 @@ export * from './subflow-node';
 export * from './branchchoice-node';
 export * from './message-node';
 export * from './narrative-node';
-export * from './form/option-field-node';
-export * from './form/customdata-inputnode';
-
+export * from './form/custom-form-node';
 export * from './form/text-field-node';
+export * from './form/number-field-node';
+export * from './form/multi-option-field-node';
 
 export * from './utils';
 
@@ -33,7 +33,7 @@ import { SubFlowNode } from './subflow-node';
 import { BranchChoiceNode } from './branchchoice-node';
 import { MessageNode } from './message-node';
 import { NarrativeNode } from './narrative-node';
-import { CustomFormNode } from './form/customdata-inputnode';
+import { CustomFormNode } from './form/custom-form-node';
 // import { IBaseBooleanNode } from './abstract/boolean-node';
 // import { IBaseNextNode } from './abstract/next-node';
 

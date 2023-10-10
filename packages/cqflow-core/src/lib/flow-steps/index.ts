@@ -7,6 +7,7 @@ import {
 import {
   ICustomDataAnswer,
   IMultiOptionAnswer,
+  INumberAnswer,
   IOptionAnswer,
   ITextAnswer,
   IYesNoAnswer,
@@ -21,10 +22,11 @@ import {
   ICustomFormNode,
   IActionNode,
   IBranchNode,
-  IOptionFieldNode,
+  IMultiOptionFieldNode,
   IFieldOption,
   INextMultiOption,
   ITextFieldNode,
+  INumberFieldNode,
 } from '../flow-definition';
 
 interface IBaseStep<D extends IFlowDefinitionNode> {
@@ -73,9 +75,10 @@ export interface IActionStep extends IBaseStep<IActionNode> {
   actionStatus: ActionStatusEnum;
 }
 
-export interface ICustomDataInputStep extends IBaseStep<ICustomFormNode> {
-  stepType: ImplementationNodeTypeEnum.CustomDataInput;
-  answer: ICustomDataAnswer | null;
+export interface ICustomFormStep extends IBaseStep<ICustomFormNode> {
+  stepType: ImplementationNodeTypeEnum.CustomForm;
+  answer?: ICustomDataAnswer | null;
+  evaluation?: ICustomDataAnswer | null;
   jsonSchema: JSONSchema7;
 }
 
@@ -84,10 +87,12 @@ export interface ICustomDataInputStep extends IBaseStep<ICustomFormNode> {
 //   answer: ITextAnswer | null;
 // }
 
-export interface IOptionFieldStep extends IBaseStep<IOptionFieldNode> {
-  stepType: ImplementationNodeTypeEnum.OptionField;
+export interface IMultiOptionFieldStep
+  extends IBaseStep<IMultiOptionFieldNode> {
+  stepType: ImplementationNodeTypeEnum.MultiOptionField;
   options: IFieldOption[];
   answer?: IMultiOptionAnswer | null;
+  evaluation?: IMultiOptionAnswer | null;
   min: number;
   max: number | null;
 }
@@ -97,6 +102,13 @@ export interface ITextFieldStep extends IBaseStep<ITextFieldNode> {
   answer?: ITextAnswer;
   evaluation?: ITextAnswer;
 }
+
+export interface INumberFieldStep extends IBaseStep<INumberFieldNode> {
+  stepType: ImplementationNodeTypeEnum.NumberField;
+  answer?: INumberAnswer;
+  evaluation?: INumberAnswer;
+}
+
 export interface IBranchChoiceStep extends IBaseStep<IBranchNode> {
   stepType: ImplementationNodeTypeEnum.BranchChoice;
   options: INextMultiOption[];
@@ -112,6 +124,7 @@ export type IFlowStep =
   | IEndStep
   | IBranchChoiceStep
   | INarrativeStep
-  | ICustomDataInputStep
+  | ICustomFormStep
   | ITextFieldStep
-  | IOptionFieldStep;
+  | INumberFieldStep
+  | IMultiOptionFieldStep;

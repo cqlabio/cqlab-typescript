@@ -1,4 +1,5 @@
 import { IFlowDefinition, IFlowDefinitionNode } from '../flow-definition';
+import { IFlowStep } from '../flow-steps';
 
 export interface ContextStackItem<S> {
   nodeId: string;
@@ -16,6 +17,7 @@ export abstract class FlowContext<I = any, S = any> {
   private _initialData: I;
   private _flowDefinition: IFlowDefinition;
   private _contextDataStack: ContextStackItem<S>[] = [];
+  private _steps: Map<string, IFlowStep> = new Map();
 
   constructor(opts: FlowContextOpts<I>) {
     this._initialData = opts.initialData;
@@ -50,5 +52,30 @@ export abstract class FlowContext<I = any, S = any> {
     const nodes = Object.values(this._flowDefinition.nodes || {});
     const found = nodes.find((node) => node.bindId === bindId);
     return found || null;
+  }
+
+  clearSteps() {
+    this._steps.clear();
+  }
+
+  addFlowStep = (step: IFlowStep) => {
+    if (step.stepId in this._steps) {
+      throw new Error(`Step ${step.stepId} already exists`);
+    }
+    this._steps.set(step.stepId, step);
+  };
+
+  getFlowStepByBindId(bindId: string): IFlowStep | null {
+    const flowDefNode = this.getFlowDefinitionNodeByBindId(bindId);
+    if (!flowDefNode) {
+      return null;
+    }
+    return this._steps.get(flowDefNode.id) || null;
+  }
+
+  // Should be in insertion order
+  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map
+  getFlowSteps(): IFlowStep[] {
+    return Array.from(this._steps.values());
   }
 }

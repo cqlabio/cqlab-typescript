@@ -25,7 +25,7 @@
 //   IEndStep,
 //   ITextInputStep,
 //   INarrativeStep,
-//   ICustomDataInputStep,
+//   ICustomFormStep,
 // } from '../cqflow-steps';
 // import {
 //   IFlowStepAnswer,
@@ -231,9 +231,9 @@
 //         await recurseNode(node.getNextNodeId(), currentFlowDefinitionId);
 //       }
 //     } else if (node instanceof CustomFormNode) {
-//       const step: ICustomDataInputStep = {
+//       const step: ICustomFormStep = {
 //         ...nextStep,
-//         stepType: ImplementationNodeTypeEnum.CustomDataInput,
+//         stepType: ImplementationNodeTypeEnum.CustomForm,
 //         label: node.getLabel(context),
 //         answer: null,
 //         jsonSchema: node.getValueJsonSchema(),

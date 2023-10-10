@@ -21,6 +21,7 @@ import {
   ITrueFalseNode,
   IFormFieldNode,
   ITextFieldNode,
+  INumberFieldNode,
 } from '../flow-definition';
 
 type NodeBinding = {
@@ -72,13 +73,18 @@ export type RegisterTextField<C extends FlowContext> = (
   optionNode: ITextFieldNode
 ) => BaseNode<C>;
 
+export type RegisterNumberField<C extends FlowContext> = (
+  optionNode: INumberFieldNode
+) => BaseNode<C>;
+
 export type RegisterBranch<C extends FlowContext> = (
   optionNode: IBranchNode
 ) => BaseNode<C>;
 
 interface FormFieldRegistrar<C extends FlowContext> {
   [FieldTypeEnum.Text]: Record<string, RegisterTextField<C>>;
-  [FieldTypeEnum.Option]: Record<string, RegisterTextField<C>>;
+  [FieldTypeEnum.Number]: Record<string, RegisterNumberField<C>>;
+  [FieldTypeEnum.MultiOption]: Record<string, RegisterTextField<C>>;
 }
 
 export interface NodeRegistrar<C extends FlowContext> {
@@ -103,7 +109,8 @@ export abstract class FlowImplementation<C extends FlowContext = FlowContext>
     [DefinitionNodeTypeEnum.Branch]: {},
     [DefinitionNodeTypeEnum.FormField]: {
       [FieldTypeEnum.Text]: {},
-      [FieldTypeEnum.Option]: {},
+      [FieldTypeEnum.Number]: {},
+      [FieldTypeEnum.MultiOption]: {},
     },
   };
 
@@ -188,6 +195,13 @@ export abstract class FlowImplementation<C extends FlowContext = FlowContext>
   registerTextField(nodeId: string, fn: RegisterTextField<C>) {
     this._checkId(nodeId);
     this.registrar[DefinitionNodeTypeEnum.FormField][FieldTypeEnum.Text][
+      nodeId
+    ] = fn;
+  }
+
+  registerNumberField(nodeId: string, fn: RegisterNumberField<C>) {
+    this._checkId(nodeId);
+    this.registrar[DefinitionNodeTypeEnum.FormField][FieldTypeEnum.Number][
       nodeId
     ] = fn;
   }

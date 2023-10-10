@@ -1,5 +1,5 @@
 import { compileNodes } from './utils';
-import { IFlowDefinition } from '../flow-definition';
+import { IFlowDefinition, INumberField } from '../flow-definition';
 import { InteractiveFlowContext } from '../flow-context/interactive-flow-context';
 import { InteractiveFlowImplementation } from '../flow-implementation/interactive-flow-implementation';
 import {
@@ -13,6 +13,7 @@ import {
   IYesNoAnswer,
   IOptionAnswer,
   ITextAnswer,
+  INumberAnswer,
 } from '../flow-steps/answers';
 import {
   ExecNode,
@@ -23,18 +24,20 @@ import {
   BaseNode,
   YesNoNode,
   CustomFormNode,
-  OptionFieldNode,
+  MultiOptionFieldNode,
   BranchChoiceNode,
   TextFieldNode,
+  NumberFieldNode,
 } from '../flow-nodes';
 import {
   IFlowStep,
   IExecStep,
   IYesNoStep,
-  ICustomDataInputStep,
-  IOptionFieldStep,
+  ICustomFormStep,
+  IMultiOptionFieldStep,
   IBranchChoiceStep,
   ITextFieldStep,
+  INumberFieldStep,
 } from '../flow-steps';
 import {
   executeStartNode,
@@ -61,7 +64,8 @@ export async function executeInteractiveFlow(
   context: InteractiveFlowContext,
   subFlows: null | Record<string, SubFlowExecution<InteractiveFlowContext>> = {}
 ): Promise<IFlowStep[]> {
-  const steps: IFlowStep[] = [];
+  // A context should have fresh steps each times its used
+  context.clearSteps();
 
   const currentAnswers = context.getMergedAnswers();
 
@@ -76,19 +80,17 @@ export async function executeInteractiveFlow(
       startNode.getDefinitionId(),
       nodes,
       context,
-      steps,
       currentAnswers
     );
   }
 
-  return steps;
+  return context.getFlowSteps();
 }
 
 export async function recurseInteractiveFlow(
   nodeId: string | null,
   nodes: Record<string, BaseNode>,
   context: InteractiveFlowContext,
-  steps: IFlowStep[],
   answers: Record<string, IFlowStepAnswer>
 ) {
   if (!nodeId || !nodes[nodeId]) {
@@ -115,24 +117,22 @@ export async function recurseInteractiveFlow(
     nextStep = await executeInteractiveBranchChoiceNode(node, context, answers);
   } else if (node instanceof CustomFormNode) {
     nextStep = await executeInteractiveCustomFormNode(node, context, answers);
-  } else if (node instanceof OptionFieldNode) {
+  } else if (node instanceof MultiOptionFieldNode) {
     nextStep = await executeInteractiveOptionFieldNode(node, context, answers);
   } else if (node instanceof TextFieldNode) {
     nextStep = await executeInteractiveTextFieldNode(node, context, answers);
+  } else if (node instanceof NumberFieldNode) {
+    nextStep = await executeInteractiveNumberFieldNode(node, context, answers);
   }
 
   if (!nextStep) {
     throw new Error(`Executor can not be found for nodeType: ${node.nodeType}`);
   }
 
-  steps.push(nextStep.step);
-  await recurseInteractiveFlow(
-    nextStep.nextNodeId,
-    nodes,
-    context,
-    steps,
-    answers
-  );
+  // Add step to the context
+  context.addFlowStep(nextStep.step);
+
+  await recurseInteractiveFlow(nextStep.nextNodeId, nodes, context, answers);
 }
 
 export async function executeInteractiveYesNoNode(
@@ -226,8 +226,8 @@ export async function executeInteractiveCustomFormNode(
   context: InteractiveFlowContext,
   answers: Record<string, IFlowStepAnswer>
 ): Promise<ReturnStep> {
-  const step: ICustomDataInputStep = {
-    stepType: ImplementationNodeTypeEnum.CustomDataInput,
+  const step: ICustomFormStep = {
+    stepType: ImplementationNodeTypeEnum.CustomForm,
     stepId: node.getDefinition().id,
     flowDefinitionId: context.getFlowDefinition().id,
     nodeDefinition: node.getDefinition(),
@@ -236,18 +236,29 @@ export async function executeInteractiveCustomFormNode(
     answer: null,
   };
 
-  step.answer = (answers[step.stepId] as ICustomDataAnswer) || null;
-  const nextNodeId = step.answer ? node.getNextNodeId() : null;
+  const calculatedValue = await node.getValue(context);
+
+  if (calculatedValue) {
+    step.evaluation = {
+      answerType: AnswerTypeEnum.CustomData,
+      value: calculatedValue,
+    };
+  } else {
+    step.answer = (answers[step.stepId] as ICustomDataAnswer) || null;
+  }
+
+  const nextNodeId =
+    step.answer || step.evaluation ? node.getNextNodeId() : null;
   return { step, nextNodeId };
 }
 
 export async function executeInteractiveOptionFieldNode(
-  node: OptionFieldNode,
+  node: MultiOptionFieldNode,
   context: InteractiveFlowContext,
   answers: Record<string, IFlowStepAnswer>
 ): Promise<ReturnStep> {
-  const step: IOptionFieldStep = {
-    stepType: ImplementationNodeTypeEnum.OptionField,
+  const step: IMultiOptionFieldStep = {
+    stepType: ImplementationNodeTypeEnum.MultiOptionField,
     stepId: node.getDefinition().id,
     flowDefinitionId: context.getFlowDefinition().id,
     nodeDefinition: node.getDefinition(),
@@ -255,8 +266,8 @@ export async function executeInteractiveOptionFieldNode(
     answer: null,
     // TODO: We may want to allow these to be overwritten by the implementation
     options: node.getOptions(),
-    min: node.getDefinition().min,
-    max: node.getDefinition().max,
+    min: node.getDefinition().field.min,
+    max: node.getDefinition().field.max,
   };
 
   step.answer = (answers[step.stepId] as IMultiOptionAnswer) || null;
@@ -290,6 +301,36 @@ export async function executeInteractiveTextFieldNode(
     };
   } else {
     step.answer = (answers[step.stepId] as ITextAnswer) || null;
+  }
+
+  const nextNodeId =
+    step.evaluation || step.answer ? node.getNextNodeId() : null;
+
+  return { step, nextNodeId };
+}
+
+export async function executeInteractiveNumberFieldNode(
+  node: NumberFieldNode,
+  context: InteractiveFlowContext,
+  answers: Record<string, IFlowStepAnswer>
+): Promise<ReturnStep> {
+  const step: INumberFieldStep = {
+    stepType: ImplementationNodeTypeEnum.NumberField,
+    stepId: node.getDefinition().id,
+    flowDefinitionId: context.getFlowDefinition().id,
+    nodeDefinition: node.getDefinition(),
+    label: await node.getLabel(context),
+  };
+
+  const calculatedValue = await node.getValue(context);
+
+  if (calculatedValue) {
+    step.evaluation = {
+      answerType: AnswerTypeEnum.Number,
+      value: calculatedValue,
+    };
+  } else {
+    step.answer = (answers[step.stepId] as INumberAnswer) || null;
   }
 
   const nextNodeId =

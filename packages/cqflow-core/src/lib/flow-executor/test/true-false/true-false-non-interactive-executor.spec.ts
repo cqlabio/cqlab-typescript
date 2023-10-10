@@ -6,7 +6,7 @@ import { executeNonInteractiveFlow } from '../../executor-non-interactive';
 import { trueFalseFlowDefinition } from './true-false-flow-definition';
 import { IExecStep } from '../../../flow-steps';
 
-interface IntitialData {
+interface InitialData {
   patientId: string;
 }
 
@@ -15,7 +15,7 @@ type ContextData = null;
 // const trueFalseImplementation =
 describe('Non-Interactive Executor True/False node', () => {
   it('should go true path when result is true', async () => {
-    class TrueFalseContext extends FlowContext<IntitialData, ContextData> {
+    class TrueFalseContext extends FlowContext<InitialData, ContextData> {
       isFemale(): TernaryEnum {
         return TernaryEnum.TRUE;
       }
@@ -57,7 +57,7 @@ describe('Non-Interactive Executor True/False node', () => {
   });
 
   it('should default false path when not configured', async () => {
-    class TrueFalseContext extends FlowContext<IntitialData, ContextData> {}
+    class TrueFalseContext extends FlowContext<InitialData, ContextData> {}
 
     const trueFalseImplementation =
       new NonInteractiveFlowImplementation<TrueFalseContext>();
@@ -82,7 +82,7 @@ describe('Non-Interactive Executor True/False node', () => {
   });
 
   it('should go false path when result is unknown', async () => {
-    class TrueFalseContext extends FlowContext<IntitialData, ContextData> {}
+    class TrueFalseContext extends FlowContext<InitialData, ContextData> {}
 
     class IsFemale extends ExecNode<TrueFalseContext> {
       override async evaluate(): Promise<TernaryEnum> {

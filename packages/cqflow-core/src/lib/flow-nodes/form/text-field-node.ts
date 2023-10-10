@@ -7,7 +7,7 @@ import { ITextFieldNode } from '../../flow-definition';
 export class TextFieldNode<
   C extends FlowContext = FlowContext
 > extends NextNode<C, ITextFieldNode> {
-  nodeType = ImplementationNodeTypeEnum.TextInput;
+  nodeType = ImplementationNodeTypeEnum.TextField;
 
   // value?: string;
 

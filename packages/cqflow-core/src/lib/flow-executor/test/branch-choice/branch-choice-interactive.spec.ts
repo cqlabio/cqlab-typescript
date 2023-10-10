@@ -13,7 +13,7 @@ import {
 import { EmitDataNode } from '../../../flow-nodes';
 import { IBranchChoiceStep } from '../../../flow-steps';
 
-interface IntitialData {
+interface InitialData {
   patientId: string;
 }
 
@@ -22,14 +22,14 @@ type ContextData = null;
 describe('Interactive Executor Branch node', () => {
   it('should default to a BranchChoice interaction', async () => {
     class BranchChoiceInteractiveContext extends InteractiveFlowContext<
-      IntitialData,
+      InitialData,
       ContextData
     > {}
 
     const branchChoiceImplementation =
       new InteractiveFlowImplementation<BranchChoiceInteractiveContext>();
 
-    const interactiveFlowState: InteractiveFlowState<IntitialData> = {
+    const interactiveFlowState: InteractiveFlowState<InitialData> = {
       id: '1234',
       status: CQFlowExecutorStateEnum.Initiated,
       answers: [],
@@ -40,7 +40,7 @@ describe('Interactive Executor Branch node', () => {
     };
 
     const onUpdateInteractiveState = async (
-      state: InteractiveFlowState<IntitialData>
+      state: InteractiveFlowState<InitialData>
     ) => state;
 
     const context = new BranchChoiceInteractiveContext({

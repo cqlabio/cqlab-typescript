@@ -15,8 +15,8 @@ export function isNextNode(node: IFlowDefinitionNode) {
     node.nodeType === DefinitionNodeTypeEnum.EmitData ||
     node.nodeType === DefinitionNodeTypeEnum.Action ||
     node.nodeType === DefinitionNodeTypeEnum.SubFlow ||
-    node.nodeType === DefinitionNodeTypeEnum.InputData ||
     node.nodeType === DefinitionNodeTypeEnum.Narrative ||
-    node.nodeType === DefinitionNodeTypeEnum.OptionSelect
+    node.nodeType === DefinitionNodeTypeEnum.CustomForm ||
+    node.nodeType === DefinitionNodeTypeEnum.FormField
   );
 }

@@ -17,39 +17,12 @@ import {
   NonInteractiveModuleConfigOpts,
 } from './non-interactive-flow-module';
 
-type Newable<T> = new (...args: any[]) => T;
-
-type InitFunction = (
-  flowInstance: any,
-  stateLoader: any
-) => {
-  flowImplementation: FlowImplementation<any>;
-  context: FlowContext;
-  testData: any[];
-};
-
 export interface BaseFlowModule {
   moduleType: FlowDefinitionTypeEnum;
   bindId: string;
   flowImplementation: FlowImplementation;
   testCases: any[];
 }
-
-// export interface NonInteractiveFlowModule extends BaseFlowModule {
-//   mouduleType: FlowDefinitionTypeEnum.NonInteractive;
-//   bindId: string;
-//   flowImplementation: NonInteractiveFlowImplementation;
-//   flowContext: FlowContext;
-//   testCases: any[];
-// }
-
-// export interface InteractiveFlowModule extends BaseFlowModule {
-//   mouduleType: FlowDefinitionTypeEnum.Interactive;
-//   bindId: string;
-//   flowImplementation: InteractiveFlowImplementation;
-//   flowContext: InteractiveFlowContext;
-//   testCases: any[];
-// }
 
 export type FlowModule = NonInteractiveFlowModule | InteractiveFlowModule;
 
@@ -81,5 +54,13 @@ export class FlowRepository {
 
   getNonInteractiveModule(id: string): NonInteractiveFlowModule | null {
     return this._nonInteractiveFlowConfigs[id];
+  }
+
+  getInteractiveModuleIds(): string[] {
+    return Object.keys(this._interactiveFlowConfigs);
+  }
+
+  getNonInteractiveModuleIds(): string[] {
+    return Object.keys(this._nonInteractiveFlowConfigs);
   }
 }

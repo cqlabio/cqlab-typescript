@@ -1,0 +1,41 @@
+{
+  "name": "cqexamples",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/cqexamples/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:swc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/cqexamples",
+        "main": "packages/cqexamples/src/index.ts",
+        "tsConfig": "packages/cqexamples/tsconfig.lib.json",
+        "assets": ["packages/cqexamples/*.md"]
+      }
+    },
+    "publish": {
+      "command": "node tools/scripts/publish.mjs packages/cqexamples {args.ver} {args.tag}",
+      "dependsOn": ["build"]
+    },
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": [
+          "packages/cqexamples/**/*.ts",
+          "packages/cqexamples/package.json"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nx/vite:test",
+      "outputs": ["{options.reportsDirectory}"],
+      "options": {
+        "passWithNoTests": true,
+        "reportsDirectory": "../../coverage/packages/cqexamples"
+      }
+    }
+  },
+  "tags": []
+}

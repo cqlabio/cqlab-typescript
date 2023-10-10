@@ -25,25 +25,28 @@ export const optionSelectDefinition: IFlowDefinition = {
       bindId: 'option_select_1',
       label: 'Choose Option',
       nodeType: DefinitionNodeTypeEnum.FormField,
-      fieldType: FieldTypeEnum.Option,
+      fieldType: FieldTypeEnum.MultiOption,
       next: {
         type: NextTypeEnum.Unary,
         id: 'end_1',
       },
-      min: 1,
-      max: null,
-      options: [
-        {
-          id: 'option_1',
-          bindId: 'option_1',
-          label: 'Option 1',
-        },
-        {
-          id: 'option_2',
-          bindId: 'option_2',
-          label: 'Option 2',
-        },
-      ],
+      field: {
+        fieldType: FieldTypeEnum.MultiOption,
+        min: 1,
+        max: null,
+        options: [
+          {
+            id: 'option_1',
+            bindId: 'option_1',
+            label: 'Option 1',
+          },
+          {
+            id: 'option_2',
+            bindId: 'option_2',
+            label: 'Option 2',
+          },
+        ],
+      },
     },
     end_1: {
       id: 'end_1',

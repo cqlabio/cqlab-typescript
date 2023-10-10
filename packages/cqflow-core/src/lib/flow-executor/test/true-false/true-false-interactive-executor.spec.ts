@@ -12,7 +12,7 @@ import {
 } from '../../../enums';
 import { EmitDataNode } from '../../../flow-nodes';
 
-interface IntitialData {
+interface InitialData {
   patientId: string;
 }
 
@@ -54,14 +54,14 @@ type ContextData = null;
 describe('Interactive Executor True/False node', () => {
   it('should default to a YesNo interaction', async () => {
     class TrueFalseInteractiveContext extends InteractiveFlowContext<
-      IntitialData,
+      InitialData,
       ContextData
     > {}
 
     const simpleFlowImplementation =
       new InteractiveFlowImplementation<TrueFalseInteractiveContext>();
 
-    const interactiveFlowState: InteractiveFlowState<IntitialData> = {
+    const interactiveFlowState: InteractiveFlowState<InitialData> = {
       id: '1234',
       status: CQFlowExecutorStateEnum.Initiated,
       answers: [],
@@ -72,7 +72,7 @@ describe('Interactive Executor True/False node', () => {
     };
 
     const onUpdateInteractiveState = async (
-      state: InteractiveFlowState<IntitialData>
+      state: InteractiveFlowState<InitialData>
     ) => state;
 
     const context = new TrueFalseInteractiveContext({
@@ -127,7 +127,7 @@ describe('Interactive Executor True/False node', () => {
 
   it('should allow answer to be entered when result is UNKNOWN', async () => {
     class TrueFalseInteractiveContext extends InteractiveFlowContext<
-      IntitialData,
+      InitialData,
       ContextData
     > {}
 
@@ -145,7 +145,7 @@ describe('Interactive Executor True/False node', () => {
       (def) => new IsFemale(def)
     );
 
-    let interactiveFlowState: InteractiveFlowState<IntitialData> = {
+    let interactiveFlowState: InteractiveFlowState<InitialData> = {
       id: '1234',
       status: CQFlowExecutorStateEnum.Initiated,
       answers: [],
@@ -156,7 +156,7 @@ describe('Interactive Executor True/False node', () => {
     };
 
     const onUpdateInteractiveState = async (
-      state: InteractiveFlowState<IntitialData>
+      state: InteractiveFlowState<InitialData>
     ) => {
       interactiveFlowState = state;
       return state;
@@ -214,7 +214,7 @@ describe('Interactive Executor True/False node', () => {
 
   it('should go the true path', async () => {
     class TrueFalseInteractiveContext extends InteractiveFlowContext<
-      IntitialData,
+      InitialData,
       ContextData
     > {}
 
@@ -232,7 +232,7 @@ describe('Interactive Executor True/False node', () => {
       (def) => new IsFemale(def)
     );
 
-    let interactiveFlowState: InteractiveFlowState<IntitialData> = {
+    let interactiveFlowState: InteractiveFlowState<InitialData> = {
       id: '1234',
       status: CQFlowExecutorStateEnum.Initiated,
       answers: [],
@@ -243,7 +243,7 @@ describe('Interactive Executor True/False node', () => {
     };
 
     const onUpdateInteractiveState = async (
-      state: InteractiveFlowState<IntitialData>
+      state: InteractiveFlowState<InitialData>
     ) => {
       interactiveFlowState = state;
       return state;

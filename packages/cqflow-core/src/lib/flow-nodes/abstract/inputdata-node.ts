@@ -10,7 +10,7 @@ export abstract class InputDataNode<
 > extends NextNode<C, D> {
   value?: V;
 
-  getValue(): V | null {
+  async getValue(context: C): Promise<V | null> {
     return this.value || null;
   }
 }

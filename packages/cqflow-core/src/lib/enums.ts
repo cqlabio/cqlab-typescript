@@ -46,11 +46,13 @@ export enum ImplementationNodeTypeEnum {
   // AndNode = 'AndNode',
   // OrNode = 'OrNode',
   Message = 'Message',
-  TextInput = 'TextInput',
-  CustomDataInput = 'CustomDataInput',
+  // TextInput = 'TextInput',
+  CustomForm = 'CustomForm',
 
   TextField = 'TextField',
-  OptionField = 'OptionField',
+  NumberField = 'NumberField',
+  MultiOptionField = 'MultiOptionField',
+
   // OptionSelect = 'OptionSelect',
   // graphLink = 'graphLink',
   // narrative = 'Narrative',
@@ -64,7 +66,8 @@ export enum ImplementationNodeTypeEnum {
 
 export enum FieldTypeEnum {
   Text = 'Text',
-  Option = 'Option',
+  Number = 'Number',
+  MultiOption = 'MultiOption',
   //email, date, range, number, quantity
 }
 
@@ -72,8 +75,9 @@ export enum AnswerTypeEnum {
   YesNo = 'YesNo',
   Action = 'Action',
   SingleOption = 'SingleOption',
-  Text = 'Text',
   CustomData = 'CustomData',
+  Text = 'Text',
+  Number = 'Number',
   MultiOption = 'MultiOption',
 }
 
