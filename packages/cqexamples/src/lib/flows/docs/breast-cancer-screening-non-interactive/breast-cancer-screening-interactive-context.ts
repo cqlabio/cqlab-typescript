@@ -1,7 +1,4 @@
-import {
-  InteractiveFlowContext,
-  InteractiveFlowContextOptions,
-} from '@cqlab/cqflow-core';
+import { FlowContext, FlowContextOpts } from '@cqlab/cqflow-core';
 import { MockFhirBundleRetriever } from '../../common/MockFhirBundleRetriever';
 import { BreastCancerScreeningLibrary } from '../../../libraries/breast-cancer-screening-library';
 
@@ -18,15 +15,15 @@ interface ScreeningRecommendation {
 // Define the interactive flow context
 // Attach the breastCancerScreeningLibrary for use in the implementation nodes
 // Use the mockBundleRetriever to retrieve the patient data
-export class BreastCancerScreeningContext extends InteractiveFlowContext<
+export class NonInteractiveBreastCancerScreeningContext extends FlowContext<
   PatientIdInitialData,
   ScreeningRecommendation
 > {
   breastCancerScreeningLibrary: BreastCancerScreeningLibrary;
 
-  constructor(opts: InteractiveFlowContextOptions<PatientIdInitialData>) {
+  constructor(opts: FlowContextOpts<PatientIdInitialData>) {
     super(opts);
-    const { patientId } = opts.interactiveFlowState.initialData;
+    const { patientId } = opts.initialData;
     const retriever = new MockFhirBundleRetriever({ bundleId: patientId });
     this.breastCancerScreeningLibrary = new BreastCancerScreeningLibrary(
       retriever

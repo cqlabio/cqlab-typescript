@@ -1,4 +1,4 @@
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs';
 import { FhirR4 } from '@cqlab/cqmockdata';
 
 export async function createPatientThatNeedsBreastCancerScreening(
