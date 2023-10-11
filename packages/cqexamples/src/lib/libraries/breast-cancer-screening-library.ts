@@ -18,6 +18,7 @@ const makeMockDataItem = (id: MockPatientIdEnum) => ({ id: id, label: id });
 @MockData([
   makeMockDataItem(MockPatientIdEnum.empty_data),
   makeMockDataItem(MockPatientIdEnum.needs_breast_cancer_screening),
+  makeMockDataItem(MockPatientIdEnum.schedule_breast_caner_screening),
 ])
 export class BreastCancerScreeningLibrary extends FhirLibrary {
   // The @Define decorator exposes the function as a public interface
@@ -68,8 +69,8 @@ export class BreastCancerScreeningLibrary extends FhirLibrary {
       return performedDate.isAfter(twoYearsAgo);
     });
 
-    return procedureFilteredByDate.length >= 0
+    return procedureFilteredByDate.length > 0
       ? TernaryEnum.TRUE
-      : TernaryEnum.FALSE;
+      : TernaryEnum.UNKNOWN;
   }
 }

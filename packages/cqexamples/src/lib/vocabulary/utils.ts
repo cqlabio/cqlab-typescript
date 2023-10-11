@@ -9,3 +9,12 @@ export function getRandomCodeFromValueSet(
   }
   return codes[Math.floor(Math.random() * codes.length)];
 }
+
+export function codeableConceptFromCoding(
+  coding: fhir4.Coding
+): fhir4.CodeableConcept {
+  return {
+    coding: [coding],
+    text: coding.display,
+  };
+}

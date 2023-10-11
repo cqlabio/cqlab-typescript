@@ -1,7 +1,10 @@
 import dayjs from 'dayjs';
 import { FhirR4 } from '@cqlab/cqmockdata';
 import { ValueSetIdEnum, valueSetContainer } from '../../vocabulary/value-sets';
-import { getRandomCodeFromValueSet } from '../../vocabulary/utils';
+import {
+  getRandomCodeFromValueSet,
+  codeableConceptFromCoding,
+} from '../../vocabulary/utils';
 
 export async function createPatientScheduleBreastCancerScreening(
   patientId: string
@@ -25,7 +28,10 @@ export async function createPatientScheduleBreastCancerScreening(
   );
   const code = getRandomCodeFromValueSet(valueSet);
 
-  let procedure = FhirR4.procedureCreate(patient, code);
+  let procedure = FhirR4.procedureCreate(
+    patient,
+    codeableConceptFromCoding(code)
+  );
   procedure = FhirR4.procedureWithPerformedDateTime(
     procedure,
     dayjs().subtract(400, 'days').toISOString()
