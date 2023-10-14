@@ -78,7 +78,11 @@ export abstract class LazyFhirBundleRetriever implements FHIRRetriever {
             filterCodes = [filterCodes];
           }
           return filterCodes.some((filterCode) => {
-            return isCodingInCodeableConcept(searchCode, filterCode);
+            const isInConcept = isCodingInCodeableConcept(
+              searchCode,
+              filterCode
+            );
+            return isInConcept;
           });
         })
         .map((entry) => entry.resource as R) || []

@@ -14,9 +14,9 @@ export interface IOptionAnswer extends IBaseAnswer {
   selectedId: string | null;
 }
 
-export interface ICustomDataAnswer extends IBaseAnswer {
+export interface ICustomDataAnswer<T = any> extends IBaseAnswer {
   answerType: AnswerTypeEnum.CustomData;
-  value: any;
+  value: T;
 }
 
 export interface IMultiOptionAnswer extends IBaseAnswer {

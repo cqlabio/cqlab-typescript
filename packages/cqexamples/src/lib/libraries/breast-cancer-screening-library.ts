@@ -12,8 +12,6 @@ import { ValueSetIdEnum, valueSetContainer } from '../vocabulary/value-sets';
 
 const makeMockDataItem = (id: MockPatientIdEnum) => ({ id: id, label: id });
 
-// The @Library decorator marks the class as a Library and defines the library name
-// The optional @MockData decorator binds mock data items to the library for testing
 @Library('Breast Cancer Screening Library')
 @MockData([
   makeMockDataItem(MockPatientIdEnum.empty_data),
@@ -21,8 +19,6 @@ const makeMockDataItem = (id: MockPatientIdEnum) => ({ id: id, label: id });
   makeMockDataItem(MockPatientIdEnum.schedule_breast_caner_screening),
 ])
 export class BreastCancerScreeningLibrary extends FhirLibrary {
-  // The @Define decorator exposes the function as a public interface
-  // The @Documentation decorator is used for documentation generation
   @Define('Is Female')
   @Documentation('Determines if gender is female')
   async isFemale(): Promise<TernaryEnum> {

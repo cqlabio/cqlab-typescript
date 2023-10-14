@@ -75,10 +75,10 @@ export interface IActionStep extends IBaseStep<IActionNode> {
   actionStatus: ActionStatusEnum;
 }
 
-export interface ICustomFormStep extends IBaseStep<ICustomFormNode> {
+export interface ICustomFormStep<T = any> extends IBaseStep<ICustomFormNode> {
   stepType: ImplementationNodeTypeEnum.CustomForm;
-  answer?: ICustomDataAnswer | null;
-  evaluation?: ICustomDataAnswer | null;
+  answer?: ICustomDataAnswer<T> | null;
+  evaluation?: ICustomDataAnswer<T> | null;
   jsonSchema: JSONSchema7;
 }
 

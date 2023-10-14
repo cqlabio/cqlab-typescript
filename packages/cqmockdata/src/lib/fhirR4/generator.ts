@@ -151,6 +151,36 @@ function observationAddValueQuantity(
   };
 }
 
+function observationAddComponent(
+  observation: fhir4.Observation,
+  component: fhir4.ObservationComponent
+): fhir4.Observation {
+  return {
+    ...observation,
+    component: observation.component
+      ? [...observation.component, component]
+      : [component],
+  };
+}
+
+function observationValueComponentCreate(
+  code: fhir4.CodeableConcept
+): fhir4.ObservationComponent {
+  return {
+    code: code,
+  };
+}
+
+function observationComponentAddValueQuantity(
+  component: fhir4.ObservationComponent,
+  quantity: fhir4.Quantity
+): fhir4.ObservationComponent {
+  return {
+    ...component,
+    valueQuantity: quantity,
+  };
+}
+
 function observationAddEffectiveDateTime(
   observation: fhir4.Observation,
   effectiveDateTime: string
@@ -217,6 +247,9 @@ export const FhirR4 = {
   observationCreate,
   observationAddValueQuantity,
   observationAddEffectiveDateTime,
+  observationAddComponent,
+  observationValueComponentCreate,
+  observationComponentAddValueQuantity,
   medicationDispenseCreate,
   codeableConceptCreate,
   createQuantity,
