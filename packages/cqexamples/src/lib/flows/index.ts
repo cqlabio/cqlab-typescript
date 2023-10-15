@@ -7,10 +7,15 @@ import {
   nonInteractiveBreastCancerScreeningImplementation,
   NonInteractiveBreastCancerScreeningContext,
 } from './docs/breast-cancer-screening-non-interactive/breast-cancer-screening-interactive';
+import {
+  hypertensionImplementation,
+  HypertensionContext,
+} from './docs/hypertension/hypertension';
 
 export const enum ExampleFlowDefinitionIdEnum {
   docs_breast_cancer_screening = 'docs-breast-cancer-screening',
-  docs_breast_cancer_screening_non_interactive = 'docs_breast_cancer_screening_non_interactive',
+  docs_breast_cancer_screening_non_interactive = 'docs-breast-cancer-screening-non-interactive',
+  docs_hypertension = 'docs-hypertension',
 }
 
 export const exampleFlowRepository = new FlowRepository();
@@ -49,6 +54,28 @@ exampleFlowRepository.registerNonInteractiveModule<PatientIdInitialData>(
       },
       {
         patientId: MockPatientIdEnum.schedule_breast_caner_screening,
+      },
+    ],
+  }
+);
+
+exampleFlowRepository.registerInteractiveModule<PatientIdInitialData>(
+  ExampleFlowDefinitionIdEnum.docs_hypertension,
+  {
+    flowImplementation: hypertensionImplementation,
+    flowContext: (contextOpts) => new HypertensionContext(contextOpts),
+    testData: [
+      {
+        patientId: MockPatientIdEnum.empty_data,
+      },
+      {
+        patientId: MockPatientIdEnum.hypertension_crisis,
+      },
+      {
+        patientId: MockPatientIdEnum.hypertension_stage_2,
+      },
+      {
+        patientId: MockPatientIdEnum.hypertension_none,
       },
     ],
   }

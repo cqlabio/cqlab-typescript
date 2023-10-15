@@ -3,6 +3,7 @@ import { createEmptyPatient } from './patients/empty-patient';
 import { createPatientThatNeedsBreastCancerScreening } from './patients/patient-needs-breast-cancer-screening';
 import { createPatientScheduleBreastCancerScreening } from './patients/patient-schedule-breast-cancer-screening';
 import {
+  createHypertensionNormal,
   createHypertensionStage2,
   createHypertensiveCrisis,
 } from './patients/hypertension/all-patients';
@@ -14,6 +15,7 @@ export enum MockPatientIdEnum {
   schedule_breast_caner_screening = 'schedule_breast_caner_screening',
   hypertension_crisis = 'hypertension_crisis',
   hypertension_stage_2 = 'hypertension_stage_2',
+  hypertension_none = 'hypertension_none',
   high_cholesterol = 'high_cholesterol',
 }
 
@@ -32,6 +34,8 @@ export const testDataGenerators: Record<
   [MockPatientIdEnum.hypertension_crisis]: createHypertensiveCrisis,
   [MockPatientIdEnum.hypertension_stage_2]: createHypertensionStage2,
   [MockPatientIdEnum.high_cholesterol]: createHighCholesterol,
+
+  [MockPatientIdEnum.hypertension_none]: createHypertensionNormal,
 };
 
 export const mockDataContainer = new PatientContainer();

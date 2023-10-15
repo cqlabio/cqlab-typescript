@@ -234,6 +234,7 @@ export async function executeInteractiveCustomFormNode(
     label: await node.getLabel(context),
     jsonSchema: node.getValueJsonSchema(),
     answer: null,
+    evaluation: null,
   };
 
   const calculatedValue = await node.getValue(context);

@@ -62,3 +62,9 @@ export async function createHypertensionStage2(
 ): Promise<fhir4.Bundle> {
   return createPatient(patientId, 150, 85);
 }
+
+export async function createHypertensionNormal(
+  patientId: string
+): Promise<fhir4.Bundle> {
+  return createPatient(patientId, 110, 75);
+}

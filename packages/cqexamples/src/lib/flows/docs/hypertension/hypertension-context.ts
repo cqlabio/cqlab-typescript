@@ -12,11 +12,9 @@ import {
   BreastCancerScreeningEnum,
   EnterBloodPressurePanelData,
 } from './hypertension';
+import { PatientIdInitialData } from '../../common/types';
 
 // Define the initialization data structure
-interface PatientIdInitialData {
-  patientId: string;
-}
 
 // Define the expected output data structure
 interface ScreeningRecommendation {
@@ -50,9 +48,13 @@ export class HypertensionContext extends InteractiveFlowContext<
     }
 
     // Pull from either evaluated OR manually entered data
-    const bnpResults =
+    const panelResults =
       enterPanelStep.evaluation?.value || enterPanelStep.answer?.value;
 
-    return bnpResults || null;
+    if (!panelResults?.diastolicReading || !panelResults?.systolicReading) {
+      return null;
+    }
+
+    return panelResults;
   }
 }

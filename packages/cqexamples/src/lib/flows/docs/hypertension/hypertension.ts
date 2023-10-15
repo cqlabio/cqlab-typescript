@@ -1,3 +1,4 @@
+export { HypertensionContext } from './hypertension-context';
 import { HypertensionContext } from './hypertension-context';
 import {
   InteractiveFlowImplementation,
@@ -22,9 +23,6 @@ export enum BreastCancerScreeningEnum {
   diastolic_greater_equal_80_less_90 = 'diastolic_greater_equal_80_less_90',
 
   systolic_greater_equal_120_less_130 = 'systolic_greater_equal_120_less_130',
-
-  diastolic_less_80 = 'diastolic_less_80',
-  systolic_bp_less_120 = 'systolic_bp_less_120',
 }
 
 export interface EnterBloodPressurePanelData {
@@ -39,12 +37,13 @@ class EnterBloodPressurePanel extends CustomFormNode<
   override async getValue(
     context: HypertensionContext
   ): Promise<EnterBloodPressurePanelData | null> {
-    const bloodPressurePanel = await context.getBloodPressurePanel();
+    const bloodPressurePanel =
+      await context.hypertensionLibrary.getBloodPressurePanel();
 
     if (bloodPressurePanel) {
       return Promise.resolve({
-        systolicReading: bloodPressurePanel.systolicReading,
-        diastolicReading: bloodPressurePanel.diastolicReading,
+        systolicReading: bloodPressurePanel.systolic.value,
+        diastolicReading: bloodPressurePanel.diastolic.value,
       });
     }
 
@@ -157,31 +156,6 @@ class SystolicGreaterEqual120Less130 extends ExecNode<HypertensionContext> {
   }
 }
 
-class DiastolicLess80 extends ExecNode<HypertensionContext> {
-  override async evaluate(context: HypertensionContext): Promise<TernaryEnum> {
-    const bloodPressurePanel = await context.getBloodPressurePanel();
-    if (!bloodPressurePanel) {
-      return TernaryEnum.UNKNOWN;
-    }
-    return bloodPressurePanel.diastolicReading < 80
-      ? TernaryEnum.TRUE
-      : TernaryEnum.FALSE;
-  }
-}
-
-class SystolicLess120 extends ExecNode<HypertensionContext> {
-  override async evaluate(context: HypertensionContext): Promise<TernaryEnum> {
-    const bloodPressurePanel = await context.getBloodPressurePanel();
-    if (!bloodPressurePanel) {
-      return TernaryEnum.UNKNOWN;
-    }
-
-    return bloodPressurePanel.systolicReading < 120
-      ? TernaryEnum.TRUE
-      : TernaryEnum.FALSE;
-  }
-}
-
 // Instantiate the flow implementation and register the nodes
 export const hypertensionImplementation =
   new InteractiveFlowImplementation<HypertensionContext>();
@@ -224,14 +198,4 @@ hypertensionImplementation.registerTrueFalse(
 hypertensionImplementation.registerTrueFalse(
   BreastCancerScreeningEnum.systolic_greater_equal_120_less_130,
   (nodeDef) => new SystolicGreaterEqual120Less130(nodeDef)
-);
-
-hypertensionImplementation.registerTrueFalse(
-  BreastCancerScreeningEnum.diastolic_less_80,
-  (nodeDef) => new DiastolicLess80(nodeDef)
-);
-
-hypertensionImplementation.registerTrueFalse(
-  BreastCancerScreeningEnum.systolic_bp_less_120,
-  (nodeDef) => new SystolicLess120(nodeDef)
 );

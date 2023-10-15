@@ -21,7 +21,10 @@ const cholesterolThreshold = z.number().int().positive().min(0);
 type CholesterolThreshold = z.infer<typeof cholesterolThreshold>;
 
 @Library('Parameterized Retrieve')
-@MockData([makeMockDataItem(MockPatientIdEnum.empty_data)])
+@MockData([
+  makeMockDataItem(MockPatientIdEnum.empty_data),
+  makeMockDataItem(MockPatientIdEnum.high_cholesterol),
+])
 export class ParameterizedRetrieveLibrary extends FhirLibrary {
   // The @Params decorator allows us to parameterize a function so that
   // it can be re-used in flexible ways. Either it can be used by other
@@ -30,7 +33,7 @@ export class ParameterizedRetrieveLibrary extends FhirLibrary {
   @Define('Is cholesterol reading above threshold')
   @Params(cholesterolThreshold)
   @Documentation(
-    'Checks to see if the cholesterol reading is above provided threshold'
+    'Provide a threshold to see if patient has cholesterol above that. Allows a "high threshold" to be configurable.'
   )
   async isCholesterolAboveThreshold(
     threshold: CholesterolThreshold
@@ -41,12 +44,14 @@ export class ParameterizedRetrieveLibrary extends FhirLibrary {
     const observations = await this.retriever.getObservationsByCode(
       cholesterolCode
     );
+
     if (observations.length === 0) {
       return TernaryEnum.UNKNOWN;
     }
 
     const mostRecentObservation =
       sortObservations(observations)[observations.length - 1];
+
     if (!mostRecentObservation.valueQuantity?.value) {
       return TernaryEnum.UNKNOWN;
     }
