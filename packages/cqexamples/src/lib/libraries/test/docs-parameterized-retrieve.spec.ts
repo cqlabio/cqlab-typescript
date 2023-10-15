@@ -11,20 +11,22 @@ describe('DocsParameterizedRetrieve', () => {
       bundleId: MockPatientIdEnum.high_cholesterol,
     });
 
-    const breastCancerScreeningLibrary = new ParameterizedRetrieveLibrary(
-      retriever
-    );
+    const parameterizedLib = new ParameterizedRetrieveLibrary(retriever);
 
-    const paramResult1 =
-      await breastCancerScreeningLibrary.isCholesterolAboveThreshold(210);
+    const cholesterolReading = await parameterizedLib.getCholesterolReading();
+    expect(cholesterolReading?.value).toEqual(220);
+
+    const paramResult1 = await parameterizedLib.isCholesterolAboveThreshold(
+      210
+    );
     expect(paramResult1).toEqual(TernaryEnum.TRUE);
 
-    const paramResult2 =
-      await breastCancerScreeningLibrary.isCholesterolAboveThreshold(230);
+    const paramResult2 = await parameterizedLib.isCholesterolAboveThreshold(
+      230
+    );
     expect(paramResult2).toEqual(TernaryEnum.FALSE);
 
-    const highResult =
-      await breastCancerScreeningLibrary.isCholesterolReadingAbove200();
+    const highResult = await parameterizedLib.isCholesterolReadingAbove200();
     expect(highResult).toEqual(TernaryEnum.TRUE);
   });
 
