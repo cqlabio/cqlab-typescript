@@ -12,7 +12,7 @@ import { ValueSetIdEnum, valueSetContainer } from '../vocabulary/value-sets';
 
 const makeMockDataItem = (id: MockPatientIdEnum) => ({ id: id, label: id });
 
-@Library('Breast Cancer Screening Library')
+@Library('BreastCancerScreeningLibrary')
 @MockData([
   makeMockDataItem(MockPatientIdEnum.empty_data),
   makeMockDataItem(MockPatientIdEnum.needs_breast_cancer_screening),

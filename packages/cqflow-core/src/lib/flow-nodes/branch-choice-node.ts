@@ -2,16 +2,10 @@ import { BaseNode } from './abstract/base-node';
 import { ImplementationNodeTypeEnum, NextTypeEnum } from '../enums';
 import { FlowContext } from '../flow-context/flow-context';
 import { IBranchNode, INextMulti, INextMultiOption } from '../flow-definition';
-// interface IBranchChoiceNode extends IBaseNode {
-//   nodeType: NodeTypeEnum.BranchChoice;
-//   next?: INextMulti;
-// }
 
-export class BranchChoiceNode<
+export abstract class BaseBranchChoiceNode<
   C extends FlowContext = FlowContext
 > extends BaseNode<C, IBranchNode> {
-  nodeType = ImplementationNodeTypeEnum.BranchChoice;
-
   next: INextMulti = {
     type: NextTypeEnum.Multi,
     options: [],
@@ -29,4 +23,10 @@ export class BranchChoiceNode<
   getOptions(): INextMultiOption[] {
     return this.next.options;
   }
+}
+
+export class BranchChoiceNode<
+  C extends FlowContext = FlowContext
+> extends BaseBranchChoiceNode<C> {
+  nodeType = ImplementationNodeTypeEnum.BranchChoice;
 }

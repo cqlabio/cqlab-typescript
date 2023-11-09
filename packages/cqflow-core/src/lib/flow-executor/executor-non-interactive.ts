@@ -1,4 +1,4 @@
-import { compileNodes } from './utils';
+import { compileNodes } from './compile-nodes';
 import { IFlowDefinition } from '../flow-definition';
 import { FlowContext } from '../flow-context/flow-context';
 import { NonInteractiveFlowImplementation } from '../flow-implementation/non-interactive-flow-implementation';

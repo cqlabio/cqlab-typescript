@@ -27,6 +27,8 @@ import {
   INextMultiOption,
   ITextFieldNode,
   INumberFieldNode,
+  IMultiOptionNode,
+  IMultiOption,
 } from '../flow-definition';
 
 interface IBaseStep<D extends IFlowDefinitionNode> {
@@ -57,6 +59,13 @@ export interface IExecStep extends IBaseStep<ITrueFalseNode> {
   evaluation: TernaryEnum;
   answer?: IYesNoAnswer | null;
   supplementalData?: any;
+}
+
+export interface IMultiOptionStep extends IBaseStep<IMultiOptionNode> {
+  stepType: ImplementationNodeTypeEnum.MultiOptionExec;
+  answer: IMultiOptionAnswer | null;
+  evaluation: IMultiOptionAnswer | null;
+  options: IMultiOption[];
 }
 
 export interface IYesNoStep extends IBaseStep<ITrueFalseNode> {
@@ -113,11 +122,13 @@ export interface IBranchChoiceStep extends IBaseStep<IBranchNode> {
   stepType: ImplementationNodeTypeEnum.BranchChoice;
   options: INextMultiOption[];
   answer: IOptionAnswer | null;
+  evaluation: IOptionAnswer | null;
 }
 
 export type IFlowStep =
   | IYesNoStep
   | IExecStep
+  | IMultiOptionStep
   | IStartStep
   | IActionStep
   | IEmitDataStep

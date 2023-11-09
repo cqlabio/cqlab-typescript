@@ -27,12 +27,14 @@ const quantitySchema = z.object({
 });
 type Quantity = z.infer<typeof quantitySchema>;
 
-@Library('Parameterized Retrieve')
+@Library('ParameterizedRetrieveLibrary')
 @MockData([
   makeMockDataItem(MockPatientIdEnum.empty_data),
   makeMockDataItem(MockPatientIdEnum.high_cholesterol),
 ])
 export class ParameterizedRetrieveLibrary extends FhirLibrary {
+  static readonly className: string = 'Test';
+
   @Define('Get cholesterol reading')
   @Documentation('Gets the most recent cholesterol reading in mg/dL')
   @ReturnType(quantitySchema)

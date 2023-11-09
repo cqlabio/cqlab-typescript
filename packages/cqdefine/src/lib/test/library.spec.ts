@@ -43,7 +43,7 @@ const mockData = [
   },
 ];
 
-@Library('Heart Disease')
+@Library('HeartDiseaseLibrary')
 @MockData(mockData)
 class HeartDiseaseLibrary extends FhirLibrary {
   @Define('Is Male')
@@ -69,8 +69,10 @@ describe('packagesCqflowEvaluator', () => {
   it('should validate the registry', async () => {
     const registry = libraryContainer.getRegistry();
 
-    expect(registry['HeartDiseaseLibrary'].label).toEqual('Heart Disease');
-    expect(registry['HeartDiseaseLibrary'].className).toEqual(
+    expect(registry['HeartDiseaseLibrary'].label).toEqual(
+      'HeartDiseaseLibrary'
+    );
+    expect(registry['HeartDiseaseLibrary'].libraryId).toEqual(
       'HeartDiseaseLibrary'
     );
     expect(registry['HeartDiseaseLibrary'].mockData).toEqual(mockData);

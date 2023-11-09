@@ -11,9 +11,11 @@ export enum ImplType {
 export enum DefinitionNodeTypeEnum {
   Start = 'Start',
   End = 'End',
+  Note = 'Note',
   Action = 'Action',
   Branch = 'Branch',
   TrueFalse = 'TrueFalse',
+  MultiOption = 'MultiOption',
   SubFlow = 'SubFlow',
   LogicTree = 'LogicTree',
   EmitData = 'EmitData',
@@ -38,8 +40,10 @@ export enum ImplementationNodeTypeEnum {
   SubFlow = 'SubFlow',
   LogicTree = 'LogicTree',
   Exec = 'Exec',
+  MultiOptionExec = 'MultiOptionExec',
   BranchChoice = 'BranchChoice',
-  BranchEvaluate = 'BranchEvaluate',
+  BranchExec = 'BranchExec',
+  // BranchEvaluate = 'BranchEvaluate',
 
   // decisionTemplate = 'decisionTemplate',
   EmitData = 'EmitData',
@@ -92,6 +96,12 @@ export enum LogicEnum {
   Or = 'Or',
   Not = 'Not',
   TrueFalseLeaf = 'TrueFalseLeaf',
+}
+
+export enum ActionEnum {
+  Order = 'Order',
+  Prescribe = 'Prescribe',
+  Diagnose = 'Diagnose',
 }
 
 export enum NextTypeEnum {

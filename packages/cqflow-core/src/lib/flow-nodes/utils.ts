@@ -4,8 +4,8 @@ import { DefinitionNodeTypeEnum } from '../enums';
 export function isBooleanNode(node: IFlowDefinitionNode) {
   return (
     node.nodeType === DefinitionNodeTypeEnum.TrueFalse ||
-    // node.nodeType === DefinitionNodeTypeEnum.Exec ||
-    node.nodeType === DefinitionNodeTypeEnum.LogicTree
+    node.nodeType === DefinitionNodeTypeEnum.LogicTree ||
+    node.nodeType === DefinitionNodeTypeEnum.MultiOption
   );
 }
 

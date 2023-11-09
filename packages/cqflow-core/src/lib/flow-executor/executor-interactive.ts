@@ -1,4 +1,5 @@
-import { compileNodes } from './utils';
+import { compileNodes } from './compile-nodes';
+import compact from 'lodash/compact';
 import { IFlowDefinition, INumberField } from '../flow-definition';
 import { InteractiveFlowContext } from '../flow-context/interactive-flow-context';
 import { InteractiveFlowImplementation } from '../flow-implementation/interactive-flow-implementation';
@@ -28,6 +29,7 @@ import {
   BranchChoiceNode,
   TextFieldNode,
   NumberFieldNode,
+  BranchExecNode,
 } from '../flow-nodes';
 import {
   IFlowStep,
@@ -38,6 +40,7 @@ import {
   IBranchChoiceStep,
   ITextFieldStep,
   INumberFieldStep,
+  IMultiOptionStep,
 } from '../flow-steps';
 import {
   executeStartNode,
@@ -46,6 +49,7 @@ import {
   executeNarrativeNode,
 } from './executor-non-interactive';
 import { IMultiOptionAnswer } from '../flow-steps/answers';
+import { MultiOptionExecNode } from '../flow-nodes/multi-option-node';
 
 // type FlowContext = FlowContext;
 
@@ -113,8 +117,16 @@ export async function recurseInteractiveFlow(
     nextStep = await executeInteractiveYesNoNode(node, context, answers);
   } else if (node instanceof ExecNode) {
     nextStep = await executeInteractiveExecNode(node, context, answers);
+  } else if (node instanceof MultiOptionExecNode) {
+    nextStep = await executeInteractiveMultiOptionExecNode(
+      node,
+      context,
+      answers
+    );
   } else if (node instanceof BranchChoiceNode) {
     nextStep = await executeInteractiveBranchChoiceNode(node, context, answers);
+  } else if (node instanceof BranchExecNode) {
+    nextStep = await executeInteractiveBranchExecNode(node, context, answers);
   } else if (node instanceof CustomFormNode) {
     nextStep = await executeInteractiveCustomFormNode(node, context, answers);
   } else if (node instanceof MultiOptionFieldNode) {
@@ -195,6 +207,37 @@ export async function executeInteractiveExecNode(
   return { step, nextNodeId };
 }
 
+export async function executeInteractiveMultiOptionExecNode(
+  node: MultiOptionExecNode,
+  context: InteractiveFlowContext,
+  answers: Record<string, IFlowStepAnswer>
+): Promise<ReturnStep> {
+  const step: IMultiOptionStep = {
+    stepType: ImplementationNodeTypeEnum.MultiOptionExec,
+    stepId: node.getDefinition().id,
+    flowDefinitionId: context.getFlowDefinition().id,
+    nodeDefinition: node.getDefinition(),
+    label: await node.getLabel(context),
+    options: node.getOptions(),
+    evaluation: null,
+    answer: null,
+  };
+
+  // TODO: this should not be undefined
+  step.answer = answers[step.stepId] as IMultiOptionAnswer | null;
+
+  let nextNodeId = null;
+  if (step.answer) {
+    if (step.answer.selectedIds.length >= step.nodeDefinition.min) {
+      nextNodeId = node.getOnTrueId();
+    } else {
+      nextNodeId = node.getOnFalseId();
+    }
+  }
+
+  return { step, nextNodeId };
+}
+
 export async function executeInteractiveBranchChoiceNode(
   node: BranchChoiceNode,
   context: InteractiveFlowContext,
@@ -208,12 +251,97 @@ export async function executeInteractiveBranchChoiceNode(
     label: await node.getLabel(context),
     options: node.getOptions(),
     answer: null,
+    evaluation: null,
   };
 
   step.answer = answers[step.stepId] as IOptionAnswer | null;
 
   let nextNodeId = null;
   if (step.answer?.selectedId) {
+    const option = step.options.find((o) => o.id === step.answer?.selectedId);
+    nextNodeId = option?.toId || null;
+  }
+
+  return { step, nextNodeId };
+}
+
+export async function executeInteractiveBranchExecNode(
+  node: BranchExecNode,
+  // nodes:  Record<string, BaseNode>,
+  context: InteractiveFlowContext,
+  answers: Record<string, IFlowStepAnswer>
+) {
+  const step: IBranchChoiceStep = {
+    stepType: ImplementationNodeTypeEnum.BranchChoice,
+    stepId: node.getDefinition().id,
+    flowDefinitionId: context.getFlowDefinition().id,
+    nodeDefinition: node.getDefinition(),
+    label: await node.getLabel(context),
+    options: node.getOptions(),
+    answer: null,
+    evaluation: null,
+  };
+
+  const optionResults: TernaryEnum[] = [];
+
+  // Find the first true evaluation if any
+  for (const option of step.options) {
+    if (step.evaluation) {
+      break;
+    }
+
+    const branchOptionExec = node.getBranchOptionExec(option.id);
+
+    if (branchOptionExec) {
+      const result = await branchOptionExec.evaluate(context);
+      if (result === TernaryEnum.TRUE) {
+        step.evaluation = {
+          answerType: AnswerTypeEnum.SingleOption,
+          selectedId: option.id,
+        };
+      }
+      optionResults.push(result);
+    } else {
+      optionResults.push(TernaryEnum.UNKNOWN);
+    }
+  }
+
+  if (step.evaluation) {
+    step.options = step.options.filter(
+      (option) => option.id === step.evaluation?.selectedId
+    );
+  } else {
+    // Remove all the false nodes as possible options
+    step.options = compact(
+      step.options.map((option, index) => {
+        if (optionResults[index] === TernaryEnum.FALSE) {
+          return null;
+        }
+        return option;
+      })
+    );
+
+    // If there is only one option left, auto-answer it
+    if (step.options.length === 1) {
+      step.evaluation = {
+        answerType: AnswerTypeEnum.SingleOption,
+        selectedId: step.options[0].id,
+      };
+    }
+  }
+
+  if (!step.evaluation) {
+    step.answer = answers[step.stepId] as IOptionAnswer | null;
+  }
+
+  let nextNodeId = null;
+
+  if (step.evaluation?.selectedId) {
+    const option = step.options.find(
+      (o) => o.id === step.evaluation?.selectedId
+    );
+    nextNodeId = option?.toId || null;
+  } else if (step.answer?.selectedId) {
     const option = step.options.find((o) => o.id === step.answer?.selectedId);
     nextNodeId = option?.toId || null;
   }

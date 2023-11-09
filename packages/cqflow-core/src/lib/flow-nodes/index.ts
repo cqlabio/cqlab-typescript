@@ -12,8 +12,10 @@ export * from './emitdata-node';
 export * from './action-node';
 export * from './logictree-node';
 export * from './subflow-node';
-export * from './branchchoice-node';
+export * from './branch-choice-node';
 export * from './message-node';
+export * from './branch-exec-node';
+export * from './branch-exec-option';
 export * from './narrative-node';
 export * from './form/custom-form-node';
 export * from './form/text-field-node';
@@ -30,10 +32,12 @@ import { EmitDataNode } from './emitdata-node';
 import { ActionNode } from './action-node';
 import { LogicTreeNode } from './logictree-node';
 import { SubFlowNode } from './subflow-node';
-import { BranchChoiceNode } from './branchchoice-node';
+import { BranchChoiceNode } from './branch-choice-node';
+import { BranchExecNode } from './branch-exec-node';
 import { MessageNode } from './message-node';
 import { NarrativeNode } from './narrative-node';
 import { CustomFormNode } from './form/custom-form-node';
+import { MultiOptionExec } from './multi-option-exec-option';
 // import { IBaseBooleanNode } from './abstract/boolean-node';
 // import { IBaseNextNode } from './abstract/next-node';
 
@@ -42,11 +46,13 @@ export type FlowNode =
   | ExecNode<any>
   | EndNode<any>
   | YesNoNode<any>
+  | MultiOptionExec<any>
   | EmitDataNode<any, any>
   | ActionNode<any>
   | LogicTreeNode<any>
   | SubFlowNode<any>
   | BranchChoiceNode<any>
+  | BranchExecNode<any>
   | MessageNode<any>
   | NarrativeNode<any>
   | CustomFormNode<any, any>;

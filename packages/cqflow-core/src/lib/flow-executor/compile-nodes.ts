@@ -24,6 +24,8 @@ import {
   ITextFieldNode,
   IFormFieldNode,
   INumberFieldNode,
+  INextMultiOption,
+  IMultiOptionNode,
 } from '../flow-definition';
 import {
   BaseNode,
@@ -54,9 +56,10 @@ import { IFlowDefinitionNode, ILogicTreeNode } from '../flow-definition';
 import { FlowContext } from '../flow-context/flow-context';
 import { TernaryEnum } from '../enums';
 import { JSONSchema7 } from 'json-schema';
+import { MultiOptionExecNode } from '../flow-nodes/multi-option-node';
 
 export function compileNodes(
-  instance: FlowImplementation,
+  flowImplementation: FlowImplementation,
   flowDefinition: IFlowDefinition
 ): Record<string, BaseNode> {
   const newNodes: Record<string, BaseNode> = {};
@@ -79,24 +82,26 @@ export function compileNodes(
     } else if (rawNode.nodeType === DefinitionNodeTypeEnum.Action) {
       implementationNode = new ActionNode(rawNode);
     } else if (rawNode.nodeType === DefinitionNodeTypeEnum.TrueFalse) {
-      implementationNode = compileTrueFalseNode(instance, rawNode);
+      implementationNode = compileTrueFalseNode(flowImplementation, rawNode);
+    } else if (rawNode.nodeType === DefinitionNodeTypeEnum.MultiOption) {
+      implementationNode = compileMultiOptionNode(flowImplementation, rawNode);
     } else if (rawNode.nodeType === DefinitionNodeTypeEnum.EmitData) {
-      implementationNode = compileEmitDataNode(instance, rawNode);
-    } else if (rawNode.nodeType === DefinitionNodeTypeEnum.Branch) {
-      implementationNode = compileBranchNode(instance, rawNode);
+      implementationNode = compileEmitDataNode(flowImplementation, rawNode);
     } else if (rawNode.nodeType === DefinitionNodeTypeEnum.CustomForm) {
-      implementationNode = compileCustomFormNode(instance, rawNode);
+      implementationNode = compileCustomFormNode(flowImplementation, rawNode);
     } else if (rawNode.nodeType === DefinitionNodeTypeEnum.FormField) {
-      implementationNode = compileFormFieldNode(instance, rawNode);
+      implementationNode = compileFormFieldNode(flowImplementation, rawNode);
+    } else if (rawNode.nodeType === DefinitionNodeTypeEnum.Branch) {
+      implementationNode = compileBranchNode(flowImplementation, rawNode);
     }
-
     if (implementationNode && implementationNode.getDefinitionId()) {
-      instance.nodes[implementationNode.getDefinitionId()] = implementationNode;
+      flowImplementation.nodes[implementationNode.getDefinitionId()] =
+        implementationNode;
     }
   });
 
   return {
-    ...instance.nodes,
+    ...flowImplementation.nodes,
     ...newNodes,
   };
 }
@@ -126,6 +131,21 @@ function compileTrueFalseNode(
     return execNode;
   }
 }
+
+function compileMultiOptionNode(
+  flowImplementation: FlowImplementation,
+  rawNode: IMultiOptionNode
+): BaseNode {
+  // const multiRegistrar =
+  //   flowImplementation.getRegistrar()[DefinitionNodeTypeEnum.MultiOption];
+
+  // if (rawNode.bindId && multiRegistrar[rawNode.bindId]) {
+  //   return multiRegistrar[rawNode.bindId](rawNode);
+  // }
+
+  return new MultiOptionExecNode(rawNode);
+}
+
 class DefaultCustomFormNode extends CustomFormNode {
   getValueJsonSchema(): JSONSchema7 {
     return {

@@ -3,6 +3,7 @@ import { ImplementationNodeTypeEnum } from '../enums';
 import { BaseNode } from './abstract/base-node';
 import { Logic } from './logic';
 import { FlowContext } from '../flow-context/flow-context';
+import { ILogicTreeNode } from '../flow-definition';
 
 // interface ILogicTreeNode extends IBaseBooleanNode {
 //   nodeType: NodeTypeEnum.LogicTree;
@@ -10,7 +11,10 @@ import { FlowContext } from '../flow-context/flow-context';
 //   logicTree?: ILogic | null;
 // }
 
-export class LogicTreeNode<C extends FlowContext> extends BooleanNode<C> {
+export class LogicTreeNode<C extends FlowContext> extends BooleanNode<
+  C,
+  ILogicTreeNode
+> {
   nodeType = ImplementationNodeTypeEnum.LogicTree;
   // implements ILogicTreeNode
   // nodeType: NodeTypeEnum.LogicTree = NodeTypeEnum.LogicTree;

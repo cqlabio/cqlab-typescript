@@ -23,7 +23,7 @@ const bloodPressurePanel = z
 
 export type BloodPressurePanel = z.infer<typeof bloodPressurePanel>;
 
-@Library('Hypertension Library')
+@Library('HypertensionLibrary')
 @MockData([
   makeMockDataItem(MockPatientIdEnum.hypertension_crisis),
   makeMockDataItem(MockPatientIdEnum.hypertension_stage_2),

@@ -21,7 +21,7 @@ export interface LibraryFunctionRegistry {
 }
 
 export interface LibraryRegistry {
-  className: string;
+  libraryId: string;
   label: string;
   klass: any;
   definitions: Record<string, LibraryFunctionRegistry>;
@@ -41,7 +41,7 @@ export class LibraryContainer<R extends BaseRetriever = BaseRetriever> {
     const foundKeys = Reflect.getOwnMetadataKeys(target);
 
     const foundLibraryKey = foundKeys.find((key) =>
-      key.startsWith('logic-library:')
+      key.startsWith('library-id:')
     ) as string | undefined;
 
     if (!foundLibraryKey) {
@@ -53,27 +53,27 @@ export class LibraryContainer<R extends BaseRetriever = BaseRetriever> {
         return;
       }
 
-      const libName = target.name;
-      const displayName = getElName(foundLibraryKey);
+      // const libraryId = target.name;
+      const libraryId = getElName(foundLibraryKey);
 
       if (key === 'exampleData') {
         const examples = Reflect.getMetadata(key, target);
 
-        if (!this.registry[libName]) {
-          this.registry[libName] = {
-            className: target.name,
-            label: displayName,
+        if (!this.registry[libraryId]) {
+          this.registry[libraryId] = {
+            libraryId: libraryId,
+            label: libraryId,
             definitions: {},
             klass: target,
           };
         }
 
-        if (!this.registry[libName].mockData) {
-          this.registry[libName].mockData = [];
+        if (!this.registry[libraryId].mockData) {
+          this.registry[libraryId].mockData = [];
         }
 
         if (examples.exampleData) {
-          this.registry[libName].mockData?.push(...examples.exampleData);
+          this.registry[libraryId].mockData?.push(...examples.exampleData);
         }
       }
 
@@ -82,22 +82,22 @@ export class LibraryContainer<R extends BaseRetriever = BaseRetriever> {
 
         const funcName = getElName(key);
 
-        if (!this.registry[libName]) {
-          this.registry[libName] = {
-            className: target.name,
-            label: displayName,
+        if (!this.registry[libraryId]) {
+          this.registry[libraryId] = {
+            libraryId: libraryId,
+            label: libraryId,
             definitions: {},
             klass: target,
           };
         }
 
-        if (!this.registry[libName].definitions[funcName]) {
-          this.registry[libName].definitions[funcName] = {
+        if (!this.registry[libraryId].definitions[funcName]) {
+          this.registry[libraryId].definitions[funcName] = {
             funcName,
             label: '',
           };
         }
-        this.registry[libName].definitions[funcName].label = statement.label;
+        this.registry[libraryId].definitions[funcName].label = statement.label;
       }
 
       // if (key.startsWith('exampleData:')) {
@@ -105,8 +105,8 @@ export class LibraryContainer<R extends BaseRetriever = BaseRetriever> {
 
       //   const funcName = getElName(key);
 
-      //   if (!this.registry[libName]) {
-      //     this.registry[libName] = {
+      //   if (!this.registry[libraryId]) {
+      //     this.registry[libraryId] = {
       //       className: target.name,
       //       label: displayName,
       //       definitions: {},
@@ -114,14 +114,14 @@ export class LibraryContainer<R extends BaseRetriever = BaseRetriever> {
       //     };
       //   }
 
-      //   if (!this.registry[libName].definitions[funcName]) {
-      //     this.registry[libName].definitions[funcName] = {
+      //   if (!this.registry[libraryId].definitions[funcName]) {
+      //     this.registry[libraryId].definitions[funcName] = {
       //       funcName,
       //       label: '',
       //     };
       //   }
 
-      //   this.registry[libName].definitions[funcName].documentation =
+      //   this.registry[libraryId].definitions[funcName].documentation =
       //     documentation.label;
       // }
 
@@ -130,23 +130,23 @@ export class LibraryContainer<R extends BaseRetriever = BaseRetriever> {
 
         const funcName = getElName(key);
 
-        if (!this.registry[libName]) {
-          this.registry[libName] = {
-            className: target.name,
-            label: displayName,
+        if (!this.registry[libraryId]) {
+          this.registry[libraryId] = {
+            libraryId: libraryId,
+            label: libraryId,
             definitions: {},
             klass: target,
           };
         }
 
-        if (!this.registry[libName].definitions[funcName]) {
-          this.registry[libName].definitions[funcName] = {
+        if (!this.registry[libraryId].definitions[funcName]) {
+          this.registry[libraryId].definitions[funcName] = {
             funcName,
             label: '',
           };
         }
 
-        this.registry[libName].definitions[funcName].documentation =
+        this.registry[libraryId].definitions[funcName].documentation =
           documentation.label;
       }
 
@@ -155,23 +155,23 @@ export class LibraryContainer<R extends BaseRetriever = BaseRetriever> {
 
         const funcName = getElName(key);
 
-        if (!this.registry[libName]) {
-          this.registry[libName] = {
-            className: target.name,
-            label: displayName,
+        if (!this.registry[libraryId]) {
+          this.registry[libraryId] = {
+            libraryId: libraryId,
+            label: libraryId,
             definitions: {},
             klass: target,
           };
         }
 
-        if (!this.registry[libName].definitions[funcName]) {
-          this.registry[libName].definitions[funcName] = {
+        if (!this.registry[libraryId].definitions[funcName]) {
+          this.registry[libraryId].definitions[funcName] = {
             funcName,
             label: '',
           };
         }
 
-        this.registry[libName].definitions[funcName].params = zodToJsonSchema(
+        this.registry[libraryId].definitions[funcName].params = zodToJsonSchema(
           params.schema
         );
       }
@@ -181,23 +181,23 @@ export class LibraryContainer<R extends BaseRetriever = BaseRetriever> {
 
         const funcName = getElName(key);
 
-        if (!this.registry[libName]) {
-          this.registry[libName] = {
-            className: target.name,
-            label: displayName,
+        if (!this.registry[libraryId]) {
+          this.registry[libraryId] = {
+            libraryId: libraryId,
+            label: libraryId,
             definitions: {},
             klass: target,
           };
         }
 
-        if (!this.registry[libName].definitions[funcName]) {
-          this.registry[libName].definitions[funcName] = {
+        if (!this.registry[libraryId].definitions[funcName]) {
+          this.registry[libraryId].definitions[funcName] = {
             funcName,
             label: '',
           };
         }
 
-        this.registry[libName].definitions[funcName].returnType =
+        this.registry[libraryId].definitions[funcName].returnType =
           zodToJsonSchema(returnType.schema);
       }
     });

@@ -6,6 +6,7 @@ export interface IFormFieldNodeBase<T, F extends FieldTypeEnum>
   nodeType: DefinitionNodeTypeEnum.FormField;
   fieldType: F;
   field: T;
+  fieldDescription?: string;
 }
 
 export interface ITextField {

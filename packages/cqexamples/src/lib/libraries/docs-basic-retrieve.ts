@@ -20,7 +20,7 @@ type Age = z.infer<typeof ageSchema>;
 
 // The @Library decorator marks the class as a Library and defines the library name
 // The optional @MockData decorator binds mock data items to the library for testing
-@Library('Basic Retrieve')
+@Library('BasicRetrieveLibrary')
 @MockData([
   makeMockDataItem(MockPatientIdEnum.empty_data),
   makeMockDataItem(MockPatientIdEnum.needs_breast_cancer_screening),

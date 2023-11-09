@@ -166,14 +166,13 @@ export abstract class FlowImplementation<C extends FlowContext = FlowContext>
     return {}; //instanceToPlain(this.nodes);
   }
 
-  // Record<string, RegisterNode<C>> = {};
-
   private _checkId(nodeId: string) {
-    if (this._boundIds.has(nodeId)) {
-      throw new Error(
-        `Id should not be registered with implementation more than once: ${nodeId}`
-      );
-    }
+    // This may not be needed
+    // if (this._boundIds.has(nodeId)) {
+    //   throw new Error(
+    //     `Id should not be registered with implementation more than once: ${nodeId}`
+    //   );
+    // }
     this._boundIds.add(nodeId);
   }
 

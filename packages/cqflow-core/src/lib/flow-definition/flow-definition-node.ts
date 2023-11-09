@@ -1,4 +1,9 @@
-import { NextTypeEnum, DefinitionNodeTypeEnum, LogicEnum } from '../enums';
+import {
+  NextTypeEnum,
+  DefinitionNodeTypeEnum,
+  LogicEnum,
+  ActionEnum,
+} from '../enums';
 import { IFormFieldNode } from './form-field-node';
 
 type HandlePosition = 'top' | 'right' | 'bottom' | 'left';
@@ -61,6 +66,11 @@ export interface IEndNode extends IDefinitionBaseNode {
   nodeType: DefinitionNodeTypeEnum.End;
 }
 
+export interface INoteNode extends IDefinitionBaseNode {
+  nodeType: DefinitionNodeTypeEnum.Note;
+  contents?: string;
+}
+
 export interface IEmitDataNode extends IBaseNextNode {
   nodeType: DefinitionNodeTypeEnum.EmitData;
 }
@@ -76,6 +86,19 @@ export interface ICustomFormNode extends IBaseNextNode {
 //   max: number | null;
 // }
 
+export interface IMultiOption {
+  id: string;
+  label: string;
+  bindId?: string;
+}
+
+export interface IMultiOptionNode extends IBaseBooleanNode {
+  nodeType: DefinitionNodeTypeEnum.MultiOption;
+  options: IMultiOption[];
+  min: number;
+  max: number | null;
+}
+
 export interface IBranchNode extends IDefinitionBaseNode {
   nodeType: DefinitionNodeTypeEnum.Branch;
   next?: INextMulti;
@@ -87,24 +110,39 @@ export interface ITrueFalseNode extends IBaseBooleanNode {
   // onTrue
 }
 
+export interface IBaseAction {
+  id: string;
+  label: string;
+  bindId?: string;
+}
+
+export interface IOrderAction extends IBaseAction {
+  actionType: ActionEnum.Order;
+}
+
+export interface IPrescribeAction extends IBaseAction {
+  actionType: ActionEnum.Prescribe;
+}
+
+export interface IDiagnoseAction extends IBaseAction {
+  actionType: ActionEnum.Diagnose;
+}
+
+export type IAction = IOrderAction | IDiagnoseAction | IPrescribeAction;
+
 export interface IActionNode extends IBaseNextNode {
   nodeType: DefinitionNodeTypeEnum.Action;
-  // onFalse
-  // onTrue
+  actions: IAction[];
 }
 
 export interface INarrativeNode extends IBaseNextNode {
   nodeType: DefinitionNodeTypeEnum.Narrative;
   narrative: string;
-  // onFalse
-  // onTrue
 }
 
 export interface ISubFlowNode extends IBaseNextNode {
   nodeType: DefinitionNodeTypeEnum.SubFlow;
   subFlowId: string;
-  // onFalse
-  // onTrue
 }
 
 interface LocalTrueFalse extends ITrueFalseNode {
@@ -142,10 +180,14 @@ export type IFlowDefinitionNextNode =
   | ICustomFormNode
   | IFormFieldNode;
 
-export type IFlowDefinitionBooleanNode = ITrueFalseNode | ILogicTreeNode;
+export type IFlowDefinitionBooleanNode =
+  | ITrueFalseNode
+  | ILogicTreeNode
+  | IMultiOptionNode;
 
 export type IFlowDefinitionNode =
   | IFlowDefinitionNextNode
   | IFlowDefinitionBooleanNode
   | IBranchNode
+  | INoteNode
   | IEndNode;
