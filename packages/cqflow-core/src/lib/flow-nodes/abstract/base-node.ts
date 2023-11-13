@@ -14,24 +14,24 @@ export abstract class BaseNode<
   // declare c: C
 
   private label: string;
-  defintion: D;
+  definition: D;
 
   constructor(data: D) {
     this.label = data.label || '';
-    this.defintion = data;
+    this.definition = data;
   }
 
   // loadDefinition(data: IFlowDefinitionNode) {
-  //   this.defintion = data;
+  //   this.definition = data;
   //   this.label = data.label;
   // }
 
   getDefinition(): D {
-    return this.defintion;
+    return this.definition;
   }
 
   getDefinitionId(): string {
-    return this.defintion.id;
+    return this.definition.id;
   }
 
   setLabel(label: string) {

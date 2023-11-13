@@ -5,6 +5,7 @@ import {
   TernaryEnum,
 } from '../enums';
 import {
+  IActionAnswer,
   ICustomDataAnswer,
   IMultiOptionAnswer,
   INumberAnswer,
@@ -80,8 +81,10 @@ export interface IEmitDataStep extends IBaseStep<IEmitDataNode> {
 
 export interface IActionStep extends IBaseStep<IActionNode> {
   stepType: ImplementationNodeTypeEnum.Action;
+  answer: IActionAnswer | null;
 
-  actionStatus: ActionStatusEnum;
+  statuses: Record<string, ActionStatusEnum>;
+  // actionStatus: ActionStatusEnum;
 }
 
 export interface ICustomFormStep<T = any> extends IBaseStep<ICustomFormNode> {

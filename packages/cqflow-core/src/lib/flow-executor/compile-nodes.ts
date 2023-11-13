@@ -26,6 +26,7 @@ import {
   INumberFieldNode,
   INextMultiOption,
   IMultiOptionNode,
+  IActionNode,
 } from '../flow-definition';
 import {
   BaseNode,
@@ -50,6 +51,7 @@ import {
   MultiOptionFieldNode,
   TextFieldNode,
   NumberFieldNode,
+  ActionDummyNode,
 } from '../flow-nodes';
 import { IFlowDefinitionNode, ILogicTreeNode } from '../flow-definition';
 // import { IBaseBooleanNode } from '../flow-nodes/abstract/boolean-node';
@@ -79,14 +81,14 @@ export function compileNodes(
       implementationNode = new NarrativeNode(rawNode);
     } else if (rawNode.nodeType === DefinitionNodeTypeEnum.SubFlow) {
       implementationNode = new SubFlowNode(rawNode);
-    } else if (rawNode.nodeType === DefinitionNodeTypeEnum.Action) {
-      implementationNode = new ActionNode(rawNode);
     } else if (rawNode.nodeType === DefinitionNodeTypeEnum.TrueFalse) {
       implementationNode = compileTrueFalseNode(flowImplementation, rawNode);
     } else if (rawNode.nodeType === DefinitionNodeTypeEnum.MultiOption) {
       implementationNode = compileMultiOptionNode(flowImplementation, rawNode);
     } else if (rawNode.nodeType === DefinitionNodeTypeEnum.EmitData) {
       implementationNode = compileEmitDataNode(flowImplementation, rawNode);
+    } else if (rawNode.nodeType === DefinitionNodeTypeEnum.Action) {
+      implementationNode = compileActionNode(flowImplementation, rawNode);
     } else if (rawNode.nodeType === DefinitionNodeTypeEnum.CustomForm) {
       implementationNode = compileCustomFormNode(flowImplementation, rawNode);
     } else if (rawNode.nodeType === DefinitionNodeTypeEnum.FormField) {
@@ -189,6 +191,13 @@ function compileEmitDataNode(
   }
 
   return new EmitDataNode(rawNode);
+}
+
+function compileActionNode(
+  flowImplementation: FlowImplementation,
+  rawNode: IActionNode
+): BaseNode {
+  return new ActionDummyNode(rawNode);
 }
 
 function compileBranchNode(

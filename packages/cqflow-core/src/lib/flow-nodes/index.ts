@@ -17,6 +17,7 @@ export * from './message-node';
 export * from './branch-exec-node';
 export * from './branch-exec-option';
 export * from './narrative-node';
+export * from './action-dummy';
 export * from './form/custom-form-node';
 export * from './form/text-field-node';
 export * from './form/number-field-node';
@@ -38,6 +39,7 @@ import { MessageNode } from './message-node';
 import { NarrativeNode } from './narrative-node';
 import { CustomFormNode } from './form/custom-form-node';
 import { MultiOptionExec } from './multi-option-exec-option';
+import { ActionDummyNode } from './action-dummy';
 // import { IBaseBooleanNode } from './abstract/boolean-node';
 // import { IBaseNextNode } from './abstract/next-node';
 
@@ -55,7 +57,8 @@ export type FlowNode =
   | BranchExecNode<any>
   | MessageNode<any>
   | NarrativeNode<any>
-  | CustomFormNode<any, any>;
+  | CustomFormNode<any, any>
+  | ActionDummyNode<any>;
 
 // export type INextNode =
 //   | IStartNode

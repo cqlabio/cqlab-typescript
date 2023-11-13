@@ -7,6 +7,7 @@ import {
   ImplementationNodeTypeEnum,
   TernaryEnum,
   AnswerTypeEnum,
+  ActionStatusEnum,
 } from '../enums';
 import {
   IFlowStepAnswer,
@@ -15,6 +16,7 @@ import {
   IOptionAnswer,
   ITextAnswer,
   INumberAnswer,
+  IActionAnswer,
 } from '../flow-steps/answers';
 import {
   ExecNode,
@@ -30,6 +32,7 @@ import {
   TextFieldNode,
   NumberFieldNode,
   BranchExecNode,
+  ActionDummyNode,
 } from '../flow-nodes';
 import {
   IFlowStep,
@@ -41,6 +44,7 @@ import {
   ITextFieldStep,
   INumberFieldStep,
   IMultiOptionStep,
+  IActionStep,
 } from '../flow-steps';
 import {
   executeStartNode,
@@ -127,6 +131,8 @@ export async function recurseInteractiveFlow(
     nextStep = await executeInteractiveBranchChoiceNode(node, context, answers);
   } else if (node instanceof BranchExecNode) {
     nextStep = await executeInteractiveBranchExecNode(node, context, answers);
+  } else if (node instanceof ActionDummyNode) {
+    nextStep = await executeInteractiveActionDummyNode(node, context, answers);
   } else if (node instanceof CustomFormNode) {
     nextStep = await executeInteractiveCustomFormNode(node, context, answers);
   } else if (node instanceof MultiOptionFieldNode) {
@@ -346,6 +352,41 @@ export async function executeInteractiveBranchExecNode(
     nextNodeId = option?.toId || null;
   }
 
+  return { step, nextNodeId };
+}
+
+export async function executeInteractiveActionDummyNode(
+  node: ActionDummyNode,
+  context: InteractiveFlowContext,
+  answers: Record<string, IFlowStepAnswer>
+): Promise<ReturnStep> {
+  const step: IActionStep = {
+    stepType: ImplementationNodeTypeEnum.Action,
+    stepId: node.getDefinition().id,
+    flowDefinitionId: context.getFlowDefinition().id,
+    nodeDefinition: node.getDefinition(),
+    label: await node.getLabel(context),
+    answer: null,
+    statuses: {},
+  };
+
+  step.answer = answers[step.stepId] as IActionAnswer | null;
+
+  let nextNodeId = null;
+  if (step.answer) {
+    node.getActions().forEach((action) => {
+      const found = step.answer?.submitted.find(
+        (actionId) => actionId === action.id
+      );
+      if (found) {
+        step.statuses[action.id] = ActionStatusEnum.Success;
+      } else {
+        step.statuses[action.id] = ActionStatusEnum.NotTaken;
+      }
+    });
+
+    nextNodeId = node.getNextNodeId();
+  }
   return { step, nextNodeId };
 }
 

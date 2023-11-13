@@ -27,7 +27,7 @@ export class ExecNode<C extends FlowContext = FlowContext> extends BooleanNode<
 
   constructor(node: ITrueFalseNode) {
     super(node);
-    this.defintion = node;
+    this.definition = node;
   }
 
   setExecutor(executor: ExecNodeExecutor<C>) {

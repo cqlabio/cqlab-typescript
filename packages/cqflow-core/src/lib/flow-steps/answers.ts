@@ -36,7 +36,7 @@ export interface INumberAnswer extends IBaseAnswer {
 
 export interface IActionAnswer extends IBaseAnswer {
   answerType: AnswerTypeEnum.Action;
-  submitted: boolean;
+  submitted: string[];
 }
 
 export type IFlowStepAnswer =

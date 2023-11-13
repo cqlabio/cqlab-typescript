@@ -133,6 +133,8 @@ export type IAction = IOrderAction | IDiagnoseAction | IPrescribeAction;
 export interface IActionNode extends IBaseNextNode {
   nodeType: DefinitionNodeTypeEnum.Action;
   actions: IAction[];
+  min: number;
+  max: number | null;
 }
 
 export interface INarrativeNode extends IBaseNextNode {
