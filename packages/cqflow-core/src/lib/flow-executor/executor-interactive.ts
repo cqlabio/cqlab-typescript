@@ -1,5 +1,5 @@
 import { compileNodes } from './compile-nodes';
-import compact from 'lodash/compact';
+import { compact } from 'lodash';
 import { IFlowDefinition, INumberField } from '../flow-definition';
 import { InteractiveFlowContext } from '../flow-context/interactive-flow-context';
 import { InteractiveFlowImplementation } from '../flow-implementation/interactive-flow-implementation';
@@ -296,7 +296,7 @@ export async function executeInteractiveBranchExecNode(
       break;
     }
 
-    const branchOptionExec = node.getBranchOptionExec(option.id);
+    const branchOptionExec = node.getBranchOptionExec(option.bindId);
 
     if (branchOptionExec) {
       const result = await branchOptionExec.evaluate(context);

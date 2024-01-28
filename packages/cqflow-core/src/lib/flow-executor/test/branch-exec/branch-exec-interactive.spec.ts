@@ -97,7 +97,7 @@ describe('Interactive Executor Branch node', () => {
     const step = result[1] as IBranchChoiceStep;
     expect(result[0].stepType).toEqual(ImplementationNodeTypeEnum.Start);
     expect(step.stepType).toEqual(ImplementationNodeTypeEnum.BranchChoice);
-    expect(step.evaluation?.selectedId).toEqual('option_1');
+    expect(step.evaluation?.selectedId).toEqual('option_1_asldkjasd');
     expect(step.options.length).toEqual(1);
     expect(step.options[0].bindId).toEqual('option_1');
     expect(result[2].stepId).toEqual('end_1');

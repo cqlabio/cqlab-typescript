@@ -28,17 +28,17 @@ export class BranchExecNode<
     this.registrar[optionId] = fn;
   }
 
-  getBranchOptionExec(optionId: string): BranchOptionExec<C> | null {
-    if (!this.registrar[optionId]) {
+  getBranchOptionExec(optionBindId: string): BranchOptionExec<C> | null {
+    if (!this.registrar[optionBindId]) {
       return null;
     }
     const foundOption = this.getOptions().find(
-      (option) => option.id === optionId
+      (option) => option.bindId === optionBindId
     );
     if (!foundOption) {
       return null;
     }
 
-    return this.registrar[optionId](foundOption);
+    return this.registrar[optionBindId](foundOption);
   }
 }

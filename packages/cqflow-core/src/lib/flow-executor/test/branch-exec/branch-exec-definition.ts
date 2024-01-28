@@ -26,13 +26,13 @@ export const branchChoiceDefinition: IFlowDefinition = {
         options: [
           {
             toId: 'end_1',
-            id: 'option_1',
+            id: 'option_1_asldkjasd',
             bindId: 'option_1',
             label: 'Option 1',
           },
           {
             toId: 'end_2',
-            id: 'option_2',
+            id: 'option_2_asldkjaa9',
             bindId: 'option_2',
             label: 'Option 2',
           },
