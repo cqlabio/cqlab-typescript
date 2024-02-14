@@ -93,22 +93,23 @@ export function FillingOutTheFormManually() {
         </p>
 
         <p>
-          This could be due to not having any claims or EHR data for the member
+          This could be due to not having any claims or EHR data for the patient
           in question because the patient is a new member, or because the system
           does not have up to date data integrations with external systems using
-          an interoperable data standard such as FHIR.
+          an interoperable data standard such as FHIR. Therefore in this case each question required
+          must be answered by the provider manually.
         </p>
 
         <p>
           Below we automatically fill the form for you in this demo, but in a
-          real world scenario the provider would need to answer the questions
-          manually. Some questions may even require supporting documentation to
+          real world scenario the healthcare provider would need to fill out the form. 
+          Some questions may even require supporting documentation to
           be uploaded such as lab test results or a letter of medical necessity.
         </p>
       </Paper>
 
       <Paper sx={{ padding: '1px 15px 15px 15px', marginTop: '30px' }}>
-        <h2>The Form</h2>
+        <h2>Manual Form</h2>
 
         <InteractiveFlowRenderer
           steps={steps}

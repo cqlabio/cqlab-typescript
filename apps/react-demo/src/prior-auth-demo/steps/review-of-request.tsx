@@ -8,7 +8,8 @@ export function ReviewRequest() {
       <Paper sx={{ padding: '1px 15px 15px 15px' }}>
         <h2>Review of the Prior Authorization Request</h2>
         <p>
-          There are different ways an insurance company may decide to setup
+          After receiving the prior authorization request form from a healthcare provider, 
+          there are different ways an insurance company may decide to setup
           their prior authorization process for review. This may even vary
           significantly within a single company based on the medication or
           procedure requested. A medication requested less often and with a high

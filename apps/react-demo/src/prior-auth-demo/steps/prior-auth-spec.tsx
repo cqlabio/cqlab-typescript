@@ -20,9 +20,17 @@ export function PriorAuthSpec() {
         </p>
 
         <p>
-          There are several ways we can perform this task with CQLab. In this
-          example, we will use a CQFlow to define a flow chart containing the
-          decision points.
+          Therefore the first step in improving the prior authorization is for
+          an insurance company to define these requirements in a 
+          consistent and clear way. Ideally these requirements should be 
+          easily accessible to all parties involved in the process.
+        </p>
+
+        <p>
+          There are several tools we can use to perform this task with CQLab. In this
+          example, we will use CQFlow to define a flow chart 
+          containing <strong>decision points</strong> that will be used to determine if a
+          prior authorization request should be approved or rejected.
         </p>
       </Paper>
 
@@ -37,9 +45,9 @@ export function PriorAuthSpec() {
           transform into a machine readable format.
         </p>
         <p>
-          Using CQFlow, our first goal is to transform a text based
-          specification into a structure that is{' '}
-          <strong>less ambiguous and more machine readable</strong>.
+          Using CQFlow, our first goal is create a
+          specification that is{' '}
+          <strong>unambiguous and machine readable</strong>.
         </p>
         <p>
           Below is a flow diagram that contains the decision points necessary to
@@ -47,9 +55,8 @@ export function PriorAuthSpec() {
           the diagram that there is no ambiguity, and the exact steps required
           to approve or reject a request are clearly defined.
         </p>
-        Include Diagram
         <ReactFlowProvider>
-          <Box sx={{ height: '400px' }}>
+          <Box sx={{ height: '400px', border: '1px solid rgb(245,245,245)' }}>
             <DisplayFlowDiagram
               flowDefinition={flowDefinition}
               zoomOnScroll={false}

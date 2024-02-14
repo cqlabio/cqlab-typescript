@@ -36,7 +36,7 @@ export function MakingAPriorAuthRequest() {
           Once an insurance company receives the request, it performs several
           tasks:
         </p>
-        <ol>
+        <ol style={{lineHeight: 1.8}}>
           <li>
             Using the <strong>memberID</strong>, the insurance company looks up
             the members insurance plan.
@@ -58,16 +58,16 @@ export function MakingAPriorAuthRequest() {
         <h2>Returning the Form to the Request Caller</h2>
 
         <p>
-          CQLab uses the specification created in the prior step to generate an
-          electronic form automatically. This is the main advantage of creating
+          CQLab uses the specification created in the prior step to generate 
+          an <strong>electronic form</strong> automatically. This is the main advantage of creating
           the authorization rules in a machine readable format (as opposed to a
           text document or PDF).
         </p>
 
         <p>
           CQLab also provides the ability to greatly increase the efficiency of
-          the process by auto-answering questions on the form using the
-          patient's medical history if it is available.
+          the process by <strong>auto-answering</strong> questions on the form using the
+          patient's medical history if it is available from an EHR or claims data.
         </p>
         <p>
           At times, this means a request can even be fully approved without
