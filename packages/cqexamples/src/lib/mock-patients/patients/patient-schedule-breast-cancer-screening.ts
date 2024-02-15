@@ -23,7 +23,7 @@ export async function createPatientScheduleBreastCancerScreening(
 
   FhirR4.bundleAddEntry(bundle, patient);
 
-  const valueSet = await valueSetContainer.loadValuesetById(
+  const valueSet = await valueSetContainer.loadValueSetById(
     ValueSetIdEnum.mammography
   );
   const code = getRandomCodeFromValueSet(valueSet);

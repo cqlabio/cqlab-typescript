@@ -1,8 +1,5 @@
 import { DefinitionNodeTypeEnum } from '@cqlab/cqflow-core';
-import {
-  getNodeColor,
-  getNodeColorLight,
-} from '@cqlab/ui-flow-diagram';
+import { getNodeColor, getNodeColorLight } from '@cqlab/ui-flow-diagram';
 import Box from '@mui/material/Box';
 
 type DragIconShapeProps = {

@@ -75,7 +75,7 @@ import {
   getPossibleHandles,
   getClosestCoord,
   getOptionIdFromEdgeId,
-// } from '@cqlab/cqflow-react-components';
+  // } from '@cqlab/cqflow-react-components';
 } from '@cqlab/ui-flow-diagram';
 import compact from 'lodash/compact';
 import { cloneCopyPasteState } from './utils';

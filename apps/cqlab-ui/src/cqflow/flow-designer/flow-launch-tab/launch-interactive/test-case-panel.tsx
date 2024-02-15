@@ -41,44 +41,33 @@ export function TestCasePanel({ flow, doLaunch }: TestCasePanelProps) {
   );
 
   return (
-    <Paper square sx={{ margin: '20px 20px 20px 20px' }}>
-      <Box
-        sx={{
-          padding: '10px',
-          fontWeight: 'bold',
-          borderBottom: '1px solid rgb(230,230,230)',
-        }}
-      >
-        Test Cases
-      </Box>
-      <TableContainer>
-        <Table size="small">
-          <TableHead>
-            <TableRow>
-              <TableCell sx={{ fontWeight: 'bold' }}>Index</TableCell>
-              <TableCell sx={{ fontWeight: 'bold' }}>Initial Data</TableCell>
-              <TableCell sx={{ fontWeight: 'bold' }}>Launch</TableCell>
+    <TableContainer>
+      <Table size="small">
+        <TableHead>
+          <TableRow>
+            <TableCell sx={{ fontWeight: 'bold' }}>Index</TableCell>
+            <TableCell sx={{ fontWeight: 'bold' }}>Initial Data</TableCell>
+            <TableCell sx={{ fontWeight: 'bold' }}>Launch</TableCell>
+          </TableRow>
+        </TableHead>
+
+        <TableBody>
+          {exampleData.map((testD, index) => (
+            <TableRow id={index + '_'}>
+              <TableCell>Example {index + 1}</TableCell>
+
+              <TableCell sx={{ whiteSpace: 'nowrap' }}>
+                <pre>{JSON.stringify(testD, null, 2)}</pre>
+              </TableCell>
+              <TableCell>
+                <Button onClick={() => doLaunch(testD)} variant="contained">
+                  Launch
+                </Button>
+              </TableCell>
             </TableRow>
-          </TableHead>
-
-          <TableBody>
-            {exampleData.map((testD, index) => (
-              <TableRow id={index + '_'}>
-                <TableCell>Example {index + 1}</TableCell>
-
-                <TableCell sx={{ whiteSpace: 'nowrap' }}>
-                  <pre>{JSON.stringify(testD, null, 2)}</pre>
-                </TableCell>
-                <TableCell>
-                  <Button onClick={() => doLaunch(testD)} variant="contained">
-                    Launch
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </Paper>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
   );
 }

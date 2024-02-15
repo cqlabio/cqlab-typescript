@@ -181,23 +181,47 @@ export function FlowDesigner() {
     {
       label: 'Flow Designer',
     },
+    {
+      label: 'Flow Implementation',
+    },
+    {
+      label: 'Launch',
+    },
   ];
 
-  if (flowImplementation) {
-    tabs.push({
-      label: 'Flow Implementation',
-    });
-    tabs.push({
-      label: 'Launch',
-    });
+  if (!flowImplementation) {
+    tabs[1].label = (
+      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+        Flow Implementation
+        <Box
+          sx={{
+            fontSize: '12px',
+            // background: '#FFEBEE',
+            background: 'rgb(230,230,230)',
+            color: 'rgb(80,80,80)',
+            padding: '4px 8px',
+            borderRadius: '8px',
+            marginLeft: '4px',
+          }}
+        >
+          Not Configured
+        </Box>
+      </Box>
+    );
+    // tabs.push({
+    //   label: 'Flow Implementation',
+    // });
+    // tabs.push({
+    //   label: 'Launch',
+    // });
   } else {
-    tabs.push({
-      label: 'Launch',
-    });
+    // tabs.push({
+    //   label: 'Launch',
+    // });
   }
 
   // TODO: this is dumb, clean up
-  const selectedTabIndex = flowImplementation ? value : value === 1 ? 2 : value;
+  // const selectedTabIndex = flowImplementation ? value : value === 1 ? 2 : value;
 
   return (
     <FlowDesignerContext.Provider
@@ -287,15 +311,15 @@ export function FlowDesigner() {
         </Paper>
 
         <Box sx={{ flexGrow: 1 }}>
-          <TabPanel value={selectedTabIndex} index={0}>
+          <TabPanel value={value} index={0}>
             <FlowDiagramTab />
           </TabPanel>
-          <TabPanel value={selectedTabIndex} index={1}>
+          <TabPanel value={value} index={1}>
             <ReactFlowProvider>
               <FlowImplementationView />
             </ReactFlowProvider>
           </TabPanel>
-          <TabPanel value={selectedTabIndex} index={2}>
+          <TabPanel value={value} index={2}>
             <FlowLaunchTab />
           </TabPanel>
         </Box>

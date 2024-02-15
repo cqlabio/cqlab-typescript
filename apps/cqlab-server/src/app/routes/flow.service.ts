@@ -2,15 +2,14 @@ import { Injectable } from '@nestjs/common';
 // import { PrismaService } from '../services/prisma.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { FlowDefinitionEntity } from './models/flow-definition.entity';
-import { IFlowDefinition } from '../../../packages/cqflow-core/src';
+import { FlowDefinitionEntity } from '../models/flow-definition.entity';
+import { IFlowDefinition } from '@cqlab/cqflow-core';
 
 @Injectable()
 export class FlowService {
   constructor(
     @InjectRepository(FlowDefinitionEntity)
-    private flowDefRepo: Repository<FlowDefinitionEntity>,
-    
+    private flowDefRepo: Repository<FlowDefinitionEntity>
   ) {}
 
   async getDefinitions(): Promise<FlowDefinitionEntity[]> {
@@ -25,11 +24,15 @@ export class FlowService {
     // return defs;
   }
 
-  // async getDefinitionById(id: string): Promise<FlowDefinition> {
-  //   return this.prisma.flowDefinition.findFirst({
-  //     where: { id: id },
-  //   });
-  // }
+  async getDefinitionById(id: string): Promise<FlowDefinitionEntity | null> {
+    return this.flowDefRepo.findOne({
+      where: { id: id },
+    });
+
+    // return this.prisma.flowDefinition.findFirst({
+    //   where: { id: id },
+    // });
+  }
 
   // async getDefinitionByBindId(bindId: string): Promise<FlowDefinition> {
   //   return this.prisma.flowDefinition.findFirst({
@@ -40,13 +43,11 @@ export class FlowService {
   async createDefinition(
     flowDefinition: IFlowDefinition
   ): Promise<FlowDefinitionEntity> {
-
-    const flowDef = new FlowDefinitionEntity()
-    flowDef.bindId = flowDefinition.bindId || ''
-    flowDef.graph = flowDefinition.nodes
-    await this.flowDefRepo.save(flowDef)
-    return flowDef
-
+    const flowDef = new FlowDefinitionEntity();
+    flowDef.bindId = flowDefinition.bindId || '';
+    flowDef.nodes = flowDefinition.nodes;
+    await this.flowDefRepo.save(flowDef);
+    return flowDef;
 
     // return await this.prisma.flowDefinition.create({
     //   data: flowDefinition,
@@ -71,14 +72,20 @@ export class FlowService {
   //   return { success: true };
   // }
 
-  // async updateDefinition(
-  //   flowDefinition: FlowDefinition
-  // ): Promise<FlowDefinition> {
-  //   return await this.prisma.flowDefinition.update({
-  //     where: {
-  //       id: flowDefinition.id,
-  //     },
-  //     data: flowDefinition,
-  //   });
-  // }
+  async updateDefinition(
+    flowDefinition: IFlowDefinition
+  ): Promise<FlowDefinitionEntity> {
+    return this.flowDefRepo.save({
+      id: flowDefinition.id,
+      bindId: flowDefinition.bindId,
+      nodes: flowDefinition.nodes,
+    });
+
+    // return await this.prisma.flowDefinition.update({
+    //   where: {
+    //     id: flowDefinition.id,
+    //   },
+    //   data: flowDefinition,
+    // });
+  }
 }

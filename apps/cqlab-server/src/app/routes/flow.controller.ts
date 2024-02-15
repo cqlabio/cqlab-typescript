@@ -20,9 +20,9 @@ import { IFlowDefinition } from '@cqlab/cqflow-core';
 @Controller('flows')
 export class FlowController {
   constructor(
-    private readonly flowService: FlowService,
-    // private readonly flowInstanceService: FlowInstanceService
-  ) {}
+    private readonly flowService: FlowService
+  ) // private readonly flowInstanceService: FlowInstanceService
+  {}
 
   @Get()
   async getFlowDefinitions(@Query('bindId') bindId: string) {
@@ -59,6 +59,14 @@ export class FlowController {
   createFlowDefinition(@Body() data: IFlowDefinition) {
     return this.flowService.createDefinition(data);
   }
+
+  // @Post(':id/launch-interactive')
+  // initiateFlowInstance(
+  //   @Param('id') id: string,
+  //   @Body() body: { initialData: InitialData }
+  // ) {
+  //   return this.mockDbService.initiateFlowInstance(id, body);
+  // }
 
   // @Delete(':id')
   // deleteFlowDefinition(@Param('id') id: string) {

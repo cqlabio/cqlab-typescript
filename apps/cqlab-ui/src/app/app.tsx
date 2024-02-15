@@ -1,6 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Box } from '@mui/material';
 import { Outlet } from 'react-router-dom';
+import { NavBar } from './navbar';
 // import styles from './app.module.css';
 
 export function App() {
@@ -13,7 +14,7 @@ export function App() {
         height: '100vh',
       }}
     >
-      {/* <NavBar /> */}
+      <NavBar />
       <Box sx={{ flexGrow: 1, background: 'rgb(250,250,250)' }}>
         <Outlet />
       </Box>

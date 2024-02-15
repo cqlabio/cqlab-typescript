@@ -34,7 +34,7 @@ export class InteractiveFlowModule {
     return this.configOpts.flowContext(opts);
   };
 
-  execute(contextOpts: InteractiveFlowContextOptions<any>) {
+  execute(contextOpts: InteractiveFlowContextOptions<any, any>) {
     return executeInteractiveFlow(
       this.configOpts.flowImplementation,
       this.configOpts.flowContext(contextOpts)

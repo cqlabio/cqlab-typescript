@@ -4,34 +4,52 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { FlowDefinitionEntity } from './models/flow-definition.entity';
 
-import { FlowController } from './flow.controller';
-import { FlowService } from './flow.service';
+import { FlowController } from './routes/flow.controller';
+import { FlowService } from './routes/flow.service';
+
+import { FlowImplementationController } from './routes/flow-implementation.controller';
+import { FlowImplementationService } from './routes/flow-implementation.service';
+
+import { FlowInstanceController } from './routes/flow-instance.controller';
+import { FlowInstanceService } from './routes/flow-instance.service';
+import { FlowInstanceEntity } from './models/flow-instance.entity';
+
+import { LibraryController } from './routes/libraries.controller';
+import { LibraryService } from './routes/libraries.service';
+
+import { VocabularyController } from './routes/vocabulary.controller';
+
+import { MockDataController } from './routes/mock-data.controller';
 
 @Module({
   imports: [
-
     TypeOrmModule.forRoot({
       type: 'sqlite',
-      database: "cqlab-db.sqlite",
+      database: 'cqlab-db.sqlite',
       // host: 'localhost',
       // port: 3306,
       // username: 'root',
       // password: 'root',
       // database: 'test',
-      entities: [
-        FlowDefinitionEntity
-      ],
+      entities: [FlowDefinitionEntity, FlowInstanceEntity],
       synchronize: true,
     }),
 
-    TypeOrmModule.forFeature([FlowDefinitionEntity])
-
+    TypeOrmModule.forFeature([FlowDefinitionEntity, FlowInstanceEntity]),
   ],
   controllers: [
-    FlowController
+    FlowController,
+    FlowImplementationController,
+    FlowInstanceController,
+    LibraryController,
+    VocabularyController,
+    MockDataController,
   ],
   providers: [
-    FlowService
+    FlowService,
+    FlowImplementationService,
+    FlowInstanceService,
+    LibraryService,
   ],
 })
 export class AppModule {}

@@ -53,9 +53,12 @@ interface ContextStateLoader {
 } 
 */
 
-export interface InteractiveFlowContextOptions<I = any> {
+export interface InteractiveFlowContextOptions<
+  I = any,
+  S = CQFlowExecutorStateEnum
+> {
   flowDefinition: IFlowDefinition;
-  interactiveFlowState: InteractiveFlowState<I>;
+  interactiveFlowState: InteractiveFlowState<I, S>;
   onUpdateInteractiveState: OnUpdateInteractiveState<I>;
 }
 

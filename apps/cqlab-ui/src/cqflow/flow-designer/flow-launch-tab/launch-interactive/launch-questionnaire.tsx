@@ -17,6 +17,7 @@ import {
   useFlowInstances,
   useAddFlowInstanceAnswerMutation,
 } from '../../../../data/queries-flow-implementation';
+import { axiosInstance } from '../../../../data/axios-instance';
 
 type LaunchQuestionnaireProps = {
   // executor: CQFlowExecutorStateful;
@@ -47,7 +48,7 @@ LaunchQuestionnaireProps) {
 
   // TODO: should be fetching a single instance instead of all
   const { data: workflowInstances = [] } = useFlowInstances(
-    flowDefinition.bindId || null,
+    flowDefinition.id,
     flowImplementationServerUrl
   );
 
@@ -58,10 +59,8 @@ LaunchQuestionnaireProps) {
     );
 
   const fetchActiveSteps = useCallback(() => {
-    axios
-      .get<InstanceRes>(
-        `${flowImplementationServerUrl}/flow-instances/${workflowInstanceId}/active-steps`
-      )
+    axiosInstance
+      .get<InstanceRes>(`/flow-instances/${workflowInstanceId}/active-steps`)
       .then((res) => {
         setActiveSteps(res.data);
       });

@@ -6,5 +6,5 @@ export interface IFlowDefinition {
   id: string;
   bindId?: string;
   nodes: Record<string, IFlowDefinitionNode>;
-  version: string;
+  version?: string;
 }

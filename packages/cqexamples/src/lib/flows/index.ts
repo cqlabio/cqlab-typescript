@@ -18,9 +18,9 @@ export const enum ExampleFlowDefinitionIdEnum {
   docs_hypertension = 'docs-hypertension',
 }
 
-export const exampleFlowRepository = new FlowRepository();
+export const flowRepository = new FlowRepository();
 
-exampleFlowRepository.registerInteractiveModule<PatientIdInitialData>(
+flowRepository.registerInteractiveModule<PatientIdInitialData>(
   ExampleFlowDefinitionIdEnum.docs_breast_cancer_screening,
   {
     flowImplementation: breastCancerScreeningImplementation,
@@ -39,7 +39,7 @@ exampleFlowRepository.registerInteractiveModule<PatientIdInitialData>(
   }
 );
 
-exampleFlowRepository.registerNonInteractiveModule<PatientIdInitialData>(
+flowRepository.registerNonInteractiveModule<PatientIdInitialData>(
   ExampleFlowDefinitionIdEnum.docs_breast_cancer_screening_non_interactive,
   {
     flowImplementation: nonInteractiveBreastCancerScreeningImplementation,
@@ -59,7 +59,7 @@ exampleFlowRepository.registerNonInteractiveModule<PatientIdInitialData>(
   }
 );
 
-exampleFlowRepository.registerInteractiveModule<PatientIdInitialData>(
+flowRepository.registerInteractiveModule<PatientIdInitialData>(
   ExampleFlowDefinitionIdEnum.docs_hypertension,
   {
     flowImplementation: hypertensionImplementation,

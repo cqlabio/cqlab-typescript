@@ -21,7 +21,7 @@ export function FlowImplementationNotFound({
       </Box>
 
       {!flowImplementationServerUrl ? (
-      <Box>Implementation server is not configured.</Box>
+        <Box>Implementation server is not configured.</Box>
       ) : (
         <Box>
           We were unable to find the flow implementation with id{' '}

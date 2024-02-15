@@ -92,7 +92,6 @@ export const getLayoutedElements = (
   edges: any,
   direction = 'TB'
 ) => {
-
   /**
   const dagreGraph = new dagre.graphlib.Graph();
   dagreGraph.setDefaultEdgeLabel(() => ({}));
@@ -152,5 +151,4 @@ export const getLayoutedElements = (
 
   return { nodes: nextNodes, edges };
  */
-
 };

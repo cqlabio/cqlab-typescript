@@ -96,15 +96,15 @@ export function FillingOutTheFormManually() {
           This could be due to not having any claims or EHR data for the patient
           in question because the patient is a new member, or because the system
           does not have up to date data integrations with external systems using
-          an interoperable data standard such as FHIR. Therefore in this case each question required
-          must be answered by the provider manually.
+          an interoperable data standard such as FHIR. Therefore in this case
+          each question required must be answered by the provider manually.
         </p>
 
         <p>
           Below we automatically fill the form for you in this demo, but in a
-          real world scenario the healthcare provider would need to fill out the form. 
-          Some questions may even require supporting documentation to
-          be uploaded such as lab test results or a letter of medical necessity.
+          real world scenario the healthcare provider would need to fill out the
+          form. Some questions may even require supporting documentation to be
+          uploaded such as lab test results or a letter of medical necessity.
         </p>
       </Paper>
 

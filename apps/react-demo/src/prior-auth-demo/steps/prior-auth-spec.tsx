@@ -21,15 +21,15 @@ export function PriorAuthSpec() {
 
         <p>
           Therefore the first step in improving the prior authorization is for
-          an insurance company to define these requirements in a 
-          consistent and clear way. Ideally these requirements should be 
-          easily accessible to all parties involved in the process.
+          an insurance company to define these requirements in a consistent and
+          clear way. Ideally these requirements should be easily accessible to
+          all parties involved in the process.
         </p>
 
         <p>
-          There are several tools we can use to perform this task with CQLab. In this
-          example, we will use CQFlow to define a flow chart 
-          containing <strong>decision points</strong> that will be used to determine if a
+          There are several tools we can use to perform this task with CQLab. In
+          this example, we will use CQFlow to define a flow chart containing{' '}
+          <strong>decision points</strong> that will be used to determine if a
           prior authorization request should be approved or rejected.
         </p>
       </Paper>
@@ -45,8 +45,7 @@ export function PriorAuthSpec() {
           transform into a machine readable format.
         </p>
         <p>
-          Using CQFlow, our first goal is create a
-          specification that is{' '}
+          Using CQFlow, our first goal is create a specification that is{' '}
           <strong>unambiguous and machine readable</strong>.
         </p>
         <p>

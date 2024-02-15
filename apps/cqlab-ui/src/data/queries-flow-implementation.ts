@@ -1,4 +1,4 @@
-import axios from 'axios';
+// import axios from 'axios';
 import { axiosInstance } from './axios-instance';
 import { useQuery, useMutation, QueryClient } from '@tanstack/react-query';
 import {
@@ -24,8 +24,9 @@ export function useFlowImplementation(
       { id: flowImplementationId, server: flowImplementationServer },
     ],
     queryFn: async () => {
-      const { data } = await axios.get(
-        `${flowImplementationServer}/flow-implementations/${flowImplementationId}`
+      const { data } = await axiosInstance.get(
+        // `/flow-implementations/${flowImplementationId}`
+        `/flow-implementations/${flowImplementationId}`
       );
       return data;
     },
@@ -43,8 +44,8 @@ export function useFlowImplementationExampleData(
       { id: flowImplementationId, server: flowImplementationServer },
     ],
     queryFn: async () => {
-      const { data } = await axios.get(
-        `${flowImplementationServer}/flow-implementations/${flowImplementationId}/example-inputs`
+      const { data } = await axiosInstance.get(
+        `/flow-implementations/${flowImplementationId}/example-inputs`
       );
       return data;
     },
@@ -54,18 +55,18 @@ export function useFlowImplementationExampleData(
 type WorkflowInstance = InteractiveFlowState<any>;
 
 export function useFlowInstances(
-  flowBindId: string | null,
+  flowDefinitionId: string | null,
   flowImplementationServer: string | null
 ) {
   return useQuery<WorkflowInstance[]>({
-    enabled: !!flowBindId && !!flowImplementationServer,
+    enabled: !!flowDefinitionId && !!flowImplementationServer,
     queryKey: [
       FLOW_INSTANCES_KEY,
-      { id: flowBindId, server: flowImplementationServer },
+      { id: flowDefinitionId, server: flowImplementationServer },
     ],
     queryFn: async () => {
-      const { data } = await axios.get(
-        `${flowImplementationServer}/flows/${flowBindId}/flow-instances`
+      const { data } = await axiosInstance.get(
+        `/flow-instances?flowDefinitionId=${flowDefinitionId}`
       );
       return data;
     },
@@ -84,12 +85,12 @@ export function useAddFlowInstanceAnswerMutation(
   return useMutation({
     mutationFn: (postBody: AnswerPostBody) => {
       return axiosInstance.post<WorkflowInstance>(
-        `${flowImplementationServerUrl}/flow-instances/${workflowInstanceId}/answer`,
+        `/flow-instances/${workflowInstanceId}/answer`,
         postBody
       );
     },
     onSuccess: () => {
-      queryClient.invalidateQueries([FLOW_INSTANCES_KEY]);
+      queryClient.invalidateQueries({ queryKey: [FLOW_INSTANCES_KEY] });
     },
   });
 
@@ -126,20 +127,18 @@ export function useAddFlowInstanceAnswerMutation(
 // });
 
 export function useCreateFlowInstanceMutation(
-  flowBindId: string | null,
+  flowDefinitionId: string | null,
   flowImplementationServer: string | null
 ) {
   return useMutation({
     mutationFn: (initialdata: any) => {
-      return axiosInstance.post<WorkflowInstance>(
-        `${flowImplementationServer}/flows/${flowBindId}/launch-interactive`,
-        {
-          initialData: initialdata,
-        }
-      );
+      return axiosInstance.post<WorkflowInstance>(`/flow-instances`, {
+        flowDefinitionId: flowDefinitionId,
+        initialData: initialdata,
+      });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries([FLOW_INSTANCES_KEY]);
+      queryClient.invalidateQueries({ queryKey: [FLOW_INSTANCES_KEY] });
     },
   });
 }
@@ -150,11 +149,11 @@ export function useDeleteFlowInstanceMutation(
   return useMutation({
     mutationFn: (instanceId: string) => {
       return axiosInstance.delete<{ success: boolean }>(
-        `${flowImplementationServer}/flow-instances/${instanceId}`
+        `/flow-instances/${instanceId}`
       );
     },
     onSuccess: () => {
-      queryClient.invalidateQueries([FLOW_INSTANCES_KEY]);
+      queryClient.invalidateQueries({ queryKey: [FLOW_INSTANCES_KEY] });
     },
   });
 }
@@ -164,7 +163,7 @@ export function useLibraryRegistry(flowImplementationServer: string | null) {
     queryKey: ['libraries', { server: flowImplementationServer }],
     queryFn: async () => {
       const { data } = await axiosInstance.get<LibraryContainerRegistry>(
-        `${flowImplementationServer}/libraries/registry`
+        `/libraries/registry`
       );
       return data;
     },
@@ -184,7 +183,7 @@ export function useVocabularyValueSets(
     queryKey: ['valuesets', { server: flowImplementationServer }],
     queryFn: async () => {
       const { data } = await axiosInstance.get<ValueSetSummary[]>(
-        `${flowImplementationServer}/vocabulary/value-sets`
+        `/vocabulary/value-sets`
       );
       return data;
     },
@@ -206,7 +205,7 @@ export function useVocabularyValueSet(
     queryKey: ['valuesets', { server: flowImplementationServer }],
     queryFn: async () => {
       const { data } = await axiosInstance.get<Coding[]>(
-        `${flowImplementationServer}/vocabulary/value-sets/${valueSetId}`
+        `/vocabulary/value-sets/${valueSetId}`
       );
       return data;
     },
@@ -218,9 +217,7 @@ export function useVocabularyCodes(flowImplementationServer: string | null) {
     enabled: !!flowImplementationServer,
     queryKey: ['codes', { server: flowImplementationServer }],
     queryFn: async () => {
-      const { data } = await axiosInstance.get<Coding[]>(
-        `${flowImplementationServer}/vocabulary/codes`
-      );
+      const { data } = await axiosInstance.get<Coding[]>(`/vocabulary/codes`);
       return data;
     },
   });
@@ -236,9 +233,7 @@ export function useMockData(flowImplementationServer: string | null) {
     enabled: !!flowImplementationServer,
     queryKey: ['mockData', { server: flowImplementationServer }],
     queryFn: async () => {
-      const { data } = await axiosInstance.get<MockData[]>(
-        `${flowImplementationServer}/mock-data`
-      );
+      const { data } = await axiosInstance.get<MockData[]>(`/mock-data`);
       return data;
     },
   });
@@ -262,7 +257,7 @@ export function useMockDataById(
     ],
     queryFn: async () => {
       const { data } = await axiosInstance.get<MockDataResolved>(
-        `${flowImplementationServer}/mock-data/${mockDataId}`
+        `/mock-data/${mockDataId}`
       );
       return data;
     },

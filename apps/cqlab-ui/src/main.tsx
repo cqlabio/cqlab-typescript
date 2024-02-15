@@ -10,8 +10,12 @@ import { AppDashboard } from './dashboard/dashboard';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { queryClient } from './data/queries';
 import { FlowDesigner } from './cqflow/flow-designer/flow-designer';
-
-
+import { CQDefine } from './cqdefine/cqdefine';
+import { CQVocabulary } from './cqvocabulary/cqvocabulary';
+import { ValueSetList } from './cqvocabulary/value-set-list';
+import { ValueSetDetails } from './cqvocabulary/value-set-details';
+import { CodeList } from './cqvocabulary/code-list';
+import { MockData } from './cqmockdata/mock-data';
 
 const router = createBrowserRouter([
   {
@@ -21,7 +25,7 @@ const router = createBrowserRouter([
       {
         path: '/',
         // element: <Navigate to="/flow" />,
-        element: <AppDashboard />
+        element: <AppDashboard />,
       },
 
       {
@@ -32,33 +36,33 @@ const router = createBrowserRouter([
         path: '/flow/:flowDefinitionId',
         element: <FlowDesigner />,
       },
-      // {
-      //   path: '/define',
-      //   element: <CQDefine />,
-      // },
-      // {
-      //   path: '/vocabulary',
-      //   element: <CQVocabulary />,
+      {
+        path: '/define',
+        element: <CQDefine />,
+      },
+      {
+        path: '/vocabulary',
+        element: <CQVocabulary />,
 
-      //   children: [
-      //     {
-      //       path: 'value-sets',
-      //       element: <ValueSetList />,
-      //     },
-      //     {
-      //       path: 'value-sets/:valueSetId',
-      //       element: <ValueSetDetails />,
-      //     },
-      //     {
-      //       path: 'codes',
-      //       element: <CodeList />,
-      //     },
-      //   ],
-      // },
-      // {
-      //   path: '/mock-data',
-      //   element: <MockData />,
-      // },
+        children: [
+          {
+            path: 'value-sets',
+            element: <ValueSetList />,
+          },
+          {
+            path: 'value-sets/:valueSetId',
+            element: <ValueSetDetails />,
+          },
+          {
+            path: 'codes',
+            element: <CodeList />,
+          },
+        ],
+      },
+      {
+        path: '/mock-data',
+        element: <MockData />,
+      },
       // {
       //   path: '/llm',
       //   element: <LLMViewer />,
@@ -80,14 +84,12 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <StrictMode>
-      <QueryClientProvider client={queryClient}>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
 
-      
-        <ThemeProvider theme={theme}>
-      <CssBaseline />
-      
-    <RouterProvider router={router} />
-    </ThemeProvider>
+        <RouterProvider router={router} />
+      </ThemeProvider>
     </QueryClientProvider>
   </StrictMode>
 );

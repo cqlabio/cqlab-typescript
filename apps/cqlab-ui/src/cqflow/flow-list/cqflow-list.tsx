@@ -82,7 +82,8 @@ export function CQFlowList() {
       </Box>
       <Paper
         sx={{
-          margin: '30px 45px',
+          maxWidth: '1200px',
+          margin: '30px auto',
           a: { textDecoration: 'none', color: 'inherit' },
         }}
       >
@@ -129,7 +130,17 @@ export function CQFlowList() {
                 <TableRow id={index + '_'}>
                   <TableCell sx={{ whiteSpace: 'nowrap' }}>
                     {/* */}
-                    {flow.bindId || flow.id}
+                    <Link to={`/flow/${flow.id}`}>
+                      <Box
+                        sx={{
+                          ':hover': {
+                            textDecoration: 'underline',
+                          },
+                        }}
+                      >
+                        {flow.bindId || flow.id}
+                      </Box>
+                    </Link>
                   </TableCell>
                   <TableCell sx={{ whiteSpace: 'nowrap' }}>
                     {dayjs(flow.createdAt).format('MMM DD, YYYY')}

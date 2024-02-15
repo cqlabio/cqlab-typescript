@@ -4,15 +4,15 @@ import { IndexedValueSet } from './indexed-valueset';
 export abstract class LazyValueSetContainer {
   valuesets: Record<string, IndexedValueSet> = {};
 
-  abstract loadValuesetById(id: string): Promise<IndexedValueSet>;
+  abstract loadValueSetById(id: string): Promise<IndexedValueSet>;
 
-  async getValuesetById(id: string): Promise<IndexedValueSet> {
+  async getValueSetById(id: string): Promise<IndexedValueSet> {
     if (this.valuesets[id]) {
       return this.valuesets[id];
     }
 
-    const loadedValueset = await this.loadValuesetById(id);
-    return loadedValueset;
+    const loadedValueSet = await this.loadValueSetById(id);
+    return loadedValueSet;
   }
 
   getAllLoadedValueSets(): IndexedValueSet[] {

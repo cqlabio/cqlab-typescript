@@ -13,6 +13,7 @@ import {
   useCreateFlowInstanceMutation,
   useDeleteFlowInstanceMutation,
 } from '../../../../data/queries-flow-implementation';
+import { FlowInstancePanel } from './flow-instance-panel';
 
 // interface OneshotExecutorState {
 //   type: 'oneshot'
@@ -26,6 +27,8 @@ type LaunchInteractiveProps = {
 };
 
 export function LaunchInteractive({ flow }: LaunchInteractiveProps) {
+  const [activeTab, setActiveTab] = useState(0);
+
   const flowImplementationServerUrl = useFlowStore(
     (state) => state.flowImplementationServerUrl
   );
@@ -35,16 +38,12 @@ export function LaunchInteractive({ flow }: LaunchInteractiveProps) {
   >(null);
 
   const { data: workflowInstances = [] } = useFlowInstances(
-    flow.bindId || null,
+    flow.id,
     flowImplementationServerUrl
   );
 
   const { mutateAsync: createFlowInstance } = useCreateFlowInstanceMutation(
-    flow.bindId || null,
-    flowImplementationServerUrl
-  );
-
-  const { mutate: deleteFlowInstance } = useDeleteFlowInstanceMutation(
+    flow.id,
     flowImplementationServerUrl
   );
 
@@ -52,10 +51,6 @@ export function LaunchInteractive({ flow }: LaunchInteractiveProps) {
     createFlowInstance(testD).then((res) => {
       setSelectedWorkflowInstanceId(res.data.id);
     });
-  };
-
-  const onDeleteInstance = (instanceId: string) => {
-    deleteFlowInstance(instanceId);
   };
 
   if (selectedWorkflowInstanceId) {
@@ -68,14 +63,54 @@ export function LaunchInteractive({ flow }: LaunchInteractiveProps) {
     );
   }
 
+  const tabs = [
+    {
+      name: 'Launch New',
+    },
+    {
+      name: 'Launch Existing',
+    },
+  ];
+
   return (
-    <Box sx={{ display: 'flex' }}>
-      <Box sx={{ flexGrow: 5 }}>
-        <TestCasePanel flow={flow} doLaunch={doLaunch} />
-      </Box>
+    <Box>
+      <Paper sx={{ maxWidth: '1200px', margin: '30px auto 0 auto' }}>
+        <Box
+          sx={{ display: 'flex', borderBottom: '1px solid rgb(230,230,230)' }}
+        >
+          {tabs.map((tab, index) => (
+            <Box
+              key={index}
+              sx={{
+                padding: '15px',
+                // borderBottom: '1px solid rgb(230,230,230)',
+                // fontWeight: 'bold',
+                cursor: 'pointer',
+                color:
+                  index === activeTab ? 'secondary.main' : 'rgb(130,130,130)',
+              }}
+              onClick={() => setActiveTab(index)}
+            >
+              {tab.name}
+            </Box>
+          ))}
+        </Box>
+
+        {activeTab === 0 && <TestCasePanel flow={flow} doLaunch={doLaunch} />}
+
+        {activeTab === 1 && (
+          <FlowInstancePanel
+            flow={flow}
+            setSelectedWorkflowInstanceId={setSelectedWorkflowInstanceId}
+          />
+        )}
+      </Paper>
+
+      <Box sx={{ flexGrow: 5 }}></Box>
 
       <Box sx={{ flexGrow: 5 }}>
-        <Paper square sx={{ margin: '20px' }}>
+        {/* <FlowInstancePanel flow={flow} setSelectedWorkflowInstanceId={setSelectedWorkflowInstanceId} /> */}
+        {/* <Paper square sx={{ margin: '20px' }}>
           <Box
             sx={{ borderBottom: '1px solid rgb(230,230,230)', padding: '10px' }}
           >
@@ -100,6 +135,9 @@ export function LaunchInteractive({ flow }: LaunchInteractiveProps) {
               </Box>
 
               <Box>{instance.status}</Box>
+              <Box>
+                Answers = {instance.answers.length}
+              </Box>
               <DeleteIcon
                 onClick={() => onDeleteInstance(instance.id)}
                 sx={{
@@ -114,7 +152,7 @@ export function LaunchInteractive({ flow }: LaunchInteractiveProps) {
               />
             </Box>
           ))}
-        </Paper>
+        </Paper> */}
       </Box>
     </Box>
   );

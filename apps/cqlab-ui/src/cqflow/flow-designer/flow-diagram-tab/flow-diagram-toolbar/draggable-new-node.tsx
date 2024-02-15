@@ -1,10 +1,7 @@
 import { useDrag } from 'react-dnd';
 import Box from '@mui/material/Box';
 import { DefinitionNodeTypeEnum } from '@cqlab/cqflow-core';
-import {
-  getNodeColor,
-  getNodeColorLight,
-} from '@cqlab/ui-flow-diagram';
+import { getNodeColor, getNodeColorLight } from '@cqlab/ui-flow-diagram';
 import { DragIconShape } from './shape';
 
 export const NEW_FLOW_NODE = 'NEW_FLOW_NODE';

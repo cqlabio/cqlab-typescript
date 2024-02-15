@@ -6,12 +6,12 @@ export enum ValueSetIdEnum {
   mammography = 'mammography',
 }
 
-const valueSetLookup: Record<ValueSetIdEnum, fhir4.ValueSet> = {
+export const valueSetLookup: Record<ValueSetIdEnum, fhir4.ValueSet> = {
   [ValueSetIdEnum.mammography]: mammography as fhir4.ValueSet,
 };
 
 class ExampleValueSetContainer extends LazyValueSetContainer {
-  async loadValuesetById(id: string): Promise<IndexedValueSet> {
+  async loadValueSetById(id: string): Promise<IndexedValueSet> {
     const valueSet = valueSetLookup[id as ValueSetIdEnum];
     if (!valueSet) {
       throw new Error(`Value set ${id} not found`);
