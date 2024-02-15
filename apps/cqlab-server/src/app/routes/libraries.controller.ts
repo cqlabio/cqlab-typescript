@@ -3,7 +3,6 @@ import flatten from 'lodash/flatten';
 // import { FlowInstanceService } from './flow-instance.service';
 // import { InitialData, MockDbService } from './mock-db.service';
 import { LibraryService } from './libraries.service';
-// import { ALL_PATIENTS } from '@roche-cds/packages/patient-generator';
 
 @Controller('libraries')
 export class LibraryController {
