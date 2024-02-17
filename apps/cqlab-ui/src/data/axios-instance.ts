@@ -2,11 +2,11 @@ import axios from 'axios';
 import { getWebToken } from './local-storage';
 
 // https://nx.dev/recipes/react/use-environment-variables-in-react
-export const BASE_URL = 'http://localhost:3000/api';
+// export const BASE_URL = 'http://localhost:3000/api';
 // export const BASE_URL = import.meta.env.VITE_API_SERVER_URL;
 
 export const axiosInstance = axios.create({
-  baseURL: BASE_URL,
+  baseURL: '/api',
 });
 
 axiosInstance.interceptors.request.use(

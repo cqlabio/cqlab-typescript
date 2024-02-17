@@ -6,7 +6,7 @@ import { StartNode } from './flow-diagram-nodes/start-diagram-node';
 import { TrueFalseDiagramNode } from './flow-diagram-nodes/truefalse-diagram-node';
 import { LogicTreeDiagramNode } from './flow-diagram-nodes/logictree-diagram-node';
 import { EmitDataDiagramNode } from './flow-diagram-nodes/emit-data-diagram-node';
-// import { SubFlowNode } from './flow-diagram-nodes/subflow-node';
+import { SubFlowNode } from './flow-diagram-nodes/subflow-node';
 import { EndDiagramNode } from './flow-diagram-nodes/end-diagram-node';
 import { ActionDiagramNode } from './flow-diagram-nodes/action-diagram-node';
 import { NarrativeDiagramNode } from './flow-diagram-nodes/narrative-diagram-node';
@@ -28,7 +28,7 @@ export const flowDiagramNodeTypes: Record<
   [DefinitionNodeTypeEnum.LogicTree]: LogicTreeDiagramNode,
   [DefinitionNodeTypeEnum.EmitData]: EmitDataDiagramNode,
   [DefinitionNodeTypeEnum.MultiOption]: MultiOptionDiagramNode,
-  // [DefinitionNodeTypeEnum.SubFlow]: SubFlowNode,
+  [DefinitionNodeTypeEnum.SubFlow]: SubFlowNode,
   [DefinitionNodeTypeEnum.End]: EndDiagramNode,
   [DefinitionNodeTypeEnum.Action]: ActionDiagramNode,
   [DefinitionNodeTypeEnum.Narrative]: NarrativeDiagramNode,

@@ -67,7 +67,7 @@ export function InteractiveFlowRenderer({
         />
       );
     } else if (step.stepType === ImplementationNodeTypeEnum.Action) {
-      result = <IActionStep step={step} onUpdateAnswer={onUpdateAnswer} />;
+      result = <IActionStep stepIndex={stepIndex} step={step} onUpdateAnswer={onUpdateAnswer} />;
     } else if (step.stepType === ImplementationNodeTypeEnum.EmitData) {
       result = <EmitDataStepView stepIndex={stepIndex} step={step} />;
     } else if (step.stepType === ImplementationNodeTypeEnum.Narrative) {

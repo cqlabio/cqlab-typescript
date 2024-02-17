@@ -1,3 +1,4 @@
+import { join } from 'path';
 import { Module } from '@nestjs/common';
 // import { AppController } from './app.controller';
 // import { AppService } from './app.service';
@@ -20,9 +21,16 @@ import { LibraryService } from './routes/libraries.service';
 import { VocabularyController } from './routes/vocabulary.controller';
 
 import { MockDataController } from './routes/mock-data.controller';
+import { ServeStaticModule } from '@nestjs/serve-static';
+
+import { SeedDBController } from './routes/seed-db.controller';
+import { SeedDBService  } from './routes/seed-db.service';
 
 @Module({
   imports: [
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'cqlab-ui'),
+    }),
     TypeOrmModule.forRoot({
       type: 'sqlite',
       database: 'cqlab-db.sqlite',
@@ -44,12 +52,14 @@ import { MockDataController } from './routes/mock-data.controller';
     LibraryController,
     VocabularyController,
     MockDataController,
+    SeedDBController
   ],
   providers: [
     FlowService,
     FlowImplementationService,
     FlowInstanceService,
     LibraryService,
+    SeedDBService
   ],
 })
 export class AppModule {}

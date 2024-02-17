@@ -30,10 +30,10 @@ export function AppDashboard() {
     <Box
       sx={{
         maxWidth: '1000px',
-        margin: '30px auto',
+        margin: '50px auto',
       }}
     >
-      <h3 style={{ fontFamily: 'Red Hat Display' }}>CQLab Applications</h3>
+      <h2 style={{ fontFamily: 'Red Hat Display' }}>CQLab Applications</h2>
 
       <Box
         sx={{

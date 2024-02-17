@@ -177,7 +177,9 @@ export function FlowDesigner() {
     );
   }
 
-  const tabs = [
+  const tabs: {
+    label: string | React.ReactNode;
+  }[] = [
     {
       label: 'Flow Designer',
     },
@@ -282,9 +284,9 @@ export function FlowDesigner() {
               textColor="secondary"
               indicatorColor="secondary"
             >
-              {tabs.map((tab) => (
+              {tabs.map((tab, index) => (
                 <Tab
-                  key={tab.label}
+                  key={index}
                   label={tab.label}
                   sx={{ fontWeight: 400 }}
                 />

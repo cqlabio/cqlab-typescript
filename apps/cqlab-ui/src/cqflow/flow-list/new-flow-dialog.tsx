@@ -45,7 +45,7 @@ export function NewFlowDialog({ isOpen, onToggleOpen }: NewFlowDialogProps) {
     createFlowDefinition({
       bindId: id,
       version: '0.0.1',
-      type: FlowDefinitionTypeEnum.NonInteractive,
+      // type: FlowDefinitionTypeEnum.NonInteractive,
       nodes: {},
     }).then((res) => {
       navigate(`/flow/${res.data.id}`);

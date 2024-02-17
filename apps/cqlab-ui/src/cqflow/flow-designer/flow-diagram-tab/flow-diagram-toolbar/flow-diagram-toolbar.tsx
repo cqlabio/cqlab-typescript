@@ -109,16 +109,16 @@ export const NODES = [
     label: 'Flow Input',
     children: [
       {
-        label: 'Custom Form',
-        nodeType: DefinitionNodeTypeEnum.CustomForm,
-        description:
-          'A fully embedable customizable form. The form itself is built on the backend flow implementation server, and is NOT built inside this UI editor. This generally serves as input for complex and dynamic form inputs such as lab results.',
-      },
-      {
         label: 'Form Field',
         nodeType: DefinitionNodeTypeEnum.FormField,
         description:
           'A form field is a single input field. It can be used for simple inputs such as text, numbers, quantities, multi-choice options, or dates. These inputs can then be used by control flow nodes at later points.',
+      },
+      {
+        label: 'Custom Form',
+        nodeType: DefinitionNodeTypeEnum.CustomForm,
+        description:
+          'A fully embedable customizable form. The form itself is built on the backend flow implementation server, and is NOT built inside this UI editor. This generally serves as input for complex and dynamic form inputs such as lab results.',
       },
     ],
   },
