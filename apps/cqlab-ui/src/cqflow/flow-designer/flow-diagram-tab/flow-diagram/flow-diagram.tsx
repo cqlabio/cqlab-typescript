@@ -75,6 +75,7 @@ import {
   getPossibleHandles,
   getClosestCoord,
   getOptionIdFromEdgeId,
+  CreatingEdge,
   // } from '@cqlab/cqflow-react-components';
 } from '@cqlab/ui-flow-diagram';
 import compact from 'lodash/compact';
@@ -112,6 +113,10 @@ export function FlowDiagram() {
     undoFlowDefOperation,
     redoFlowDefOperation,
   } = useContext(FlowDesignerContext);
+
+  const [creatingEdge, updateCreatingEdge] = useState<CreatingEdge | null>(
+    null
+  );
 
   const reactFlowWrapper = useRef<HTMLElement>(null);
   // const currentHandleConnect = useRef<LocalConnectParam | null>(null);
@@ -291,40 +296,51 @@ export function FlowDiagram() {
         const sourceNode = flowDefinition.nodes[params.source as string];
         const targetNode = flowDefinition.nodes[params.target as string];
 
-        if (!sourceNode || !targetNode) {
+        if (!sourceNode || !targetNode || !creatingEdge) {
           return;
         }
 
-        if (!params.sourceHandle?.startsWith('toolbar')) {
-          throw new Error(
-            'OnConnect Source handle must start with prefix: toolbar'
-          );
+        if (sourceNode.id === targetNode.id) {
+          return;
         }
+
+        // if (!params.sourceHandle?.startsWith('toolbar')) {
+        //   throw new Error(
+        //     'OnConnect Source handle must start with prefix: toolbar'
+        //   );
+        // }
 
         const reactFlowSourceNode = nodes.find(
           (n) => n.id === sourceNode.id
         ) as LocalFlowNode;
+
         const reactFlowTargetNode = nodes.find(
           (n) => n.id === targetNode.id
         ) as LocalFlowNode;
 
-        const sourcePossibleHandles = getPossibleHandles(reactFlowSourceNode);
-        const targetPossibleHandles = getPossibleHandles(reactFlowTargetNode);
+        // const sourcePossibleHandles = getPossibleHandles(reactFlowSourceNode);
+        // const targetPossibleHandles = getPossibleHandles(reactFlowTargetNode);
 
-        const targetHandle =
-          targetPossibleHandles[params.targetHandle as Position];
+        // const targetHandle =
+        //   targetPossibleHandles[params.targetHandle as Position];
 
         // We need to find the closest target handle to the chosen source
-        const closestSource = getClosestCoord(
-          {
-            x: targetHandle.x,
-            y: targetHandle.y,
-            position: targetHandle.position,
-          },
-          Object.values(sourcePossibleHandles)
-        );
+        // const closestSource = getClosestCoord(
+        //   {
+        //     x: targetHandle.x,
+        //     y: targetHandle.y,
+        //     position: targetHandle.position,
+        //   },
+        //   Object.values(sourcePossibleHandles)
+        // );
 
-        const newTargetHandle = params.targetHandle as
+        const fromHandle = params.sourceHandle as
+          | 'top'
+          | 'right'
+          | 'bottom'
+          | 'left';
+
+        const toHandle = params.targetHandle as
           | 'top'
           | 'right'
           | 'bottom'
@@ -338,8 +354,8 @@ export function FlowDiagram() {
             next: {
               type: NextTypeEnum.Unary,
               id: targetNode.id,
-              fromHandle: closestSource.position,
-              toHandle: newTargetHandle,
+              fromHandle: fromHandle,
+              toHandle: toHandle,
             },
           };
 
@@ -357,16 +373,17 @@ export function FlowDiagram() {
               };
 
           // onTrue or onFalse
-          const type = last(params.sourceHandle.split('-'));
+          // const type = last(params.sourceHandle.split('-'));
+          const type = creatingEdge.index === 0 ? 'onTrue' : 'onFalse';
 
           if (type === 'onTrue') {
             boolNext.trueId = targetNode.id;
-            boolNext.trueFromHandle = closestSource.position;
-            boolNext.trueToHandle = newTargetHandle;
+            boolNext.trueFromHandle = fromHandle;
+            boolNext.trueToHandle = toHandle;
           } else if (type === 'onFalse') {
             boolNext.falseId = targetNode.id;
-            boolNext.falseFromHandle = closestSource.position;
-            boolNext.falseToHandle = newTargetHandle;
+            boolNext.falseFromHandle = fromHandle;
+            boolNext.falseToHandle = toHandle;
           }
 
           const nextBooleanNode: IFlowDefinitionBooleanNode = {
@@ -383,15 +400,15 @@ export function FlowDiagram() {
             return;
           }
 
-          const optionId = getIndexFromHandleId(params.sourceHandle);
+          // const optionId = getIndexFromHandleId(params.sourceHandle);
 
-          const nextOptions = sourceNode.next.options.map((o) => {
-            if (o.id.includes(optionId)) {
+          const nextOptions = sourceNode.next.options.map((o, index) => {
+            if (creatingEdge.index === index) {
               return {
                 ...o,
                 toId: targetNode.id,
-                fromHandle: closestSource.position,
-                toHandle: newTargetHandle,
+                fromHandle: fromHandle,
+                toHandle: toHandle,
               };
             }
             return { ...o };
@@ -408,11 +425,13 @@ export function FlowDiagram() {
             },
           });
         }
+
+        updateCreatingEdge(null);
       } catch (e) {
         console.error('CQFLOW ERROR: Unable to connect nodes', e);
       }
     },
-    [flowDefinition, doNodeUpdates, nodes]
+    [flowDefinition, doNodeUpdates, nodes, creatingEdge, updateCreatingEdge]
   );
 
   const onEdgeUpdate = useCallback(
@@ -670,6 +689,7 @@ export function FlowDiagram() {
     (event: any, node: LocalFlowNode) => {
       setSelectedNodeId(node.data.node.id || null);
       setSelectedEdgeId(null);
+      // updateCreatingEdge(null);
     },
     [setSelectedNodeId, setSelectedEdgeId]
   );
@@ -680,6 +700,7 @@ export function FlowDiagram() {
       setSelectedLeafNodeId(null);
       setSelectedBranchOptionId(null);
       setSelectedEdgeId(edge.id);
+      updateCreatingEdge(null);
     },
     [setSelectedNodeId, setSelectedLeafNodeId, setSelectedEdgeId]
   );
@@ -689,6 +710,7 @@ export function FlowDiagram() {
     setSelectedLeafNodeId(null);
     setSelectedBranchOptionId(null);
     setSelectedEdgeId(null);
+    updateCreatingEdge(null);
   }, [setSelectedNodeId, setSelectedLeafNodeId, setSelectedEdgeId]);
 
   // When moving multiple nodes at once
@@ -847,7 +869,13 @@ export function FlowDiagram() {
       ref={drop}
     >
       <Box sx={{ height: '100%' }} ref={reactFlowWrapper}>
-        <FlowDiagramContext.Provider value={{ selectedNodeId: selectedNodeId }}>
+        <FlowDiagramContext.Provider
+          value={{
+            selectedNodeId: selectedNodeId,
+            creatingEdge,
+            updateCreatingEdge,
+          }}
+        >
           <ReactFlow
             nodes={nodes}
             edges={edges}
@@ -864,7 +892,7 @@ export function FlowDiagram() {
             onPaneClick={onPaneClick}
             onInit={setReactFlowInstance}
             connectionMode={ConnectionMode.Loose}
-            connectionLineType={ConnectionLineType.Straight}
+            connectionLineType={ConnectionLineType.SmoothStep}
             connectionLineComponent={CustomConnectionLine}
             edgeUpdaterRadius={20}
             panOnScroll

@@ -1,0 +1,256 @@
+{
+  "id": "0c766e64-c5e9-47da-98ff-35685cf10fea",
+  "createdAt": "2024-02-18T09:59:22.000Z",
+  "bindId": "who-immunization-hepatitis-b",
+  "nodes": {
+    "end_cpuvrgef": {
+      "id": "end_cpuvrgef",
+      "label": "End",
+      "bindId": "end_cpuvrgef",
+      "nodeType": "End",
+      "position": {
+        "x": 629.0462935717871,
+        "y": 996.2862277184228,
+        "width": 60,
+        "height": 60
+      }
+    },
+    "end_pczfbkih": {
+      "id": "end_pczfbkih",
+      "label": "End",
+      "bindId": "end_pczfbkih",
+      "nodeType": "End",
+      "position": {
+        "x": 122.13270123569663,
+        "y": 1214.204319094579,
+        "width": 60,
+        "height": 60
+      }
+    },
+    "start_wcygumin": {
+      "id": "start_wcygumin",
+      "next": {
+        "type": "Unary",
+        "id": "truefalse_hfmnncsk",
+        "fromHandle": "bottom",
+        "toHandle": "top"
+      },
+      "label": "Start",
+      "bindId": "start_wcygumin",
+      "nodeType": "Start",
+      "position": {
+        "x": 456.0797823597676,
+        "y": -73.21661633782169,
+        "width": 60,
+        "height": 60
+      }
+    },
+    "logictree_yernnplj": {
+      "id": "logictree_yernnplj",
+      "next": {
+        "type": "Binary",
+        "trueId": "contextdata_ooaragfs",
+        "falseId": "contextdata_jwfaeivl",
+        "trueToHandle": "top",
+        "falseToHandle": "top",
+        "trueFromHandle": "bottom",
+        "falseFromHandle": "bottom"
+      },
+      "label": "Requires 4 Hepatitis B Vaccines due to early vaccination for premature birth",
+      "bindId": "logictree_yernnplj",
+      "nodeType": "LogicTree",
+      "position": {
+        "x": 77.28675407061883,
+        "y": 389.37089801967323,
+        "width": 326,
+        "height": 205
+      },
+      "logicTree": {
+        "children": [
+          {
+            "id": "truefalse_jrdtnfin",
+            "label": "Is less than 2 weeks old",
+            "bindId": "is_less_than_2_weeks_old",
+            "nodeType": "TrueFalse",
+            "logicType": "TrueFalseLeaf"
+          },
+          {
+            "children": [
+              {
+                "id": "truefalse_rvtipxjq",
+                "label": "Was born underweight",
+                "bindId": "truefalse_rvtipxjq",
+                "nodeType": "TrueFalse",
+                "logicType": "TrueFalseLeaf"
+              },
+              {
+                "id": "truefalse_xnkbsrpc",
+                "label": "Was born premature",
+                "bindId": "truefalse_xnkbsrpc",
+                "nodeType": "TrueFalse",
+                "logicType": "TrueFalseLeaf"
+              }
+            ],
+            "logicType": "Or"
+          }
+        ],
+        "logicType": "And"
+      }
+    },
+    "truefalse_bzewhrbi": {
+      "id": "truefalse_bzewhrbi",
+      "next": {
+        "type": "Binary",
+        "trueId": "contextdata_bgudpoki",
+        "falseId": "truefalse_xtxmefus",
+        "trueToHandle": "left",
+        "falseToHandle": "right",
+        "trueFromHandle": "right",
+        "falseFromHandle": "left"
+      },
+      "label": "Has had required number of vaccines",
+      "bindId": "has_had_required_number_of_vaccines",
+      "nodeType": "TrueFalse",
+      "position": {
+        "x": 330.6197086631711,
+        "y": 844.8190367228569,
+        "width": 111,
+        "height": 111
+      }
+    },
+    "truefalse_hfmnncsk": {
+      "id": "truefalse_hfmnncsk",
+      "next": {
+        "type": "Binary",
+        "trueId": "contextdata_ooaragfs",
+        "falseId": "logictree_yernnplj",
+        "falseToHandle": "top",
+        "falseFromHandle": "left"
+      },
+      "label": "Was given birth dose of Hep B",
+      "bindId": "was_given_birth_dose_of_hep_b",
+      "nodeType": "TrueFalse",
+      "position": {
+        "x": 431.17312332451894,
+        "y": 233.79935430899604,
+        "width": 107,
+        "height": 107
+      }
+    },
+    "truefalse_xtxmefus": {
+      "id": "truefalse_xtxmefus",
+      "next": {
+        "type": "Binary",
+        "trueId": "contextdata_ornnutdx",
+        "falseId": "contextdata_lzgcodjr"
+      },
+      "label": "Was last vaccine given less than 4 weeks old",
+      "bindId": "was_given_last_vaccine_less_than_4_weeks_ago",
+      "nodeType": "TrueFalse",
+      "position": {
+        "x": 102.01471962330356,
+        "y": 836.1818421450262,
+        "width": 119,
+        "height": 119
+      }
+    },
+    "contextdata_bgudpoki": {
+      "id": "contextdata_bgudpoki",
+      "next": {
+        "id": "end_cpuvrgef",
+        "type": "Unary"
+      },
+      "label": "Does not require HepB vaccine",
+      "bindId": "contextdata_bgudpoki",
+      "nodeType": "EmitData",
+      "position": {
+        "x": 563.3272933242091,
+        "y": 865.3717306506643,
+        "width": 190,
+        "height": 60
+      },
+      "dataItems": []
+    },
+    "contextdata_jwfaeivl": {
+      "id": "contextdata_jwfaeivl",
+      "next": {
+        "id": "truefalse_bzewhrbi",
+        "type": "Unary"
+      },
+      "label": "Requires 3 HepB vaccines",
+      "bindId": "requires_3_hepb_vaccines",
+      "nodeType": "EmitData",
+      "position": {
+        "x": 143.76390082835348,
+        "y": 678.9336625269307,
+        "width": 197,
+        "height": 69
+      },
+      "dataItems": []
+    },
+    "contextdata_lzgcodjr": {
+      "id": "contextdata_lzgcodjr",
+      "next": {
+        "id": "end_pczfbkih",
+        "type": "Unary"
+      },
+      "label": "Recommend HepB Vaccine",
+      "bindId": "recommend_hepb_vaccine",
+      "nodeType": "EmitData",
+      "position": {
+        "x": -88.4373211880812,
+        "y": 1063.8878926729628,
+        "width": 203,
+        "height": 68
+      },
+      "dataItems": []
+    },
+    "contextdata_ooaragfs": {
+      "id": "contextdata_ooaragfs",
+      "next": {
+        "id": "truefalse_bzewhrbi",
+        "type": "Unary"
+      },
+      "label": "Requires 4 HepB vaccines",
+      "bindId": "requires_4_hepb_vaccines",
+      "nodeType": "EmitData",
+      "position": {
+        "x": 391.00403582862543,
+        "y": 676.1848203234176,
+        "width": 176,
+        "height": 72
+      },
+      "dataItems": []
+    },
+    "contextdata_ornnutdx": {
+      "id": "contextdata_ornnutdx",
+      "next": {
+        "id": "end_pczfbkih",
+        "type": "Unary"
+      },
+      "label": "Schedule HepB vaccine",
+      "bindId": "schedule_hepb_vaccine",
+      "nodeType": "EmitData",
+      "position": {
+        "x": 191.92647108304962,
+        "y": 1061.628323885152,
+        "width": 194,
+        "height": 60
+      },
+      "dataItems": []
+    },
+    "note_rbsperki": {
+      "nodeType": "Note",
+      "label": "",
+      "id": "note_rbsperki",
+      "bindId": "note_rbsperki",
+      "contents": "Hepatitis B vaccination is recommended for all children worldwide. Reaching all children with at least 3 doses of hepatitis B vaccine should be the standard for all national immunization programmes. Since perinatal or early postnatal transmission is the most important source of chronic HBV infection globally, all premature infants or those born with low birth weight should receive their first dose of hepatitis B vaccine as soon as possible after birth, ideally within 24 hours. If children receive an early dose while less than 2 weeks old, a total of 4 doses of Hepatitis B should be given.",
+      "position": {
+        "x": -4.908308683864448,
+        "y": -89.88443349694268,
+        "width": 402,
+        "height": 293
+      }
+    }
+  }
+}

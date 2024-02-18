@@ -12,27 +12,40 @@ import {
 import LocationSearchingIcon from '@mui/icons-material/LocationSearching';
 import { INextMulti } from '@cqlab/cqflow-core';
 import { createIdFromIndex } from '../../convert-nodes-and-edges';
+import { FlowDiagramContext } from '../../flow-diagram-context';
 
 export const alphabet = 'abcdefghijklmnopqrstuvwxyz';
 
 type MultiChoicePickerProps = {
+  sourceId: string;
   isSelected: boolean;
   next?: INextMulti;
 };
 
 export function MultiChoicePicker({
+  sourceId,
   isSelected,
   next,
 }: MultiChoicePickerProps) {
+  const { updateCreatingEdge } = useContext(FlowDiagramContext);
+
+  const onCreateEdge = (index: number) => {
+    updateCreatingEdge({ sourceId: sourceId || '', index: index });
+  };
+
   const options = next?.options.map((opt, index) => {
     return (
       <Box
+        onClick={() => onCreateEdge(index)}
         sx={{
           display: 'flex',
-          cursor: 'default',
           position: 'relative',
           minWidth: '60px',
           borderTop: '1px solid rgb(230,230,230)',
+          cursor: 'pointer',
+          ':hover': {
+            background: 'rgb(250,250,250)',
+          },
         }}
       >
         <Box
@@ -48,7 +61,7 @@ export function MultiChoicePicker({
           {/* icon */}
           <LocationSearchingIcon sx={{ fontSize: '14px', color: '#5E4A06' }} />
 
-          <Handle
+          {/* <Handle
             id={createIdFromIndex(opt.id)}
             position={Position.Bottom}
             type="source"
@@ -67,7 +80,7 @@ export function MultiChoicePicker({
               bottom: 0,
               opacity: 0,
             }}
-          />
+          /> */}
         </Box>
         <Box sx={{ flexGrow: 1, padding: '2px 6px', textAlign: 'left' }}>
           {alphabet[index]}

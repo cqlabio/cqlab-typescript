@@ -11,11 +11,14 @@ import {
   hypertensionImplementation,
   HypertensionContext,
 } from './docs/hypertension/hypertension';
+import { whoImmunizationImplementation } from './who-immunization/who-immunization';
+import { WHOImmunizationContext } from './who-immunization/who-immunization-context';
 
 export const enum ExampleFlowDefinitionIdEnum {
   docs_breast_cancer_screening = 'docs-breast-cancer-screening',
   docs_breast_cancer_screening_non_interactive = 'docs-breast-cancer-screening-non-interactive',
   docs_hypertension = 'docs-hypertension',
+  who_immunization = 'who-immunization',
 }
 
 export const flowRepository = new FlowRepository();
@@ -76,6 +79,19 @@ flowRepository.registerInteractiveModule<PatientIdInitialData>(
       },
       {
         patientId: MockPatientIdEnum.hypertension_none,
+      },
+    ],
+  }
+);
+
+flowRepository.registerInteractiveModule<PatientIdInitialData>(
+  ExampleFlowDefinitionIdEnum.who_immunization,
+  {
+    flowImplementation: whoImmunizationImplementation,
+    flowContext: (contextOpts) => new WHOImmunizationContext(contextOpts),
+    testData: [
+      {
+        patientId: MockPatientIdEnum.empty_data,
       },
     ],
   }

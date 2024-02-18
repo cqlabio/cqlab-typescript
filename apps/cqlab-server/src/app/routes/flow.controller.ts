@@ -20,9 +20,8 @@ import { IFlowDefinition } from '@cqlab/cqflow-core';
 @Controller('flows')
 export class FlowController {
   constructor(
-    private readonly flowService: FlowService
-  ) // private readonly flowInstanceService: FlowInstanceService
-  {}
+    private readonly flowService: FlowService // private readonly flowInstanceService: FlowInstanceService
+  ) {}
 
   @Get()
   async getFlowDefinitions(@Query('bindId') bindId: string) {

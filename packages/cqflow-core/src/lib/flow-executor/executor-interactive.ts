@@ -33,6 +33,7 @@ import {
   NumberFieldNode,
   BranchExecNode,
   ActionDummyNode,
+  SubFlowNode,
 } from '../flow-nodes';
 import {
   IFlowStep,
@@ -142,6 +143,11 @@ export async function recurseInteractiveFlow(
   } else if (node instanceof NumberFieldNode) {
     nextStep = await executeInteractiveNumberFieldNode(node, context, answers);
   }
+
+  // else if (node instanceof SubFlowNode) {
+  //   nextStep = await executeInteractiveSubFlowNode(node, context, answers);
+
+  // }
 
   if (!nextStep) {
     throw new Error(`Executor can not be found for nodeType: ${node.nodeType}`);
@@ -508,3 +514,49 @@ export async function executeInteractiveNumberFieldNode(
 
   return { step, nextNodeId };
 }
+
+// export async function executeInteractiveSubFlowNode(
+//   node: SubFlowNode<any>,
+//   context: InteractiveFlowContext,
+//   answers: Record<string, IFlowStepAnswer>
+// ): Promise<ReturnStep> {
+
+//   const subflowContext = await node.getSubFlowContext(context);
+
+//   const subflowNodes = compileNodes(flowImplementation, context.getFlowDefinition());
+
+//   recurseInteractiveFlow()
+
+//   const step: IExecStep = {
+//     stepType: ImplementationNodeTypeEnum.Exec,
+//     stepId: node.getDefinition().id,
+//     flowDefinitionId: context.getFlowDefinition().id,
+//     nodeDefinition: node.getDefinition(),
+//     label: await node.getLabel(context),
+//     evaluation: TernaryEnum.TRUE,
+//     supplementalData: await node.resolveSupplementalData(context),
+//   };
+
+//   const subFlowId = node.getDefinition().subFlowId;
+//   const subFlow = context.getSubFlow(subFlowId);
+
+//   if (!subFlow) {
+//     throw new Error(`SubFlow with id ${subFlowId} not found`);
+//   }
+
+//   const subFlowContext = context.createSubFlowContext(subFlowId);
+
+//   const subFlowImplementation = new InteractiveFlowImplementation();
+//   const subFlowSteps = await executeInteractiveFlow(
+//     subFlowImplementation,
+//     subFlowContext
+//   );
+
+//   subFlowSteps.forEach((step) => {
+//     context.addFlowStep(step);
+//   });
+
+//   const nextNodeId = node.getNextNodeId();
+
+//   return { step, nextNodeId };
+// }

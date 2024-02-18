@@ -285,11 +285,7 @@ export function FlowDesigner() {
               indicatorColor="secondary"
             >
               {tabs.map((tab, index) => (
-                <Tab
-                  key={index}
-                  label={tab.label}
-                  sx={{ fontWeight: 400 }}
-                />
+                <Tab key={index} label={tab.label} sx={{ fontWeight: 400 }} />
               ))}
             </Tabs>
             <Box>

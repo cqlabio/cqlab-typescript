@@ -13,7 +13,7 @@ import { TrueFalsePanel } from './flow-node-panels/truefalse-node-panel';
 import { EmitDataPanel } from './flow-node-panels/emitdata-node-panel';
 import { ActionPanel } from './flow-node-panels/action-panel/action-node-panel';
 import { LogicTreePanel } from './flow-node-panels/logic-tree-panel/logictree-node-panel';
-import { SubFlowPanel } from './flow-node-panels/subflow-panel';
+import { SubFlowPanel } from './flow-node-panels/subflow-panel/subflow-panel';
 import { CustomFormPanel } from './flow-node-panels/inputdata-node-panel';
 import { BranchChoiceDataPanel } from './flow-node-panels/branchchoice-panel/branchchoice-panel';
 import { NarrativeNodePanel } from './flow-node-panels/narrative-node-panel';

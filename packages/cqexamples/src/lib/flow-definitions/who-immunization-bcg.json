@@ -1,0 +1,233 @@
+{
+  "id": "17553b4e-0849-4564-a893-a8e3c96af845",
+  "createdAt": "2024-02-18T09:46:32.000Z",
+  "bindId": "who-immunization-bcg",
+  "nodes": {
+    "end_zmbanyqs": {
+      "id": "end_zmbanyqs",
+      "label": "End",
+      "bindId": "end_zmbanyqs",
+      "nodeType": "End",
+      "position": {
+        "x": 715.3486040205607,
+        "y": 60.487741674702306,
+        "width": 60,
+        "height": 60
+      }
+    },
+    "end_zrhgmjzp": {
+      "id": "end_zrhgmjzp",
+      "label": "End",
+      "bindId": "end_zrhgmjzp",
+      "nodeType": "End",
+      "position": {
+        "x": 516.4473847142003,
+        "y": 920.7115814730928,
+        "width": 60,
+        "height": 60
+      }
+    },
+    "exec_ijibaspy": {
+      "id": "exec_ijibaspy",
+      "next": {
+        "type": "Binary",
+        "trueId": "logictree_iicvexli",
+        "falseId": "logictree_uamvuori"
+      },
+      "label": "Patient Has HIV",
+      "bindId": "patient_has_hiv",
+      "nodeType": "TrueFalse",
+      "position": {
+        "x": 505.44202183382816,
+        "y": 237.40871219605555,
+        "width": 90,
+        "height": 90
+      }
+    },
+    "exec_lgzixlvi": {
+      "id": "exec_lgzixlvi",
+      "next": {
+        "type": "Binary",
+        "trueId": "end_zmbanyqs",
+        "falseId": "exec_ijibaspy",
+        "trueToHandle": "left",
+        "trueFromHandle": "right"
+      },
+      "label": "BCG has been administered ",
+      "bindId": "exec_lgzixlvi",
+      "nodeType": "TrueFalse",
+      "position": {
+        "x": 497.5942396581895,
+        "y": 35.633885298933535,
+        "width": 110,
+        "height": 110
+      }
+    },
+    "start_iaqbuxel": {
+      "id": "start_iaqbuxel",
+      "next": {
+        "id": "exec_lgzixlvi",
+        "type": "Unary"
+      },
+      "label": "Start",
+      "nodeType": "Start",
+      "position": {
+        "x": 520.1654177358481,
+        "y": -97.95093904210977,
+        "width": 60,
+        "height": 60
+      }
+    },
+    "logictree_iicvexli": {
+      "id": "logictree_iicvexli",
+      "next": {
+        "type": "Binary",
+        "trueId": "contextdata_pawjofmo",
+        "falseId": "end_zrhgmjzp",
+        "trueToHandle": "top",
+        "falseToHandle": "right",
+        "trueFromHandle": "bottom",
+        "falseFromHandle": "bottom"
+      },
+      "label": "Criteria for patients with HIV",
+      "bindId": "logictree_iicvexli",
+      "nodeType": "LogicTree",
+      "position": {
+        "x": 615.0000585311603,
+        "y": 400.4367174161466,
+        "width": 388,
+        "height": 275
+      },
+      "logicTree": {
+        "children": [
+          {
+            "children": [
+              {
+                "id": "exec_yfikrovb",
+                "label": "Most Recent CD4 count is greater than 25 percent",
+                "bindId": "exec_yfikrovb",
+                "nodeType": "TrueFalse",
+                "logicType": "TrueFalseLeaf"
+              },
+              {
+                "id": "exec_zvjqqezl",
+                "label": "Over 5 years old",
+                "bindId": "exec_zvjqqezl",
+                "nodeType": "TrueFalse",
+                "logicType": "TrueFalseLeaf"
+              }
+            ],
+            "logicType": "And"
+          },
+          {
+            "children": [
+              {
+                "id": "exec_nbsaqpmb",
+                "label": "Most recent CD4 count is greater than 200",
+                "bindId": "exec_nbsaqpmb",
+                "nodeType": "TrueFalse",
+                "logicType": "TrueFalseLeaf"
+              },
+              {
+                "id": "exec_shkpgvgq",
+                "label": "Less then 5 years old",
+                "bindId": "exec_shkpgvgq",
+                "nodeType": "TrueFalse",
+                "logicType": "TrueFalseLeaf"
+              }
+            ],
+            "logicType": "And"
+          }
+        ],
+        "logicType": "Or"
+      }
+    },
+    "logictree_uamvuori": {
+      "id": "logictree_uamvuori",
+      "next": {
+        "type": "Binary",
+        "trueId": "contextdata_pawjofmo",
+        "falseId": "end_zrhgmjzp",
+        "trueToHandle": "top",
+        "falseToHandle": "left",
+        "trueFromHandle": "bottom",
+        "falseFromHandle": "bottom"
+      },
+      "label": "Criteria for patients without HIV",
+      "bindId": "logictree_uamvuori",
+      "nodeType": "LogicTree",
+      "position": {
+        "x": 85.45535663589226,
+        "y": 403.3861269649111,
+        "width": 420,
+        "height": 275
+      },
+      "logicTree": {
+        "children": [
+          {
+            "id": "exec_yndjmpyk",
+            "label": "High Incidence of TB",
+            "bindId": "high_incidence_of_tb",
+            "nodeType": "Exec",
+            "logicType": "TrueFalseLeaf"
+          },
+          {
+            "id": "exec_aawlutgu",
+            "label": "High leprosy burden",
+            "bindId": "exec_aawlutgu",
+            "nodeType": "Exec",
+            "logicType": "TrueFalseLeaf"
+          },
+          {
+            "children": [
+              {
+                "id": "exec_xlzlgcms",
+                "label": "Risk of occupational exposure in low and high TB areas",
+                "bindId": "exec_xlzlgcms",
+                "nodeType": "Exec",
+                "logicType": "TrueFalseLeaf"
+              },
+              {
+                "children": [
+                  {
+                    "id": "exec_kdallhjk",
+                    "label": "Most recent TST result is negative",
+                    "bindId": "exec_kdallhjk",
+                    "nodeType": "Exec",
+                    "logicType": "TrueFalseLeaf"
+                  },
+                  {
+                    "id": "exec_sjcojylo",
+                    "label": "Most recent IGRA test is negative",
+                    "bindId": "exec_sjcojylo",
+                    "nodeType": "Exec",
+                    "logicType": "TrueFalseLeaf"
+                  }
+                ],
+                "logicType": "Or"
+              }
+            ],
+            "logicType": "And"
+          }
+        ],
+        "logicType": "Or"
+      }
+    },
+    "contextdata_pawjofmo": {
+      "id": "contextdata_pawjofmo",
+      "next": {
+        "id": "end_zrhgmjzp",
+        "type": "Unary"
+      },
+      "label": "Recommend BCG",
+      "bindId": "recommend_bcg",
+      "nodeType": "EmitData",
+      "position": {
+        "x": 444.52170437748225,
+        "y": 789.292769422983,
+        "width": 201,
+        "height": 71
+      }
+    }
+  }
+}

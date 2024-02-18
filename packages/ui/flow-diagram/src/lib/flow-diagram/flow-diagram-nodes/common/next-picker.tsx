@@ -4,12 +4,20 @@ import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import { Handle, Position } from 'reactflow';
 import LocationSearchingIcon from '@mui/icons-material/LocationSearching';
+import { FlowDiagramContext } from '../../flow-diagram-context';
 
 type NextPickerProps = {
   isSelected: boolean;
+  sourceId: string;
 };
 
-export function NextPicker({ isSelected }: NextPickerProps) {
+export function NextPicker({ isSelected, sourceId }: NextPickerProps) {
+  const { updateCreatingEdge } = useContext(FlowDiagramContext);
+
+  const onCreateEdge = () => {
+    updateCreatingEdge({ sourceId: sourceId || '' });
+  };
+
   return (
     <Paper
       square
@@ -24,11 +32,15 @@ export function NextPicker({ isSelected }: NextPickerProps) {
       }}
     >
       <Box
+        onClick={onCreateEdge}
         sx={{
           display: 'flex',
-          cursor: 'default',
           position: 'relative',
           minWidth: '90px',
+          cursor: 'pointer',
+          ':hover': {
+            background: 'rgb(250,250,250)',
+          },
         }}
       >
         <Box
@@ -44,7 +56,7 @@ export function NextPicker({ isSelected }: NextPickerProps) {
           {/* icon */}
           <LocationSearchingIcon sx={{ fontSize: '14px', color: '#5E4A06' }} />
 
-          <Handle
+          {/* <Handle
             id="toolbar-next"
             position={Position.Bottom}
             type="source"
@@ -64,7 +76,7 @@ export function NextPicker({ isSelected }: NextPickerProps) {
               bottom: 0,
               opacity: 0,
             }}
-          />
+          /> */}
         </Box>
         <Box sx={{ flexGrow: 1, padding: '2px 6px', textAlign: 'left' }}>
           Next
