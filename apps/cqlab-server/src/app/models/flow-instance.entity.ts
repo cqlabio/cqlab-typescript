@@ -18,11 +18,11 @@ import {
   CreateDateColumn,
   ManyToOne,
 } from 'typeorm';
-import { CQFlowExecutorStatefulAnswer } from '@cqlab/cqflow-core';
+import { CQFlowExecutorStatefulAnswer, InteractiveFlowState } from '@cqlab/cqflow-core';
 import { FlowDefinitionEntity } from './flow-definition.entity';
 
 @Entity()
-export class FlowInstanceEntity {
+export class FlowInstanceEntity implements InteractiveFlowState<any, string> {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 

@@ -5,6 +5,8 @@ import {
   InteractiveFlowState,
   CQFlowExecutorStateEnum,
   InteractiveFlowContextOptions,
+  LazyFlowDefinitionRetriever,
+  IFlowDefinition,
 } from '@cqlab/cqflow-core';
 import { FlowInstanceEntity } from '../models/flow-instance.entity';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -85,12 +87,32 @@ export class FlowInstanceService {
     }
 
     const onUpdate = async (nextFlowInstance: InteractiveFlowState<any>) => {
-      console.log(nextFlowInstance);
+      // TODO: should this update the DB when an action is triggered??
       return nextFlowInstance;
     };
 
+
+    const flowServiceLocal = this.flowService
+
+    class FlowDefinitionRetriever extends LazyFlowDefinitionRetriever {
+      data: Record<string, IFlowDefinition> = {};
+    
+      async loadFlowDefinitionById(id: string): Promise<IFlowDefinition> {
+        if (!this.data[id]) {
+          const flowDef = await flowServiceLocal.getDefinitionById(id);
+          if (!flowDef) {
+            throw new Error(`No flow definition for id: ${id}`);
+          }
+          this.data[id] = flowDef;
+        }
+        return this.data[id];
+      }
+    }
+
     const opts: InteractiveFlowContextOptions<any, string> = {
-      flowDefinition: flowInstance.flowDefinition,
+      flowDefinitionId: flowInstance.flowDefinition.id,
+      initialData: flowInstance.initialData,
+      flowDefinitionRetriever: new FlowDefinitionRetriever(),
       interactiveFlowState: flowInstance,
       onUpdateInteractiveState: onUpdate,
     };

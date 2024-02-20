@@ -26,6 +26,10 @@ export class InteractiveFlowModule {
     return this.configOpts.flowImplementation;
   }
 
+  getFlowContext(contextOpts: InteractiveFlowContextOptions<any, any>) {
+    return this.configOpts.flowContext(contextOpts);
+  }
+
   getTestData() {
     return this.configOpts.testData;
   }

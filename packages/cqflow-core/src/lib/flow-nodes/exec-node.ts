@@ -8,7 +8,7 @@ import { IFlowDefinitionNode, ITrueFalseNode } from '../flow-definition';
 
 export type ExecNodeExecutor<C extends FlowContext> = (
   context: C
-) => TernaryEnum;
+) => Promise<TernaryEnum>;
 
 export type SupplementalDataResolver<C extends FlowContext> = (
   context: C

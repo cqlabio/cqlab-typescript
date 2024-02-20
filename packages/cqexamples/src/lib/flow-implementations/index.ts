@@ -13,12 +13,15 @@ import {
 } from './docs/hypertension/hypertension';
 import { whoImmunizationImplementation } from './who-immunization/who-immunization';
 import { WHOImmunizationContext } from './who-immunization/who-immunization-context';
+import { whoImmunizationHepatitisBImplementation } from './who-immunization/who-immunixation-hepatitis-b';
+import { WHOImmunizationHepBContext } from './who-immunization/hepatitis-b-context';
 
 export const enum ExampleFlowDefinitionIdEnum {
   docs_breast_cancer_screening = 'docs-breast-cancer-screening',
   docs_breast_cancer_screening_non_interactive = 'docs-breast-cancer-screening-non-interactive',
   docs_hypertension = 'docs-hypertension',
   who_immunization = 'who-immunization',
+  who_immunization_hepatitis_b = 'who-immunization-hepatitis-b'
 }
 
 export const flowRepository = new FlowRepository();
@@ -89,6 +92,19 @@ flowRepository.registerInteractiveModule<PatientIdInitialData>(
   {
     flowImplementation: whoImmunizationImplementation,
     flowContext: (contextOpts) => new WHOImmunizationContext(contextOpts),
+    testData: [
+      {
+        patientId: MockPatientIdEnum.empty_data,
+      },
+    ],
+  }
+);
+
+flowRepository.registerInteractiveModule<PatientIdInitialData>(
+  ExampleFlowDefinitionIdEnum.who_immunization_hepatitis_b,
+  {
+    flowImplementation: whoImmunizationHepatitisBImplementation,
+    flowContext: (contextOpts) => new WHOImmunizationHepBContext(contextOpts),
     testData: [
       {
         patientId: MockPatientIdEnum.empty_data,

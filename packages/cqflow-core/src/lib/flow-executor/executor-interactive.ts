@@ -1,13 +1,14 @@
 import { compileNodes } from './compile-nodes';
 import { compact } from 'lodash';
 import { IFlowDefinition, INumberField } from '../flow-definition';
-import { InteractiveFlowContext } from '../flow-context/interactive-flow-context';
+import { InteractiveFlowContext, InteractiveFlowContextOptions, OnUpdateInteractiveState } from '../flow-context/interactive-flow-context';
 import { InteractiveFlowImplementation } from '../flow-implementation/interactive-flow-implementation';
 import {
   ImplementationNodeTypeEnum,
   TernaryEnum,
   AnswerTypeEnum,
   ActionStatusEnum,
+  CQFlowExecutorStateEnum,
 } from '../enums';
 import {
   IFlowStepAnswer,
@@ -55,6 +56,9 @@ import {
 } from './executor-non-interactive';
 import { IMultiOptionAnswer } from '../flow-steps/answers';
 import { MultiOptionExecNode } from '../flow-nodes/multi-option-node';
+import { LazyFlowDefinitionRetriever } from '../flow-context/flow-context';
+import { InteractiveFlowState } from './interactive-flow-state';
+import { FlowRepository } from '../flow-repository/flow-repository';
 
 // type FlowContext = FlowContext;
 
@@ -68,17 +72,53 @@ interface ReturnStep {
   nextNodeId: string | null;
 }
 
+/**
+ * 
+ Each flow needs a context, flowDefinition, and flowImplementation
+
+ */
+
+
+ interface ExecuteInteractiveFlowNewOpts<
+ I = any,
+ S = CQFlowExecutorStateEnum
+> {
+  flowDefinitionId: string;
+  flowDefinitionRetriever: LazyFlowDefinitionRetriever
+  flowRepository: FlowRepository
+  interactiveFlowState: InteractiveFlowState<I, S>;
+  onUpdateInteractiveState: OnUpdateInteractiveState<I>;
+ }
+
+// export async function executeInteractiveFlowNew(opts: ExecuteInteractiveFlowNewOpts): Promise<IFlowStep[]> {
+  
+//   const flowDefinition = await opts.flowDefinitionRetriever.loadFlowDefinitionById(opts.flowDefinitionId);
+
+//   if (!flowDefinition?.bindId) {
+//     throw new Error("No flow definition found for id: " + opts.flowDefinitionId)
+//   }
+
+//   const flowModule = opts.flowRepository.getInteractiveModule(flowDefinition.bindId);
+
+
+//   const context = new InteractiveFlowContext(opts);
+//   const flowImplementation = new InteractiveFlowImplementation();
+//   return executeInteractiveFlow(flowImplementation, context);
+
+//  }
+
+
 export async function executeInteractiveFlow(
   flowImplementation: InteractiveFlowImplementation,
   context: InteractiveFlowContext,
-  subFlows: null | Record<string, SubFlowExecution<InteractiveFlowContext>> = {}
+  // flowRepository: FlowRepository
 ): Promise<IFlowStep[]> {
   // A context should have fresh steps each times its used
   context.clearSteps();
 
   const currentAnswers = context.getMergedAnswers();
 
-  const nodes = compileNodes(flowImplementation, context.getFlowDefinition());
+  const nodes = compileNodes(flowImplementation, await context.getFlowDefinition());
 
   const startNode = Object.values(nodes).find(
     (node) => node instanceof StartNode
@@ -142,12 +182,13 @@ export async function recurseInteractiveFlow(
     nextStep = await executeInteractiveTextFieldNode(node, context, answers);
   } else if (node instanceof NumberFieldNode) {
     nextStep = await executeInteractiveNumberFieldNode(node, context, answers);
+  } else if (node instanceof SubFlowNode) {
+
+    
+
+    // nextStep = await executeInteractiveSubFlowNode(node, context, answers, flowRepository);
+    
   }
-
-  // else if (node instanceof SubFlowNode) {
-  //   nextStep = await executeInteractiveSubFlowNode(node, context, answers);
-
-  // }
 
   if (!nextStep) {
     throw new Error(`Executor can not be found for nodeType: ${node.nodeType}`);
@@ -167,7 +208,7 @@ export async function executeInteractiveYesNoNode(
   const step: IYesNoStep = {
     stepType: ImplementationNodeTypeEnum.YesNo,
     stepId: node.getDefinition().id,
-    flowDefinitionId: context.getFlowDefinition().id,
+    flowDefinitionId:  (await context.getFlowDefinition()).id,
     nodeDefinition: node.getDefinition(),
     label: await node.getLabel(context),
     answer: null,
@@ -194,7 +235,7 @@ export async function executeInteractiveExecNode(
   const step: IExecStep = {
     stepType: ImplementationNodeTypeEnum.Exec,
     stepId: node.getDefinition().id,
-    flowDefinitionId: context.getFlowDefinition().id,
+    flowDefinitionId: (await context.getFlowDefinition()).id,
     nodeDefinition: node.getDefinition(),
     label: await node.getLabel(context),
     evaluation: await node.evaluate(context),
@@ -227,7 +268,7 @@ export async function executeInteractiveMultiOptionExecNode(
   const step: IMultiOptionStep = {
     stepType: ImplementationNodeTypeEnum.MultiOptionExec,
     stepId: node.getDefinition().id,
-    flowDefinitionId: context.getFlowDefinition().id,
+    flowDefinitionId: (await context.getFlowDefinition()).id,
     nodeDefinition: node.getDefinition(),
     label: await node.getLabel(context),
     options: node.getOptions(),
@@ -258,7 +299,7 @@ export async function executeInteractiveBranchChoiceNode(
   const step: IBranchChoiceStep = {
     stepType: ImplementationNodeTypeEnum.BranchChoice,
     stepId: node.getDefinition().id,
-    flowDefinitionId: context.getFlowDefinition().id,
+    flowDefinitionId: (await context.getFlowDefinition()).id,
     nodeDefinition: node.getDefinition(),
     label: await node.getLabel(context),
     options: node.getOptions(),
@@ -286,7 +327,7 @@ export async function executeInteractiveBranchExecNode(
   const step: IBranchChoiceStep = {
     stepType: ImplementationNodeTypeEnum.BranchChoice,
     stepId: node.getDefinition().id,
-    flowDefinitionId: context.getFlowDefinition().id,
+    flowDefinitionId: (await context.getFlowDefinition()).id,
     nodeDefinition: node.getDefinition(),
     label: await node.getLabel(context),
     options: node.getOptions(),
@@ -369,7 +410,7 @@ export async function executeInteractiveActionDummyNode(
   const step: IActionStep = {
     stepType: ImplementationNodeTypeEnum.Action,
     stepId: node.getDefinition().id,
-    flowDefinitionId: context.getFlowDefinition().id,
+    flowDefinitionId: (await context.getFlowDefinition()).id,
     nodeDefinition: node.getDefinition(),
     label: await node.getLabel(context),
     answer: null,
@@ -404,7 +445,7 @@ export async function executeInteractiveCustomFormNode(
   const step: ICustomFormStep = {
     stepType: ImplementationNodeTypeEnum.CustomForm,
     stepId: node.getDefinition().id,
-    flowDefinitionId: context.getFlowDefinition().id,
+    flowDefinitionId: (await context.getFlowDefinition()).id,
     nodeDefinition: node.getDefinition(),
     label: await node.getLabel(context),
     jsonSchema: node.getValueJsonSchema(),
@@ -436,7 +477,7 @@ export async function executeInteractiveOptionFieldNode(
   const step: IMultiOptionFieldStep = {
     stepType: ImplementationNodeTypeEnum.MultiOptionField,
     stepId: node.getDefinition().id,
-    flowDefinitionId: context.getFlowDefinition().id,
+    flowDefinitionId: (await context.getFlowDefinition()).id,
     nodeDefinition: node.getDefinition(),
     label: await node.getLabel(context),
     answer: null,
@@ -463,7 +504,7 @@ export async function executeInteractiveTextFieldNode(
   const step: ITextFieldStep = {
     stepType: ImplementationNodeTypeEnum.TextField,
     stepId: node.getDefinition().id,
-    flowDefinitionId: context.getFlowDefinition().id,
+    flowDefinitionId: (await context.getFlowDefinition()).id,
     nodeDefinition: node.getDefinition(),
     label: await node.getLabel(context),
   };
@@ -493,7 +534,7 @@ export async function executeInteractiveNumberFieldNode(
   const step: INumberFieldStep = {
     stepType: ImplementationNodeTypeEnum.NumberField,
     stepId: node.getDefinition().id,
-    flowDefinitionId: context.getFlowDefinition().id,
+    flowDefinitionId: (await context.getFlowDefinition()).id,
     nodeDefinition: node.getDefinition(),
     label: await node.getLabel(context),
   };
@@ -515,48 +556,66 @@ export async function executeInteractiveNumberFieldNode(
   return { step, nextNodeId };
 }
 
-// export async function executeInteractiveSubFlowNode(
-//   node: SubFlowNode<any>,
-//   context: InteractiveFlowContext,
-//   answers: Record<string, IFlowStepAnswer>
-// ): Promise<ReturnStep> {
+export async function executeInteractiveSubFlowNode(
+  node: SubFlowNode<any>,
+  context: InteractiveFlowContext,
+  answers: Record<string, IFlowStepAnswer>,
+  flowRepository: FlowRepository
+): Promise<ReturnStep | null> {
 
-//   const subflowContext = await node.getSubFlowContext(context);
+  const subFlowId = node.getSubFlowId()
 
-//   const subflowNodes = compileNodes(flowImplementation, context.getFlowDefinition());
+  if (!subFlowId) {
+    return  null
+  }
 
-//   recurseInteractiveFlow()
+  const subFlowDefinition = await context.getFlowDefinitionRetriever().loadFlowDefinitionById(subFlowId);
+  if (!subFlowDefinition?.bindId) {
+    throw new Error("Sub Flow definition not found for id: " + subFlowId)
+  }
 
-//   const step: IExecStep = {
-//     stepType: ImplementationNodeTypeEnum.Exec,
-//     stepId: node.getDefinition().id,
-//     flowDefinitionId: context.getFlowDefinition().id,
-//     nodeDefinition: node.getDefinition(),
-//     label: await node.getLabel(context),
-//     evaluation: TernaryEnum.TRUE,
-//     supplementalData: await node.resolveSupplementalData(context),
-//   };
+  const subFlowModule = flowRepository.getInteractiveModule(subFlowDefinition.bindId);
 
-//   const subFlowId = node.getDefinition().subFlowId;
-//   const subFlow = context.getSubFlow(subFlowId);
+  if (!subFlowModule) {
+    throw new Error( `Unable to find module for flow definition: ${subFlowDefinition.bindId}`);
+  }
 
-//   if (!subFlow) {
-//     throw new Error(`SubFlow with id ${subFlowId} not found`);
-//   }
+  const opts: InteractiveFlowContextOptions<any, string> = {
+    flowDefinitionId: subFlowId,
+    flowDefinitionRetriever: context.getFlowDefinitionRetriever(),
+    interactiveFlowState: context.interactiveFlowState, // THIS HAS WRONG INITIAL DATA
+    onUpdateInteractiveState: context.onUpdateInteractiveState,
+    initialData: context.getInitialData(),
+  };
 
-//   const subFlowContext = context.createSubFlowContext(subFlowId);
+  const subFlowSteps = await executeInteractiveFlow(
+    subFlowModule.getFlowImplementation(),
+    subFlowModule.getFlowContext(opts),
 
-//   const subFlowImplementation = new InteractiveFlowImplementation();
-//   const subFlowSteps = await executeInteractiveFlow(
-//     subFlowImplementation,
-//     subFlowContext
-//   );
+    // flowRepository
+  );
 
-//   subFlowSteps.forEach((step) => {
-//     context.addFlowStep(step);
-//   });
+  // const subflowContext = await node.getSubFlowContext(context);
 
-//   const nextNodeId = node.getNextNodeId();
+  return null
+  // const subflowNodes = compileNodes(flowImplementation, context.getFlowDefinition());
 
-//   return { step, nextNodeId };
-// }
+
+  // const subFlowContext = context.createSubFlowContext(subFlowId);
+
+  // const subFlowImplementation = new InteractiveFlowImplementation();
+  
+  
+  // const subFlowSteps = await executeInteractiveFlow(
+  //   subFlowImplementation,
+  //   subFlowContext
+  // );
+
+  // subFlowSteps.forEach((step) => {
+  //   context.addFlowStep(step);
+  // });
+
+  // const nextNodeId = node.getNextNodeId();
+
+  // return { step, nextNodeId };
+}
