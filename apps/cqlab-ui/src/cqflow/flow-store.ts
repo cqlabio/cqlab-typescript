@@ -70,7 +70,7 @@ interface FlowStore {
 }
 
 export const useFlowStore = create<FlowStore>()((set, get) => ({
-  flowImplementationServerUrl: getSelectedServer() || null,
+  flowImplementationServerUrl: getSelectedServer() || 'http://localhost:3201/api',
 
   flowImplementation: null,
 

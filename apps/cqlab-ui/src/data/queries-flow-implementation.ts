@@ -18,10 +18,11 @@ export function useFlowImplementation(
   flowImplementationServer: string | null
 ) {
   return useQuery<IFlowImplementation>({
-    enabled: !!flowImplementationId && !!flowImplementationServer,
+    enabled: !!flowImplementationId, // && !!flowImplementationServer,
     queryKey: [
       'flowImplementations',
-      { id: flowImplementationId, server: flowImplementationServer },
+      { id: flowImplementationId,// server: flowImplementationServer
+       },
     ],
     queryFn: async () => {
       const { data } = await axiosInstance.get(
@@ -38,10 +39,11 @@ export function useFlowImplementationExampleData(
   flowImplementationServer: string | null
 ) {
   return useQuery<any[]>({
-    enabled: !!flowImplementationId && !!flowImplementationServer,
+    enabled: !!flowImplementationId,// && !!flowImplementationServer,
     queryKey: [
       'flowImplementationExampleData',
-      { id: flowImplementationId, server: flowImplementationServer },
+      // { id: flowImplementationId, server: flowImplementationServer },
+      { id: flowImplementationId},
     ],
     queryFn: async () => {
       const { data } = await axiosInstance.get(
@@ -59,10 +61,11 @@ export function useFlowInstances(
   flowImplementationServer: string | null
 ) {
   return useQuery<WorkflowInstance[]>({
-    enabled: !!flowDefinitionId && !!flowImplementationServer,
+    enabled: !!flowDefinitionId, //&& !!flowImplementationServer,
     queryKey: [
       FLOW_INSTANCES_KEY,
-      { id: flowDefinitionId, server: flowImplementationServer },
+      { id: flowDefinitionId, //server: flowImplementationServer
+       },
     ],
     queryFn: async () => {
       const { data } = await axiosInstance.get(
@@ -179,8 +182,10 @@ export function useVocabularyValueSets(
   flowImplementationServer: string | null
 ) {
   return useQuery<ValueSetSummary[]>({
-    enabled: !!flowImplementationServer,
-    queryKey: ['valuesets', { server: flowImplementationServer }],
+    // enabled: !!flowImplementationServer,
+    queryKey: ['valuesets', { 
+      // server: flowImplementationServer 
+    }],
     queryFn: async () => {
       const { data } = await axiosInstance.get<ValueSetSummary[]>(
         `/vocabulary/value-sets`
@@ -201,8 +206,10 @@ export function useVocabularyValueSet(
   valueSetId: string
 ) {
   return useQuery<Coding[]>({
-    enabled: !!flowImplementationServer,
-    queryKey: ['valuesets', { server: flowImplementationServer }],
+    // enabled: !!flowImplementationServer,
+    queryKey: ['valuesets', { 
+      // server: flowImplementationServer 
+    }],
     queryFn: async () => {
       const { data } = await axiosInstance.get<Coding[]>(
         `/vocabulary/value-sets/${valueSetId}`
@@ -214,8 +221,11 @@ export function useVocabularyValueSet(
 
 export function useVocabularyCodes(flowImplementationServer: string | null) {
   return useQuery<Coding[]>({
-    enabled: !!flowImplementationServer,
-    queryKey: ['codes', { server: flowImplementationServer }],
+    // enabled: !!flowImplementationServer,
+    queryKey: ['codes', { 
+      // server: 
+      // flowImplementationServer 
+    }],
     queryFn: async () => {
       const { data } = await axiosInstance.get<Coding[]>(`/vocabulary/codes`);
       return data;
@@ -230,8 +240,10 @@ type MockData = {
 
 export function useMockData(flowImplementationServer: string | null) {
   return useQuery<MockData[]>({
-    enabled: !!flowImplementationServer,
-    queryKey: ['mockData', { server: flowImplementationServer }],
+    // enabled: !!flowImplementationServer,
+    queryKey: ['mockData', {
+      //  server: flowImplementationServer
+       }],
     queryFn: async () => {
       const { data } = await axiosInstance.get<MockData[]>(`/mock-data`);
       return data;
@@ -250,10 +262,12 @@ export function useMockDataById(
   mockDataId: string
 ) {
   return useQuery<MockDataResolved>({
-    enabled: !!mockDataId && !!flowImplementationServer,
+    enabled: !!mockDataId, //&& !!flowImplementationServer,
     queryKey: [
       'mockData',
-      { server: flowImplementationServer, id: mockDataId },
+      {
+        // server: flowImplementationServer, 
+        id: mockDataId },
     ],
     queryFn: async () => {
       const { data } = await axiosInstance.get<MockDataResolved>(
