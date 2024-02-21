@@ -40,7 +40,10 @@ export async function executeNonInteractiveFlow(
   // A context should have fresh steps each times its used
   context.clearSteps();
 
-  const nodes = compileNodes(flowImplementation,await context.getFlowDefinition());
+  const nodes = compileNodes(
+    flowImplementation,
+    await context.getFlowDefinition()
+  );
 
   const startNode = Object.values(nodes).find(
     (node) => node instanceof StartNode

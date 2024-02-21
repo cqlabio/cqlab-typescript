@@ -10,7 +10,6 @@ class HepatitisBSubFlowNode extends SubFlowNode<WHOImmunizationContext> {
   override async getSubFlowContext(
     context: WHOImmunizationContext
   ): Promise<FlowContext<any, any>> {
-    
     const subflowContext = new WHOImmunizationHepBContext({
       flowDefinitionId: this.getSubFlowId() as string,
       flowDefinitionRetriever: context.getFlowDefinitionRetriever(),
@@ -20,12 +19,9 @@ class HepatitisBSubFlowNode extends SubFlowNode<WHOImmunizationContext> {
         patientId: context.getInitialData().patientId,
       },
     });
-    
-    
+
     return context;
   }
-
-
 }
 
 export const whoImmunizationImplementation =

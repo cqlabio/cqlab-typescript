@@ -18,7 +18,10 @@ import {
   CreateDateColumn,
   ManyToOne,
 } from 'typeorm';
-import { CQFlowExecutorStatefulAnswer, InteractiveFlowState } from '@cqlab/cqflow-core';
+import {
+  CQFlowExecutorStatefulAnswer,
+  InteractiveFlowState,
+} from '@cqlab/cqflow-core';
 import { FlowDefinitionEntity } from './flow-definition.entity';
 
 @Entity()

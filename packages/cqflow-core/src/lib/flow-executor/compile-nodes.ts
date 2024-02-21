@@ -128,7 +128,7 @@ function compileTrueFalseNode(
     const execNode = new ExecNode(rawNode);
     // If there is no executor, then we assume it is a false node
     execNode.setExecutor(() => {
-      return TernaryEnum.FALSE;
+      return Promise.resolve(TernaryEnum.FALSE);
     });
     return execNode;
   }

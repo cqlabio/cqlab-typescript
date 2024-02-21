@@ -1,0 +1,123 @@
+{
+  "id": "c751e075-fb08-477f-adf4-271ed74e8d27",
+  "createdAt": "2024-02-21T14:15:15.000Z",
+  "bindId": "who-immunization-rubella",
+  "nodes": {
+    "end_jtyjlrql": {
+      "id": "end_jtyjlrql",
+      "label": "End",
+      "bindId": "end_jtyjlrql",
+      "nodeType": "End",
+      "position": {
+        "x": 694.8433983179206,
+        "y": 527.2069313486468,
+        "width": 60,
+        "height": 60
+      }
+    },
+    "end_uuqlikup": {
+      "id": "end_uuqlikup",
+      "label": "End",
+      "bindId": "end_uuqlikup",
+      "nodeType": "End",
+      "position": {
+        "x": 690.0655597061965,
+        "y": 131.43653034820548,
+        "width": 60,
+        "height": 60
+      }
+    },
+    "start_wtfrktjl": {
+      "id": "start_wtfrktjl",
+      "next": {
+        "id": "truefalse_kezxidke",
+        "type": "Unary"
+      },
+      "label": "Start",
+      "bindId": "start_wtfrktjl",
+      "nodeType": "Start",
+      "position": {
+        "x": 520.0539049350089,
+        "y": -5.135681904967356,
+        "width": 60,
+        "height": 60
+      }
+    },
+    "logictree_yotbsjyf": {
+      "id": "logictree_yotbsjyf",
+      "next": {
+        "type": "Binary",
+        "trueId": "contextdata_miievrzj",
+        "falseId": "end_jtyjlrql",
+        "falseFromHandle": "right",
+        "falseToHandle": "top"
+      },
+      "label": "Rubella criteria",
+      "bindId": "logictree_yotbsjyf",
+      "nodeType": "LogicTree",
+      "position": {
+        "x": 436.80300452169047,
+        "y": 289.63158061053673,
+        "width": 229,
+        "height": 137
+      },
+      "logicTree": {
+        "children": [
+          {
+            "id": "truefalse_yfxenkqx",
+            "label": "Is not pregnant",
+            "bindId": "is_not_pregnant",
+            "nodeType": "TrueFalse",
+            "logicType": "TrueFalseLeaf"
+          },
+          {
+            "id": "truefalse_etgklnle",
+            "label": "Is over 9 months old",
+            "bindId": "is_over_9_months_old",
+            "nodeType": "TrueFalse",
+            "logicType": "TrueFalseLeaf"
+          }
+        ],
+        "logicType": "And"
+      }
+    },
+    "truefalse_kezxidke": {
+      "id": "truefalse_kezxidke",
+      "next": {
+        "type": "Binary",
+        "trueId": "end_uuqlikup",
+        "falseId": "logictree_yotbsjyf",
+        "trueFromHandle": "right",
+        "trueToHandle": "left"
+      },
+      "label": "Rubella vaccine has been given",
+      "bindId": "rubella_has_been_given",
+      "nodeType": "TrueFalse",
+      "position": {
+        "x": 497.14248705658053,
+        "y": 114.63596691958372,
+        "width": 104,
+        "height": 104
+      }
+    },
+    "contextdata_miievrzj": {
+      "id": "contextdata_miievrzj",
+      "next": {
+        "id": "end_jtyjlrql",
+        "type": "Unary",
+        "fromHandle": "right",
+        "toHandle": "left"
+      },
+      "label": "Recommend Rubella",
+      "bindId": "recommend_rubella",
+      "nodeType": "EmitData",
+      "position": {
+        "x": 474.02519246209795,
+        "y": 522.1044569411044,
+        "width": 150,
+        "height": 68
+      },
+      "dataItems": []
+    }
+  }
+}

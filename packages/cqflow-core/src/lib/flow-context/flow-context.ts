@@ -2,7 +2,7 @@ import { IFlowDefinition, IFlowDefinitionNode } from '../flow-definition';
 import { IFlowStep } from '../flow-steps';
 
 export abstract class LazyFlowDefinitionRetriever {
-  abstract loadFlowDefinitionById(id: string): Promise<IFlowDefinition> 
+  abstract loadFlowDefinitionById(id: string): Promise<IFlowDefinition>;
 }
 
 export interface ContextStackItem<S> {
@@ -51,7 +51,9 @@ export abstract class FlowContext<I = any, S = any> {
   // }
 
   async getFlowDefinition(): Promise<IFlowDefinition> {
-    return this._flowDefinitionRetriever.loadFlowDefinitionById(this._flowDefinitionId);
+    return this._flowDefinitionRetriever.loadFlowDefinitionById(
+      this._flowDefinitionId
+    );
   }
 
   getFlowDefinitionRetriever() {
@@ -59,7 +61,9 @@ export abstract class FlowContext<I = any, S = any> {
   }
 
   // TODO: can add a bindId index here so this happens at most once
-  async getFlowDefinitionNodeByBindId(bindId: string): Promise<IFlowDefinitionNode | null> {
+  async getFlowDefinitionNodeByBindId(
+    bindId: string
+  ): Promise<IFlowDefinitionNode | null> {
     const flowDefinition = await this.getFlowDefinition();
     const nodes = Object.values(flowDefinition.nodes || {});
     const found = nodes.find((node) => node.bindId === bindId);
@@ -77,7 +81,7 @@ export abstract class FlowContext<I = any, S = any> {
     this._steps.set(step.stepId, step);
   };
 
-  async getFlowStepByBindId(bindId: string):Promise<IFlowStep | null> {
+  async getFlowStepByBindId(bindId: string): Promise<IFlowStep | null> {
     const flowDefNode = await this.getFlowDefinitionNodeByBindId(bindId);
     if (!flowDefNode) {
       return null;

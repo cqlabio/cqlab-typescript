@@ -1,8 +1,5 @@
-import { InteractiveFlowImplementation } from "@cqlab/cqflow-core";
-import { WHOImmunizationHepBContext } from "./hepatitis-b-context";
-
-
-
+import { InteractiveFlowImplementation } from '@cqlab/cqflow-core';
+import { WHOImmunizationHepBContext } from './hepatitis-b-context';
 
 interface InputData {
   patientId: string;
@@ -15,6 +12,6 @@ interface OutputData {
 export const whoImmunizationHepatitisBImplementation =
   new InteractiveFlowImplementation<WHOImmunizationHepBContext>();
 
-  whoImmunizationHepatitisBImplementation.registerLibraryManager(initialData => {
-    return new LibraryManager(initialData);
-  })
+// whoImmunizationHepatitisBImplementation.registerLibraryManager(initialData => {
+//   return new LibraryManager(initialData);
+// })

@@ -21,7 +21,7 @@ export const enum ExampleFlowDefinitionIdEnum {
   docs_breast_cancer_screening_non_interactive = 'docs-breast-cancer-screening-non-interactive',
   docs_hypertension = 'docs-hypertension',
   who_immunization = 'who-immunization',
-  who_immunization_hepatitis_b = 'who-immunization-hepatitis-b'
+  who_immunization_hepatitis_b = 'who-immunization-hepatitis-b',
 }
 
 export const flowRepository = new FlowRepository();

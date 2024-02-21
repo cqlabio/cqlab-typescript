@@ -67,3 +67,14 @@ export function useDeleteFlowDefinitionMutation() {
     },
   });
 }
+
+export function useSeedDb() {
+  return useMutation({
+    mutationFn: () => {
+      return axiosInstance.post<{ success: true }>(`seed-db`);
+    },
+    onSuccess: (data, variables) => {
+      queryClient.invalidateQueries({ queryKey: ['flowDefinitions'] });
+    },
+  });
+}

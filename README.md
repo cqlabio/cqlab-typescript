@@ -54,3 +54,11 @@ It should open at the following URL/Port on localhost, and the app logs should v
 ```
 http://localhost:4201
 ```
+
+If this is your first time installing CQLab, we also suggest generating example data from CQExamples to get a feel for how different flow charts look, how they are launched in development, and how they can be configured and executed. To generate the data:
+
+```
+Navigate to the CQFlow application at: http://localhost:4200/flow
+```
+
+and then click `Generate Examples` at the top of the page.

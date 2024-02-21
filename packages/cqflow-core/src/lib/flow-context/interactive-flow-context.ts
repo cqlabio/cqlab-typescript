@@ -54,15 +54,15 @@ interface ContextStateLoader {
 */
 
 // export abstract class LazyFlowDefinitionRetriever {
-//   abstract loadFlowDefinitionById(id: string): Promise<IFlowDefinition> 
+//   abstract loadFlowDefinitionById(id: string): Promise<IFlowDefinition>
 // }
 
 export interface InteractiveFlowContextOptions<
   I = any,
   S = CQFlowExecutorStateEnum
 > {
-  flowDefinitionId: string
-  flowDefinitionRetriever: LazyFlowDefinitionRetriever
+  flowDefinitionId: string;
+  flowDefinitionRetriever: LazyFlowDefinitionRetriever;
   interactiveFlowState: InteractiveFlowState<I, S>;
   onUpdateInteractiveState: OnUpdateInteractiveState<I>;
   initialData: I;
@@ -133,7 +133,9 @@ export abstract class InteractiveFlowContext<
     return currentAnswers;
   }
 
-  async getAnswerByNodeBinding(nodeBinding: string): Promise<IFlowStepAnswer | null> {
+  async getAnswerByNodeBinding(
+    nodeBinding: string
+  ): Promise<IFlowStepAnswer | null> {
     const node = await this.getFlowDefinitionNodeByBindId(nodeBinding);
     const answers = this.getMergedAnswers();
     return (node && answers[node.id]) || null;

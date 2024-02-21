@@ -13,15 +13,11 @@ export class FlowService {
   ) {}
 
   async getDefinitions(): Promise<FlowDefinitionEntity[]> {
-    return this.flowDefRepo.find();
-    // const defs = await this.prisma.flowDefinition.findMany({
-    //   orderBy: [
-    //     {
-    //       bindId: 'asc',
-    //     },
-    //   ],
-    // });
-    // return defs;
+    return this.flowDefRepo.find({
+      order: {
+        bindId: 'ASC',
+      },
+    });
   }
 
   async getDefinitionById(id: string): Promise<FlowDefinitionEntity | null> {

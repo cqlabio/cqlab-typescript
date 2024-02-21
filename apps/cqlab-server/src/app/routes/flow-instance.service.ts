@@ -91,12 +91,11 @@ export class FlowInstanceService {
       return nextFlowInstance;
     };
 
-
-    const flowServiceLocal = this.flowService
+    const flowServiceLocal = this.flowService;
 
     class FlowDefinitionRetriever extends LazyFlowDefinitionRetriever {
       data: Record<string, IFlowDefinition> = {};
-    
+
       async loadFlowDefinitionById(id: string): Promise<IFlowDefinition> {
         if (!this.data[id]) {
           const flowDef = await flowServiceLocal.getDefinitionById(id);
@@ -117,7 +116,7 @@ export class FlowInstanceService {
       onUpdateInteractiveState: onUpdate,
     };
 
-    const activeSteps = await module.execute(opts);
+    const activeSteps = await module.execute(opts, flowRepository);
 
     return {
       status: CQFlowExecutorStateEnum.Initiated,
