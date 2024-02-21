@@ -9,7 +9,6 @@ import { useNavigate } from 'react-router-dom';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { FlowDefinitionName } from './subflow-query/flow-definition-name';
 import { queryClient } from './subflow-query/subflow-query';
-
 type InputNodeProps = NodeProps<FlowNodeData<ISubFlowNode>>;
 
 export const SubFlowNode = memo(
@@ -38,10 +37,9 @@ export const SubFlowNode = memo(
         validationStatus={validationStatus}
         editMode={editMode}
       >
-        hello
-        {/* <QueryClientProvider client={queryClient}>
+        <QueryClientProvider client={queryClient}>
           <FlowDefinitionName flowId={node.subFlowId} />
-        </QueryClientProvider> */}
+        </QueryClientProvider>
         {/* <Box sx={{ textAlign: 'center' }}>
           {subFlowDefinition ? (
             <Box

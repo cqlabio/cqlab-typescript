@@ -38,29 +38,29 @@ export function CustomConnectionLine(props: ConnectionLineComponentProps) {
   } = props;
   const res = getPossibleHandles(fromNode as ViewFlowNode<any>);
 
-  let calcSourceX = fromX;
-  let calcSourceY = fromY;
+  // let calcSourceX = fromX;
+  // let calcSourceY = fromY;
 
   // This calculates the closest handle to the target when starting from the toolbar
-  const isToolbar = fromHandle?.id?.startsWith('toolbar');
+  // const isToolbar = fromHandle?.id?.startsWith('toolbar');
 
-  if (isToolbar) {
-    const closest = getClosestCoord(
-      {
-        x: toX,
-        y: toY,
-        position: toPosition,
-      },
-      Object.values(res)
-    );
+  // if (isToolbar) {
+  //   const closest = getClosestCoord(
+  //     {
+  //       x: toX,
+  //       y: toY,
+  //       position: toPosition,
+  //     },
+  //     Object.values(res)
+  //   );
 
-    calcSourceX = closest.x;
-    calcSourceY = closest.y;
-  }
+  //   calcSourceX = closest.x;
+  //   calcSourceY = closest.y;
+  // }
 
-  const [path] = getStraightPath({
-    sourceX: calcSourceX,
-    sourceY: calcSourceY,
+  const [path] = getSmoothStepPath({
+    sourceX: fromX,
+    sourceY: fromY,
     targetX: toX,
     targetY: toY,
   });

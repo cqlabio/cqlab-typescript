@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import Alert from '@mui/material/Alert';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -13,10 +14,13 @@ import { NewFlowDialog } from './new-flow-dialog';
 import { UploadFlowDialog } from './upload-flow-dialog';
 import { ChatGPTDialog } from './chatgpt-dialog';
 import dayjs from 'dayjs';
-import { useFlowDefinitions } from '../../data/queries';
+import { useFlowDefinitions, useSeedDb } from '../../data/queries';
 // import { MdLaunch } from 'react-icons/md';
 import CreateIcon from '@mui/icons-material/Add';
 import { Link } from 'react-router-dom';
+import { axiosInstance } from '../../data/axios-instance';
+
+const MAX_WIDTH = 1200;
 
 export function CQFlowList() {
   const [isOpen, setIsOpen] = useState(false);
@@ -24,6 +28,7 @@ export function CQFlowList() {
   const [isChatDialogOpen, setIsChatDialogOpen] = useState(false);
 
   const { status, data: flows, error, isFetching } = useFlowDefinitions();
+  const { mutate: onSeedDb } = useSeedDb();
 
   const toggleOpen = () => setIsOpen(!isOpen);
   const toggleUploadOpen = () => setIsUploadOpen(!isUploadOpen);
@@ -67,6 +72,29 @@ export function CQFlowList() {
 
   return (
     <Box sx={{ padding: '15px' }}>
+      {flows.length === 0 && (
+        <Box
+          sx={{
+            maxWidth: `${MAX_WIDTH}px`,
+            margin: '30px auto',
+            background: '#E1F5FE',
+            padding: '15px',
+            display: 'flex',
+          }}
+        >
+          <Box sx={{ flexGrow: 1 }}>
+            No flows found were found in your environment. Would you like to
+            populate your local database with some examples from the CQExamples
+            package? These can easily be deleted later if you wish.
+          </Box>
+          <Box sx={{ minWidth: '200px' }}>
+            <Button variant="contained" color="info" onClick={() => onSeedDb()}>
+              Generate Examples
+            </Button>
+          </Box>
+        </Box>
+      )}
+
       <Box sx={{ textAlign: 'right' }}>
         {/* <Button onClick={toggleUploadOpen} sx={{ marginRight: '5px' }}>
           Upload From Definition
@@ -82,7 +110,7 @@ export function CQFlowList() {
       </Box>
       <Paper
         sx={{
-          maxWidth: '1200px',
+          maxWidth: `${MAX_WIDTH}px`,
           margin: '30px auto',
           a: { textDecoration: 'none', color: 'inherit' },
         }}

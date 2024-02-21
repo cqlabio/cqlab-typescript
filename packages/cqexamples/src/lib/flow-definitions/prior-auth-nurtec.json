@@ -1,0 +1,414 @@
+{
+  "id": "117d49ed-c86c-4402-90e4-c6ef6743aa2c",
+  "createdAt": "2023-09-09T13:29:17.483Z",
+  "bindId": "prior-auth-nurtec",
+  "version": "0.0.1",
+  "type": "",
+  "nodes": {
+    "end_radigxnl": {
+      "id": "end_radigxnl",
+      "label": "End",
+      "bindId": "end_radigxnl",
+      "nodeType": "End",
+      "position": {
+        "x": 702.1564877206445,
+        "y": 1583.645095220505,
+        "width": 60,
+        "height": 60
+      }
+    },
+    "start_kwzjugef": {
+      "id": "start_kwzjugef",
+      "next": {
+        "id": "branchchoice_qgkouezc",
+        "type": "Unary"
+      },
+      "label": "Start",
+      "bindId": "start_kwzjugef",
+      "nodeType": "Start",
+      "position": {
+        "x": 826.7900355133766,
+        "y": 90.47797066172876,
+        "width": 60,
+        "height": 60
+      }
+    },
+    "logictree_esfzqobl": {
+      "id": "logictree_esfzqobl",
+      "next": {
+        "type": "Binary",
+        "trueId": "emitdata_idcgzvhb",
+        "falseId": "contextdata_htblytiq",
+        "trueFromHandle": "bottom",
+        "trueToHandle": "top",
+        "falseFromHandle": "bottom",
+        "falseToHandle": "right"
+      },
+      "label": "Initial authorization for episodic treatment of migraine",
+      "bindId": "logictree_esfzqobl",
+      "nodeType": "LogicTree",
+      "position": {
+        "x": 908.8097369112695,
+        "y": 646.4027662652126,
+        "width": 609,
+        "height": 413
+      },
+      "logicTree": {
+        "children": [
+          {
+            "id": "truefalse_bwqsazaj",
+            "label": "Dose does not exceed 75 mg given once every other day (limit of 16 tablets per month)",
+            "bindId": "truefalse_bwqsazaj",
+            "nodeType": "TrueFalse",
+            "logicType": "TrueFalseLeaf"
+          },
+          {
+            "id": "truefalse_uvonaoli",
+            "label": "Patient must be 18 years or older",
+            "bindId": "truefalse_uvonaoli",
+            "nodeType": "TrueFalse",
+            "logicType": "TrueFalseLeaf"
+          },
+          {
+            "id": "truefalse_yacbadps",
+            "label": "Patient has an average of 4 to 18 migraine headaches per month as confirmed by medical record",
+            "bindId": "truefalse_yacbadps",
+            "nodeType": "TrueFalse",
+            "logicType": "TrueFalseLeaf"
+          },
+          {
+            "children": [
+              {
+                "id": "truefalse_aakvpwqs",
+                "label": "Has experienced an inadequate response (minimum two-month trial) to at least TWO prophylactic medications used for migraine headaches, each from a different pharmacologic class supported by the American Academy of Neurology",
+                "bindId": "truefalse_aakvpwqs",
+                "nodeType": "TrueFalse",
+                "logicType": "TrueFalseLeaf"
+              },
+              {
+                "id": "truefalse_beanzdhx",
+                "label": "Had a contraindication to all medications listed for migraine headache prophylaxis",
+                "bindId": "truefalse_beanzdhx",
+                "nodeType": "TrueFalse",
+                "logicType": "TrueFalseLeaf"
+              },
+              {
+                "id": "truefalse_erfoabuq",
+                "label": "Is currently being treated with one of the following: Antiepileptic drugs, Beta-blockers, Antidepressants, Blood pressure drugs, Alpha-agonists, Antihistamines",
+                "bindId": "truefalse_erfoabuq",
+                "nodeType": "TrueFalse",
+                "logicType": "TrueFalseLeaf"
+              }
+            ],
+            "logicType": "Or"
+          },
+          {
+            "id": "truefalse_lfhpkngm",
+            "label": "Will not be used in combination with another oral CGRP inhibitor or 5-HT-1F agent",
+            "bindId": "truefalse_lfhpkngm",
+            "nodeType": "TrueFalse",
+            "logicType": "TrueFalseLeaf"
+          }
+        ],
+        "logicType": "And"
+      }
+    },
+    "logictree_weqphgux": {
+      "id": "logictree_weqphgux",
+      "next": {
+        "type": "Binary",
+        "trueId": "emitdata_idcgzvhb",
+        "falseId": "contextdata_htblytiq",
+        "trueToHandle": "top",
+        "trueFromHandle": "bottom"
+      },
+      "label": "Re-authorization for acute treatment of migraine",
+      "bindId": "logictree_weqphgux",
+      "nodeType": "LogicTree",
+      "position": {
+        "x": 402.99554385948136,
+        "y": 642.174906772396,
+        "width": 435,
+        "height": 210
+      },
+      "logicTree": {
+        "children": [
+          {
+            "id": "truefalse_rceetpip",
+            "label": "Dose does not exceed 75 mg per day (limit of 8 tablets per month)",
+            "bindId": "truefalse_rceetpip",
+            "nodeType": "TrueFalse",
+            "logicType": "TrueFalseLeaf"
+          },
+          {
+            "id": "truefalse_pfiklipf",
+            "label": "Documentation of positive clinical response to therapy",
+            "bindId": "truefalse_pfiklipf",
+            "nodeType": "TrueFalse",
+            "logicType": "TrueFalseLeaf"
+          },
+          {
+            "id": "truefalse_dvkumnpa",
+            "label": "Not being used in combination with another oral CGRP inhibitor or 5-HT-1F agent.",
+            "bindId": "truefalse_dvkumnpa",
+            "nodeType": "TrueFalse",
+            "logicType": "TrueFalseLeaf"
+          }
+        ],
+        "logicType": "And"
+      }
+    },
+    "logictree_xwpwnlfk": {
+      "id": "logictree_xwpwnlfk",
+      "next": {
+        "type": "Binary",
+        "trueId": "emitdata_idcgzvhb",
+        "falseId": "contextdata_htblytiq",
+        "trueToHandle": "left",
+        "trueFromHandle": "bottom"
+      },
+      "label": "Initial authorization for acute treatment of migraine",
+      "bindId": "logictree_xwpwnlfk",
+      "nodeType": "LogicTree",
+      "position": {
+        "x": -243.31287682411426,
+        "y": 641.9374307754986,
+        "width": 594,
+        "height": 492
+      },
+      "logicTree": {
+        "children": [
+          {
+            "id": "truefalse_fgokailt",
+            "label": "Dose does not exceed 75 mg per day",
+            "bindId": "truefalse_fgokailt",
+            "nodeType": "TrueFalse",
+            "logicType": "TrueFalseLeaf"
+          },
+          {
+            "id": "truefalse_eccmebua",
+            "label": "Must be over 18 years old",
+            "bindId": "truefalse_eccmebua",
+            "nodeType": "TrueFalse",
+            "logicType": "TrueFalseLeaf"
+          },
+          {
+            "children": [
+              {
+                "id": "truefalse_oxxpcfnr",
+                "label": "Documented trial and failure or intolerance to Triptan Medications",
+                "bindId": "truefalse_oxxpcfnr",
+                "nodeType": "TrueFalse",
+                "logicType": "TrueFalseLeaf"
+              },
+              {
+                "id": "truefalse_qacghosl",
+                "label": "Had a contraindication to all triptan drugs",
+                "bindId": "truefalse_qacghosl",
+                "nodeType": "TrueFalse",
+                "logicType": "TrueFalseLeaf"
+              }
+            ],
+            "logicType": "Or"
+          },
+          {
+            "id": "truefalse_jchchjtn",
+            "label": "Average number of migraine headaches experienced per month is confirmed by medical records",
+            "bindId": "truefalse_jchchjtn",
+            "nodeType": "TrueFalse",
+            "logicType": "TrueFalseLeaf"
+          },
+          {
+            "children": [
+              {
+                "id": "truefalse_dqljcgpf",
+                "label": "Patient has experienced an inadequate response (minimum two-month trial) to at least TWO prophylactic medications used for migraine headaches, each from a different pharmacologic class supported by the American Academy of Neurology",
+                "bindId": "truefalse_dqljcgpf",
+                "nodeType": "TrueFalse",
+                "logicType": "TrueFalseLeaf"
+              },
+              {
+                "id": "truefalse_hjuxzmnt",
+                "label": "Had a contraindication to all medications listed for migraine headache prophylaxis",
+                "bindId": "truefalse_hjuxzmnt",
+                "nodeType": "TrueFalse",
+                "logicType": "TrueFalseLeaf"
+              },
+              {
+                "id": "truefalse_ohayycev",
+                "label": "Is currently being treated with one of the following: Antiepileptic drugs, Beta-blockers, Antidepressants, Blood pressure drugs, Alpha-agonists, Antihistamines",
+                "bindId": "truefalse_ohayycev",
+                "nodeType": "TrueFalse",
+                "logicType": "TrueFalseLeaf"
+              }
+            ],
+            "logicType": "Or"
+          },
+          {
+            "id": "truefalse_yzxhbzgt",
+            "label": "Will not be used in combination with another oral CGRP inhibitor or 5-HT-1F agent",
+            "bindId": "truefalse_yzxhbzgt",
+            "nodeType": "TrueFalse",
+            "logicType": "TrueFalseLeaf"
+          }
+        ],
+        "logicType": "And"
+      }
+    },
+    "logictree_yvgierhd": {
+      "id": "logictree_yvgierhd",
+      "next": {
+        "type": "Binary",
+        "trueId": "emitdata_idcgzvhb",
+        "falseId": "contextdata_htblytiq",
+        "falseToHandle": "right",
+        "falseFromHandle": "bottom",
+        "trueFromHandle": "bottom",
+        "trueToHandle": "top"
+      },
+      "label": "Re-authorization for episodic treatment of migraine",
+      "bindId": "logictree_yvgierhd",
+      "nodeType": "LogicTree",
+      "position": {
+        "x": 1590.8288196476456,
+        "y": 650.0280089651843,
+        "width": 511,
+        "height": 251
+      },
+      "logicTree": {
+        "children": [
+          {
+            "id": "truefalse_ndwluxlk",
+            "label": "Dose does not exceed 75 mg given once every other day (limit of 16 tablets per month)",
+            "bindId": "truefalse_ndwluxlk",
+            "nodeType": "TrueFalse",
+            "logicType": "TrueFalseLeaf"
+          },
+          {
+            "id": "truefalse_dnadmail",
+            "label": "Documentation of positive clinical response to therapy (e.g., decrease in number of migraine headaches experienced per month compared to baseline)",
+            "bindId": "truefalse_dnadmail",
+            "nodeType": "TrueFalse",
+            "logicType": "TrueFalseLeaf"
+          },
+          {
+            "id": "truefalse_atqasuyc",
+            "label": "Not being used in combination with an injectable CGRP inhibitor.",
+            "bindId": "truefalse_atqasuyc",
+            "nodeType": "TrueFalse",
+            "logicType": "TrueFalseLeaf"
+          }
+        ],
+        "logicType": "And"
+      }
+    },
+    "truefalse_kzisoabg": {
+      "id": "truefalse_kzisoabg",
+      "next": {
+        "type": "Binary",
+        "trueId": "logictree_weqphgux",
+        "falseId": "logictree_xwpwnlfk",
+        "falseToHandle": "top",
+        "falseFromHandle": "left",
+        "trueFromHandle": "right",
+        "trueToHandle": "top"
+      },
+      "label": "Is re-authorization for acute treatment of migraine",
+      "bindId": "truefalse_kzisoabg",
+      "nodeType": "TrueFalse",
+      "position": {
+        "x": 248.70396227485935,
+        "y": 424.1733430869163,
+        "width": 125,
+        "height": 125
+      }
+    },
+    "truefalse_uaypuauu": {
+      "id": "truefalse_uaypuauu",
+      "next": {
+        "type": "Binary",
+        "trueId": "logictree_yvgierhd",
+        "falseId": "logictree_esfzqobl",
+        "trueToHandle": "top",
+        "trueFromHandle": "right",
+        "falseFromHandle": "left",
+        "falseToHandle": "top"
+      },
+      "label": "Is re-authorization for episodic treatment of migraine",
+      "bindId": "truefalse_uaypuauu",
+      "nodeType": "TrueFalse",
+      "position": {
+        "x": 1438.7873397300377,
+        "y": 425.196449627996,
+        "width": 131,
+        "height": 131
+      }
+    },
+    "contextdata_htblytiq": {
+      "id": "contextdata_htblytiq",
+      "next": {
+        "id": "end_radigxnl",
+        "type": "Unary"
+      },
+      "label": "Not eligibile for Nurtec",
+      "bindId": "contextdata_htblytiq",
+      "nodeType": "EmitData",
+      "position": {
+        "x": 786.0333078280693,
+        "y": 1308.3552667285232,
+        "width": 150,
+        "height": 72
+      },
+      "dataItems": []
+    },
+    "branchchoice_qgkouezc": {
+      "id": "branchchoice_qgkouezc",
+      "next": {
+        "type": "Multi",
+        "options": [
+          {
+            "id": "truefalse_kzisoabg",
+            "label": "Acute treatment of migraine",
+            "toId": "truefalse_kzisoabg",
+            "fromHandle": "bottom",
+            "toHandle": "top"
+          },
+          {
+            "id": "truefalse_uaypuauu",
+            "label": "Episodic treatment of migraine",
+            "toId": "truefalse_uaypuauu",
+            "fromHandle": "bottom",
+            "toHandle": "top"
+          }
+        ]
+      },
+      "label": "Choose treatment type",
+      "bindId": "branchchoice_qgkouezc",
+      "nodeType": "Branch",
+      "position": {
+        "x": 746.8863497499614,
+        "y": 231.77685801248202,
+        "width": 220,
+        "height": 92
+      }
+    },
+    "emitdata_idcgzvhb": {
+      "nodeType": "EmitData",
+      "id": "emitdata_idcgzvhb",
+      "bindId": "emitdata_idcgzvhb",
+      "label": "Eligible For Nurtec",
+      "next": {
+        "type": "Unary",
+        "id": "end_radigxnl",
+        "fromHandle": "bottom",
+        "toHandle": "top"
+      },
+      "position": {
+        "x": 515.7806968004372,
+        "y": 1304.8610482807292,
+        "width": 150,
+        "height": 80
+      }
+    }
+  }
+}

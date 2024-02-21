@@ -14,6 +14,6 @@ export class SeedDBController {
 
   @Post()
   runSeed() {
-    return this.seedService.runSeed()
+    return this.seedService.runSeed();
   }
 }

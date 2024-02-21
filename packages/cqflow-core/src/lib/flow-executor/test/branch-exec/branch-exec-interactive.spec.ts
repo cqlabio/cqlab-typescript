@@ -176,7 +176,7 @@ describe('Interactive Executor Branch node', () => {
     const step = result[1] as IBranchChoiceStep;
     expect(result[0].stepType).toEqual(ImplementationNodeTypeEnum.Start);
     expect(step.stepType).toEqual(ImplementationNodeTypeEnum.BranchChoice);
-    expect(step.evaluation?.selectedId).toEqual('option_2');
+    expect(step.evaluation?.selectedId).toEqual('option_2_asldkjaa9');
     expect(step.options.length).toEqual(1);
     expect(step.options[0].bindId).toEqual('option_2');
     expect(result[2].stepId).toEqual('end_2');
@@ -255,7 +255,7 @@ describe('Interactive Executor Branch node', () => {
       stepId: 'branch_1',
       answer: {
         answerType: AnswerTypeEnum.SingleOption,
-        selectedId: 'option_2',
+        selectedId: 'option_2_asldkjaa9',
       },
     });
 
@@ -266,7 +266,7 @@ describe('Interactive Executor Branch node', () => {
     const step = result[1] as IBranchChoiceStep;
     expect(result[0].stepType).toEqual(ImplementationNodeTypeEnum.Start);
     expect(step.stepType).toEqual(ImplementationNodeTypeEnum.BranchChoice);
-    expect(step.answer?.selectedId).toEqual('option_2');
+    expect(step.answer?.selectedId).toEqual('option_2_asldkjaa9');
     expect(step.options.length).toEqual(2);
     expect(result[2].stepId).toEqual('end_2');
   });

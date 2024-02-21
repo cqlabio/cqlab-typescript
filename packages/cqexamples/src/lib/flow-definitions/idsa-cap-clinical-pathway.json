@@ -1,0 +1,1109 @@
+{
+  "id": "b7226930-2776-4e52-aff6-9353cad9228b",
+  "createdAt": "2023-10-30T12:39:51.276Z",
+  "bindId": "idsa-cap-clinical-pathway",
+  "version": "0.0.1",
+  "type": "NonInteractive",
+  "nodes": {
+    "end_fsyugwyo": {
+      "id": "end_fsyugwyo",
+      "label": "End",
+      "bindId": "end_fsyugwyo",
+      "nodeType": "End",
+      "position": {
+        "x": 612.0145562862791,
+        "y": 3365.9132273604605,
+        "width": 60,
+        "height": 60
+      }
+    },
+    "end_ueaxgphp": {
+      "id": "end_ueaxgphp",
+      "label": "End",
+      "bindId": "end_ueaxgphp",
+      "nodeType": "End",
+      "position": {
+        "x": 675.5428112040946,
+        "y": 331.4309526180174,
+        "width": 60,
+        "height": 60
+      }
+    },
+    "note_gecwcabe": {
+      "id": "note_gecwcabe",
+      "label": "",
+      "bindId": "note_gecwcabe",
+      "contents": "Severe CAP is diagnosed when at least 1 major criteria or at least 3 minor criteria are met",
+      "nodeType": "Note",
+      "position": {
+        "x": -235.68645655039262,
+        "y": 538.4029605993844,
+        "width": 239,
+        "height": 135
+      }
+    },
+    "note_ikuruzgo": {
+      "id": "note_ikuruzgo",
+      "label": "unknown: Note",
+      "bindId": "note_ikuruzgo",
+      "contents": "First evaluate if the patient meets criteria for  Community Acquired Pneumonia (CAP). Patient meets initial requirements for CAP with pulmonary infiltrate, at least 1 Respiratory symptom of pneumonia, and one abnormal clinical finding",
+      "nodeType": "Note",
+      "position": {
+        "x": -295.8207598821258,
+        "y": -578.0254637014974,
+        "width": 337,
+        "height": 192
+      }
+    },
+    "note_maafgktz": {
+      "id": "note_maafgktz",
+      "label": "unknown: Note",
+      "bindId": "note_maafgktz",
+      "contents": "Diagnostic testing for community-acquired pneumonia (CAP) by disease severity",
+      "nodeType": "Note",
+      "position": {
+        "x": -417.1564635686792,
+        "y": 1145.770460544735,
+        "width": 242,
+        "height": 141
+      }
+    },
+    "note_ozhqpgcd": {
+      "id": "note_ozhqpgcd",
+      "label": "unknown: Note",
+      "bindId": "note_ozhqpgcd",
+      "contents": "Wait until diagnostic test results return and then start CAP Treatment",
+      "nodeType": "Note",
+      "position": {
+        "x": -281.7308183111334,
+        "y": 2410.391992908024,
+        "width": 239,
+        "height": 126
+      }
+    },
+    "note_totykfwx": {
+      "id": "note_totykfwx",
+      "label": "unknown: Note",
+      "bindId": "note_totykfwx",
+      "contents": "Evaluate whether inpatient or outpatient treatment is required",
+      "nodeType": "Note",
+      "position": {
+        "x": -177.70549018063844,
+        "y": 270.35765039951696,
+        "width": 211,
+        "height": 131
+      }
+    },
+    "start_fajoxxcx": {
+      "id": "start_fajoxxcx",
+      "next": {
+        "id": "multioption_ikejxhgv",
+        "type": "Unary",
+        "toHandle": "top",
+        "fromHandle": "bottom"
+      },
+      "label": "Start",
+      "bindId": "start_fajoxxcx",
+      "nodeType": "Start",
+      "position": {
+        "x": 189.1746127330457,
+        "y": -718.4406624922628,
+        "width": 60,
+        "height": 60
+      }
+    },
+    "action_dzbuttgp": {
+      "id": "action_dzbuttgp",
+      "min": "1",
+      "next": {
+        "id": "action_snyhjefv",
+        "type": "Unary",
+        "toHandle": "left",
+        "fromHandle": "right"
+      },
+      "label": "Beta Lactam",
+      "bindId": "action_dzbuttgp",
+      "actions": [
+        {
+          "id": "action_cuyrkggz",
+          "label": "Ampicillin/sulbactam",
+          "bindId": "action_cuyrkggz",
+          "actionType": "Prescribe"
+        },
+        {
+          "id": "action_ebkhuftg",
+          "label": "Ceftriaxone",
+          "bindId": "action_ebkhuftg",
+          "actionType": "Prescribe"
+        },
+        {
+          "id": "action_jzascycn",
+          "label": "Cefotaxime",
+          "bindId": "action_jzascycn",
+          "actionType": "Prescribe"
+        }
+      ],
+      "nodeType": "Action",
+      "position": {
+        "x": 83.5781181524826,
+        "y": 3107.5711486012015,
+        "width": 253,
+        "height": 147
+      }
+    },
+    "action_kcqlomsr": {
+      "id": "action_kcqlomsr",
+      "min": "1",
+      "next": {
+        "id": "action_snyhjefv",
+        "type": "Unary",
+        "toHandle": "top",
+        "fromHandle": "bottom"
+      },
+      "label": "Beta Lactam",
+      "bindId": "action_kcqlomsr",
+      "actions": [
+        {
+          "id": "action_chyosfaz",
+          "label": "Piperacillin/tazobactam",
+          "bindId": "action_chyosfaz",
+          "actionType": "Prescribe"
+        },
+        {
+          "id": "action_ptsckohl",
+          "label": "Cefepime",
+          "bindId": "action_ptsckohl",
+          "actionType": "Prescribe"
+        },
+        {
+          "id": "action_rluowgyb",
+          "label": "Ceftazidime",
+          "bindId": "action_rluowgyb",
+          "actionType": "Prescribe"
+        },
+        {
+          "id": "action_vkezootq",
+          "label": "Imipenem",
+          "bindId": "action_vkezootq",
+          "actionType": "Prescribe"
+        },
+        {
+          "id": "action_kmipsklu",
+          "label": "Meropenem",
+          "bindId": "action_kmipsklu",
+          "actionType": "Prescribe"
+        }
+      ],
+      "nodeType": "Action",
+      "position": {
+        "x": 524.4330317002665,
+        "y": 2810.2657165755377,
+        "width": 240,
+        "height": 190
+      }
+    },
+    "action_miedihsw": {
+      "id": "action_miedihsw",
+      "min": "1",
+      "next": {
+        "id": "logictree_warlsnad",
+        "type": "Unary",
+        "toHandle": "top",
+        "fromHandle": "bottom"
+      },
+      "label": "Order Culture",
+      "bindId": "action_miedihsw",
+      "actions": [
+        {
+          "id": "action_hvwxwtfy",
+          "label": "Respiratory Culture",
+          "bindId": "action_hvwxwtfy",
+          "actionType": "Order"
+        }
+      ],
+      "nodeType": "Action",
+      "position": {
+        "x": -449.6923842716602,
+        "y": 1768.31735278734,
+        "width": 202,
+        "height": 110
+      }
+    },
+    "action_nppxluch": {
+      "id": "action_nppxluch",
+      "max": null,
+      "min": 1,
+      "next": {
+        "id": "logictree_cpubzrdd",
+        "type": "Unary",
+        "toHandle": "top",
+        "fromHandle": "bottom"
+      },
+      "label": "MRSA swab",
+      "bindId": "action_nppxluch",
+      "actions": [
+        {
+          "id": "action_zapsrubc",
+          "label": "MRSA nasal swab (marker of MRSA colonization)",
+          "bindId": "action_zapsrubc",
+          "actionType": "Order"
+        }
+      ],
+      "nodeType": "Action",
+      "position": {
+        "x": 736.4567345019639,
+        "y": 1776.330626643286,
+        "width": 259,
+        "height": 115
+      }
+    },
+    "action_okaybrmt": {
+      "id": "action_okaybrmt",
+      "max": 1,
+      "min": "9",
+      "next": {
+        "id": "logictree_ruxspjij",
+        "type": "Unary",
+        "toHandle": "top",
+        "fromHandle": "bottom"
+      },
+      "label": "Severe CAP Diagnostic Tests",
+      "bindId": "action_okaybrmt",
+      "actions": [
+        {
+          "id": "action_byyjocas",
+          "label": "Blood Culture",
+          "bindId": "action_byyjocas",
+          "actionType": "Order"
+        },
+        {
+          "id": "action_wwzuhjhh",
+          "label": "Procalcitonin",
+          "bindId": "action_wwzuhjhh",
+          "actionType": "Order"
+        },
+        {
+          "id": "action_tibhmrrp",
+          "label": "Respiratory culture",
+          "bindId": "action_tibhmrrp",
+          "actionType": "Order"
+        },
+        {
+          "id": "action_uqvmalca",
+          "label": "Molecular testing for bacterial pathogens",
+          "bindId": "action_uqvmalca",
+          "actionType": "Order"
+        },
+        {
+          "id": "action_kbomoncr",
+          "label": "Influenza testing",
+          "bindId": "action_kbomoncr",
+          "actionType": "Order"
+        },
+        {
+          "id": "action_rcdydwzt",
+          "label": "COVID-19 testing ‡",
+          "bindId": "action_rcdydwzt",
+          "actionType": "Order"
+        },
+        {
+          "id": "action_ueizgtmx",
+          "label": "Expanded viral molecular panel (e.g., rhinovirus, enterovirus, RSV)",
+          "bindId": "action_ueizgtmx",
+          "actionType": "Order"
+        },
+        {
+          "id": "action_vozgozpo",
+          "label": "Legionella urine antigen test",
+          "bindId": "action_vozgozpo",
+          "actionType": "Order"
+        },
+        {
+          "id": "action_sfzepjuo",
+          "label": "Pneumococcus urine antigen test",
+          "bindId": "action_sfzepjuo",
+          "actionType": "Order"
+        }
+      ],
+      "nodeType": "Action",
+      "position": {
+        "x": 314.5434978554481,
+        "y": 1312.6791570186651,
+        "width": 288,
+        "height": 308
+      }
+    },
+    "action_snyhjefv": {
+      "id": "action_snyhjefv",
+      "min": "1",
+      "next": {
+        "id": "end_fsyugwyo",
+        "type": "Unary",
+        "toHandle": "top",
+        "fromHandle": "bottom"
+      },
+      "label": "Choose one from below",
+      "bindId": "action_snyhjefv",
+      "actions": [
+        {
+          "id": "action_udfnusrp",
+          "label": "Azithromycin",
+          "bindId": "action_udfnusrp",
+          "actionType": "Prescribe"
+        },
+        {
+          "id": "action_totwcnlv",
+          "label": "Clarithromycin",
+          "bindId": "action_totwcnlv",
+          "actionType": "Prescribe"
+        },
+        {
+          "id": "action_frljopgq",
+          "label": "Doxycycline",
+          "bindId": "action_frljopgq",
+          "actionType": "Prescribe"
+        },
+        {
+          "id": "action_gvqffegn",
+          "label": "Levofloxacin",
+          "bindId": "action_gvqffegn",
+          "actionType": "Prescribe"
+        },
+        {
+          "id": "action_ewwllujp",
+          "label": "Moxifloxacin",
+          "bindId": "action_ewwllujp",
+          "actionType": "Prescribe"
+        }
+      ],
+      "nodeType": "Action",
+      "position": {
+        "x": 520.4948280507629,
+        "y": 3095.6856078295777,
+        "width": 247,
+        "height": 182
+      }
+    },
+    "action_tekoxfmh": {
+      "id": "action_tekoxfmh",
+      "max": null,
+      "min": "4",
+      "next": {
+        "id": "logictree_xtlnnksb",
+        "type": "Unary",
+        "toHandle": "top",
+        "fromHandle": "bottom"
+      },
+      "label": "Non-Severe CAP Diagnostic Tests",
+      "bindId": "action_tekoxfmh",
+      "actions": [
+        {
+          "id": "action_tlxfihxn",
+          "label": "Procalcitonin",
+          "bindId": "action_tlxfihxn",
+          "actionType": "Order"
+        },
+        {
+          "id": "action_cjfhfxvi",
+          "label": "Influenza testing",
+          "bindId": "action_cjfhfxvi",
+          "actionType": "Order"
+        },
+        {
+          "id": "action_vzbzajbm",
+          "label": "COVID-19 testing",
+          "bindId": "action_vzbzajbm",
+          "actionType": "Order"
+        },
+        {
+          "id": "action_zzwkerhc",
+          "label": "Legionella urine antigen test",
+          "bindId": "action_zzwkerhc",
+          "actionType": "Order"
+        }
+      ],
+      "nodeType": "Action",
+      "position": {
+        "x": -115.41997400683533,
+        "y": 1313.3209854265338,
+        "width": 245,
+        "height": 163
+      }
+    },
+    "action_vnjwzvfz": {
+      "id": "action_vnjwzvfz",
+      "min": "1",
+      "next": {
+        "id": "logictree_krseqesf",
+        "type": "Unary",
+        "toHandle": "top",
+        "fromHandle": "bottom"
+      },
+      "label": "Prescribe MRSA meds",
+      "bindId": "action_vnjwzvfz",
+      "actions": [
+        {
+          "id": "action_qemgvcsw",
+          "label": "Vancomycin",
+          "bindId": "action_qemgvcsw",
+          "actionType": "Prescribe"
+        },
+        {
+          "id": "action_mmgijizx",
+          "label": "Linezolid",
+          "bindId": "action_mmgijizx",
+          "actionType": "Prescribe"
+        }
+      ],
+      "nodeType": "Action",
+      "position": {
+        "x": 527.8615366286584,
+        "y": 2471.548103580087,
+        "width": 207,
+        "height": 121
+      }
+    },
+    "action_xxqcyywf": {
+      "id": "action_xxqcyywf",
+      "min": "1",
+      "next": {
+        "id": "logictree_cpubzrdd",
+        "type": "Unary",
+        "toHandle": "top",
+        "fromHandle": "bottom"
+      },
+      "label": "Order MRSA",
+      "bindId": "action_xxqcyywf",
+      "actions": [
+        {
+          "id": "action_ltullydc",
+          "label": "MRSA nasal swab (marker of MRSA colonization)",
+          "bindId": "action_ltullydc",
+          "actionType": "Order"
+        }
+      ],
+      "nodeType": "Action",
+      "position": {
+        "x": -470.575602699745,
+        "y": 2062.087950132807,
+        "width": 242,
+        "height": 118
+      }
+    },
+    "emitdata_icjknujc": {
+      "id": "emitdata_icjknujc",
+      "next": {
+        "id": "action_okaybrmt",
+        "type": "Unary",
+        "toHandle": "top",
+        "fromHandle": "bottom"
+      },
+      "label": "Severe CAP",
+      "bindId": "emitdata_nitmvkse",
+      "nodeType": "EmitData",
+      "position": {
+        "x": 378.68809305771174,
+        "y": 1147.9565854561133,
+        "width": 150,
+        "height": 80
+      }
+    },
+    "emitdata_nitmvkse": {
+      "id": "emitdata_nitmvkse",
+      "next": {
+        "id": "action_tekoxfmh",
+        "type": "Unary",
+        "toHandle": "top",
+        "fromHandle": "bottom"
+      },
+      "label": "Non-Severe CAP",
+      "bindId": "emitdata_nitmvkse",
+      "nodeType": "EmitData",
+      "position": {
+        "x": -71.6488080062885,
+        "y": 1149.6775221987782,
+        "width": 150,
+        "height": 80
+      }
+    },
+    "emitdata_qbdoliza": {
+      "id": "emitdata_qbdoliza",
+      "next": {
+        "id": "truefalse_wqlkealj",
+        "type": "Unary",
+        "toHandle": "top",
+        "fromHandle": "bottom"
+      },
+      "label": "Perform chest imaging",
+      "bindId": "emitdata_qbdoliza",
+      "nodeType": "EmitData",
+      "position": {
+        "x": 135.2624382016504,
+        "y": -128.67157890778668,
+        "width": 155,
+        "height": 73
+      }
+    },
+    "emitdata_ttbhdayo": {
+      "id": "emitdata_ttbhdayo",
+      "next": {
+        "id": "end_ueaxgphp",
+        "type": "Unary",
+        "toHandle": "left",
+        "fromHandle": "right"
+      },
+      "label": "Consider Outpatient Treatment",
+      "bindId": "emitdata_ttbhdayo",
+      "nodeType": "EmitData",
+      "position": {
+        "x": 441.54710638336087,
+        "y": 319.48055986340825,
+        "width": 150,
+        "height": 87
+      }
+    },
+    "emitdata_ydxugath": {
+      "id": "emitdata_ydxugath",
+      "next": {
+        "id": "end_ueaxgphp",
+        "type": "Unary",
+        "toHandle": "top",
+        "fromHandle": "right"
+      },
+      "label": "Patient does not meet requirements for Community Acquired Pneumonia ",
+      "bindId": "emitdata_ydxugath",
+      "nodeType": "EmitData",
+      "position": {
+        "x": 440.29778254563166,
+        "y": 40.8760503868545,
+        "width": 168,
+        "height": 116
+      }
+    },
+    "formfield_xfnxpkdv": {
+      "id": "formfield_xfnxpkdv",
+      "max": null,
+      "min": "3",
+      "next": {
+        "id": "logictree_rquhwdrl",
+        "type": "Binary",
+        "trueId": "emitdata_icjknujc",
+        "falseId": "emitdata_nitmvkse",
+        "toHandle": "top",
+        "fromHandle": "bottom",
+        "trueToHandle": "left",
+        "falseToHandle": "right",
+        "trueFromHandle": "bottom",
+        "falseFromHandle": "bottom"
+      },
+      "label": "Minor Criteria for severe community-acquired pneumonia",
+      "bindId": "formfield_xfnxpkdv",
+      "options": [
+        {
+          "id": "option_zmbtoafw",
+          "label": "Respiratory rate ≥ 30 breaths/min",
+          "bindId": "option_zmbtoafw"
+        },
+        {
+          "id": "option_iyvowbqo",
+          "label": "PaO 2 /FIO 2 ratio ≤ 250 *",
+          "bindId": "option_iyvowbqo"
+        },
+        {
+          "id": "option_xifhujwt",
+          "label": "Multilobar (i.e., ≥ 2) infiltrates",
+          "bindId": "option_xifhujwt"
+        },
+        {
+          "id": "option_qflpqqlg",
+          "label": "Confusion/disorientation",
+          "bindId": "option_qflpqqlg"
+        },
+        {
+          "id": "option_iwzikyzz",
+          "label": "Uremia (blood urea nitrogen level ≥ 20 mg/dl)",
+          "bindId": "option_iwzikyzz"
+        },
+        {
+          "id": "option_cxrqgtkz",
+          "label": "Leukopenia (white blood cell count < 4,000 cells/µl) †",
+          "bindId": "option_cxrqgtkz"
+        },
+        {
+          "id": "option_hynzqedt",
+          "label": "Thrombocytopenia (platelet count < 100,000/µl)",
+          "bindId": "option_hynzqedt"
+        },
+        {
+          "id": "option_jufllezr",
+          "label": "Hypothermia (core temperature < 36 o C)",
+          "bindId": "option_jufllezr"
+        },
+        {
+          "id": "option_jtlvihzc",
+          "label": "Hypotension requiring aggressive fluid resuscitation",
+          "bindId": "option_jtlvihzc"
+        }
+      ],
+      "nodeType": "MultiOption",
+      "position": {
+        "x": 35.88660907779331,
+        "y": 774.0357540182904,
+        "width": 366,
+        "height": 246
+      }
+    },
+    "logictree_cpubzrdd": {
+      "id": "logictree_cpubzrdd",
+      "next": {
+        "type": "Binary",
+        "trueId": "action_vnjwzvfz",
+        "falseId": "logictree_krseqesf",
+        "trueToHandle": "left",
+        "falseToHandle": "top",
+        "trueFromHandle": "right",
+        "falseFromHandle": "bottom"
+      },
+      "label": "MSRA / Severe CAP / Recent hospitalization",
+      "bindId": "logictree_cpubzrdd",
+      "nodeType": "LogicTree",
+      "position": {
+        "x": 24.860480054168875,
+        "y": 2410.175658580575,
+        "width": 373,
+        "height": 249
+      },
+      "logicTree": {
+        "children": [
+          {
+            "id": "truefalse_jrsaqnpe",
+            "label": "History of\nMRSA\ncolonization or\ninfection at\nany site within\n1 year",
+            "bindId": "truefalse_jrsaqnpe",
+            "nodeType": "TrueFalse",
+            "logicType": "TrueFalseLeaf"
+          },
+          {
+            "id": "truefalse_nfeizssc",
+            "label": "MRSA nasal PCR positive",
+            "bindId": "truefalse_nfeizssc",
+            "nodeType": "TrueFalse",
+            "logicType": "TrueFalseLeaf"
+          },
+          {
+            "children": [
+              {
+                "id": "truefalse_btievhsn",
+                "label": "Severe CAP",
+                "bindId": "truefalse_btievhsn",
+                "nodeType": "TrueFalse",
+                "logicType": "TrueFalseLeaf"
+              },
+              {
+                "id": "truefalse_ttrvsghe",
+                "label": "Recent hospitalization and parenteral antibiotics in the last 90 days",
+                "bindId": "truefalse_ttrvsghe",
+                "nodeType": "TrueFalse",
+                "logicType": "TrueFalseLeaf"
+              }
+            ],
+            "logicType": "And"
+          }
+        ],
+        "logicType": "Or"
+      }
+    },
+    "logictree_gbtfjhbm": {
+      "id": "logictree_gbtfjhbm",
+      "next": {
+        "type": "Binary",
+        "trueId": "multioption_aocnkxyo",
+        "falseId": "emitdata_ttbhdayo",
+        "trueToHandle": "top",
+        "falseToHandle": "left",
+        "trueFromHandle": "bottom",
+        "falseFromHandle": "right"
+      },
+      "label": "Is Inpatient treatment required",
+      "bindId": "logictree_gbtfjhbm",
+      "nodeType": "LogicTree",
+      "position": {
+        "x": 100.37383792237961,
+        "y": 267.80206145295466,
+        "width": 227,
+        "height": 191
+      },
+      "logicTree": {
+        "children": [
+          {
+            "id": "truefalse_zeqxdxzo",
+            "label": "Hypoxia",
+            "bindId": "truefalse_zeqxdxzo",
+            "nodeType": "TrueFalse",
+            "logicType": "TrueFalseLeaf"
+          },
+          {
+            "id": "truefalse_utsecwyq",
+            "label": "High CURB-65",
+            "bindId": "truefalse_utsecwyq",
+            "nodeType": "TrueFalse",
+            "logicType": "TrueFalseLeaf"
+          },
+          {
+            "id": "truefalse_vulhmxob",
+            "label": "PSI",
+            "bindId": "truefalse_vulhmxob",
+            "nodeType": "TrueFalse",
+            "logicType": "TrueFalseLeaf"
+          },
+          {
+            "id": "truefalse_drysrglq",
+            "label": "DRIP Score",
+            "bindId": "truefalse_drysrglq",
+            "nodeType": "TrueFalse",
+            "logicType": "TrueFalseLeaf"
+          }
+        ],
+        "logicType": "Or"
+      }
+    },
+    "logictree_krseqesf": {
+      "id": "logictree_krseqesf",
+      "next": {
+        "type": "Binary",
+        "trueId": "action_kcqlomsr",
+        "falseId": "action_dzbuttgp",
+        "trueToHandle": "left",
+        "falseToHandle": "top",
+        "trueFromHandle": "right",
+        "falseFromHandle": "bottom"
+      },
+      "label": "Pseudomonas / Severe CAP / Recent hospitalization",
+      "bindId": "logictree_krseqesf",
+      "nodeType": "LogicTree",
+      "position": {
+        "x": 25.49435553214539,
+        "y": 2778.2987238615747,
+        "width": 370,
+        "height": 255
+      },
+      "logicTree": {
+        "children": [
+          {
+            "id": "truefalse_uewwbkbu",
+            "label": "History of P. aeruginosa colonization or\ninfection at any site within 1 year",
+            "bindId": "truefalse_uewwbkbu",
+            "nodeType": "TrueFalse",
+            "logicType": "TrueFalseLeaf"
+          },
+          {
+            "id": "truefalse_cjghnuof",
+            "label": "Advanced structural lung disease",
+            "bindId": "truefalse_cjghnuof",
+            "nodeType": "TrueFalse",
+            "logicType": "TrueFalseLeaf"
+          },
+          {
+            "children": [
+              {
+                "id": "truefalse_qevnbiqw",
+                "label": "Severe CAP",
+                "bindId": "truefalse_qevnbiqw",
+                "nodeType": "TrueFalse",
+                "logicType": "TrueFalseLeaf"
+              },
+              {
+                "id": "truefalse_onbepnsk",
+                "label": "Recent hospitalization and parenteral antibiotics in the last\n90 days",
+                "bindId": "truefalse_onbepnsk",
+                "nodeType": "TrueFalse",
+                "logicType": "TrueFalseLeaf"
+              }
+            ],
+            "logicType": "And"
+          }
+        ],
+        "logicType": "Or"
+      }
+    },
+    "logictree_ruxspjij": {
+      "id": "logictree_ruxspjij",
+      "next": {
+        "type": "Binary",
+        "trueId": "action_nppxluch",
+        "falseId": "logictree_cpubzrdd",
+        "trueToHandle": "left",
+        "falseToHandle": "top",
+        "trueFromHandle": "right",
+        "falseFromHandle": "bottom"
+      },
+      "label": "Check for MSRA Coverage",
+      "bindId": "logictree_cpubzrdd",
+      "nodeType": "LogicTree",
+      "position": {
+        "x": 287.1165577665771,
+        "y": 1722.6029028549508,
+        "width": 345,
+        "height": 224
+      },
+      "logicTree": {
+        "children": [
+          {
+            "id": "truefalse_pjagpmcl",
+            "label": "Hospitalization and parenteral antibiotics in\nthe last 90 days",
+            "bindId": "truefalse_jrsaqnpe",
+            "nodeType": "TrueFalse",
+            "logicType": "TrueFalseLeaf"
+          },
+          {
+            "id": "truefalse_ndmvctec",
+            "label": "History of MRSA colonization or infection at\nany site within 1 year",
+            "bindId": "truefalse_nfeizssc",
+            "nodeType": "TrueFalse",
+            "logicType": "TrueFalseLeaf"
+          },
+          {
+            "id": "truefalse_tdiildnr",
+            "label": "Anti-MRSA coverage is intiated",
+            "bindId": "truefalse_tdiildnr",
+            "nodeType": "TrueFalse",
+            "logicType": "TrueFalseLeaf"
+          }
+        ],
+        "logicType": "Or"
+      }
+    },
+    "logictree_warlsnad": {
+      "id": "logictree_warlsnad",
+      "next": {
+        "type": "Binary",
+        "trueId": "action_xxqcyywf",
+        "falseId": "logictree_cpubzrdd",
+        "trueToHandle": "right",
+        "falseToHandle": "top",
+        "trueFromHandle": "left",
+        "falseFromHandle": "bottom"
+      },
+      "label": "Check for MSRA Coverage",
+      "bindId": "logictree_cpubzrdd",
+      "nodeType": "LogicTree",
+      "position": {
+        "x": -137.03487180675415,
+        "y": 2046.6096482640737,
+        "width": 283,
+        "height": 161
+      },
+      "logicTree": {
+        "children": [
+          {
+            "id": "truefalse_gdwioltf",
+            "label": "History of\nMRSA\ncolonization or\ninfection at\nany site within\n1 year",
+            "bindId": "truefalse_jrsaqnpe",
+            "nodeType": "TrueFalse",
+            "logicType": "TrueFalseLeaf"
+          },
+          {
+            "id": "truefalse_nuyiamsc",
+            "label": "MRSA nasal PCR positive",
+            "bindId": "truefalse_nfeizssc",
+            "nodeType": "TrueFalse",
+            "logicType": "TrueFalseLeaf"
+          }
+        ],
+        "logicType": "Or"
+      }
+    },
+    "logictree_xtlnnksb": {
+      "id": "logictree_xtlnnksb",
+      "next": {
+        "type": "Binary",
+        "trueId": "action_miedihsw",
+        "falseId": "logictree_warlsnad",
+        "trueToHandle": "right",
+        "falseToHandle": "top",
+        "trueFromHandle": "left",
+        "falseFromHandle": "bottom"
+      },
+      "label": "Respiratory culture not routinely recommended unless",
+      "bindId": "logictree_xtlnnksb",
+      "nodeType": "LogicTree",
+      "position": {
+        "x": -162.2419439171655,
+        "y": 1718.2645516175078,
+        "width": 345,
+        "height": 215
+      },
+      "logicTree": {
+        "children": [
+          {
+            "id": "truefalse_rzfbnxqu",
+            "label": "Hospitalization and parenteral antibiotics in\nthe last 90 days",
+            "bindId": "truefalse_rzfbnxqu",
+            "nodeType": "TrueFalse",
+            "logicType": "TrueFalseLeaf"
+          },
+          {
+            "id": "truefalse_zvlxxhkm",
+            "label": "Anti-MRSA or anti- P. aeruginosa coverage is\nintiated",
+            "bindId": "truefalse_zvlxxhkm",
+            "nodeType": "TrueFalse",
+            "logicType": "TrueFalseLeaf"
+          },
+          {
+            "id": "truefalse_ngbprzqz",
+            "label": "Advanced structural lung disease",
+            "bindId": "truefalse_ngbprzqz",
+            "nodeType": "TrueFalse",
+            "logicType": "TrueFalseLeaf"
+          }
+        ],
+        "logicType": "And"
+      }
+    },
+    "truefalse_wqlkealj": {
+      "id": "truefalse_wqlkealj",
+      "next": {
+        "type": "Binary",
+        "trueId": "logictree_gbtfjhbm",
+        "falseId": "emitdata_ydxugath",
+        "trueToHandle": "top",
+        "falseToHandle": "left",
+        "trueFromHandle": "bottom",
+        "falseFromHandle": "right"
+      },
+      "label": "Newly recognized pulmonary infiltrate(s) on chest imaging",
+      "bindId": "truefalse_wqlkealj",
+      "nodeType": "TrueFalse",
+      "position": {
+        "x": 143.54573690370955,
+        "y": 30.631147647895546,
+        "width": 137,
+        "height": 137
+      }
+    },
+    "multioption_aocnkxyo": {
+      "id": "multioption_aocnkxyo",
+      "max": null,
+      "min": "1",
+      "next": {
+        "type": "Binary",
+        "trueId": "emitdata_icjknujc",
+        "falseId": "formfield_xfnxpkdv",
+        "trueToHandle": "top",
+        "falseToHandle": "top",
+        "trueFromHandle": "right",
+        "falseFromHandle": "bottom"
+      },
+      "label": "Major Criteria for severe community-acquired pneumonia",
+      "bindId": "multioption_aocnkxyo",
+      "options": [
+        {
+          "id": "option_fuygemmn",
+          "label": "Septic shock with need for vasopressors",
+          "bindId": "option_fuygemmn"
+        },
+        {
+          "id": "option_cczsiwta",
+          "label": "Respiratory failure requiring mechanical ventilation",
+          "bindId": "option_cczsiwta"
+        }
+      ],
+      "nodeType": "MultiOption",
+      "position": {
+        "x": 54.0605216121545,
+        "y": 540.8333634203359,
+        "width": 336,
+        "height": 119
+      }
+    },
+    "multioption_ikejxhgv": {
+      "id": "multioption_ikejxhgv",
+      "max": 1,
+      "min": 1,
+      "next": {
+        "type": "Binary",
+        "trueId": "multioption_qyhujnhg",
+        "falseId": "emitdata_ydxugath",
+        "trueToHandle": "top",
+        "falseToHandle": "top",
+        "trueFromHandle": "bottom",
+        "falseFromHandle": "right"
+      },
+      "label": "Respiratory Symptoms of Pneumonia",
+      "bindId": "multioption_ikejxhgv",
+      "options": [
+        {
+          "id": "option_lpyxozcy",
+          "label": "New or increased cough",
+          "bindId": "option_lpyxozcy"
+        },
+        {
+          "id": "option_kqnxxjyy",
+          "label": "New or increased sputum production",
+          "bindId": "option_kqnxxjyy"
+        },
+        {
+          "id": "option_odrzskfe",
+          "label": "Dyspnea",
+          "bindId": "option_odrzskfe"
+        },
+        {
+          "id": "option_hhuwxwbf",
+          "label": "Pleuritic chest pain",
+          "bindId": "option_hhuwxwbf"
+        }
+      ],
+      "nodeType": "MultiOption",
+      "position": {
+        "x": 89.1619459345078,
+        "y": -579.9509723822703,
+        "width": 261,
+        "height": 156
+      }
+    },
+    "multioption_qyhujnhg": {
+      "id": "multioption_qyhujnhg",
+      "max": 1,
+      "min": 1,
+      "next": {
+        "type": "Binary",
+        "trueId": "emitdata_qbdoliza",
+        "falseId": "emitdata_ydxugath",
+        "trueToHandle": "top",
+        "falseToHandle": "top",
+        "trueFromHandle": "bottom",
+        "falseFromHandle": "right"
+      },
+      "label": "Other Signs or Findings of Pneumonia",
+      "bindId": "multioption_qyhujnhg",
+      "options": [
+        {
+          "id": "option_tevneetl",
+          "label": "Abnormal lung sounds (rhonchi or rales)",
+          "bindId": "option_tevneetl"
+        },
+        {
+          "id": "option_dwvvqkmn",
+          "label": "Fever (≥100.4 °F)",
+          "bindId": "option_dwvvqkmn"
+        },
+        {
+          "id": "option_nsptofyl",
+          "label": "Leukocytosis or unexplained bandemia (above normal limits for laboratory)",
+          "bindId": "option_nsptofyl"
+        },
+        {
+          "id": "option_boyouhzc",
+          "label": "Hypoxia (< 90%)",
+          "bindId": "option_boyouhzc"
+        }
+      ],
+      "nodeType": "MultiOption",
+      "position": {
+        "x": 82.6471022667613,
+        "y": -371.19639981177846,
+        "width": 263,
+        "height": 175
+      }
+    }
+  }
+}

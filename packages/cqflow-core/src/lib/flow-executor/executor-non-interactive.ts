@@ -40,7 +40,10 @@ export async function executeNonInteractiveFlow(
   // A context should have fresh steps each times its used
   context.clearSteps();
 
-  const nodes = compileNodes(flowImplementation, context.getFlowDefinition());
+  const nodes = compileNodes(
+    flowImplementation,
+    await context.getFlowDefinition()
+  );
 
   const startNode = Object.values(nodes).find(
     (node) => node instanceof StartNode
@@ -99,7 +102,7 @@ export async function executeStartNode(
   const step: IStartStep = {
     stepType: ImplementationNodeTypeEnum.Start,
     stepId: node.getDefinition().id,
-    flowDefinitionId: context.getFlowDefinition().id,
+    flowDefinitionId: (await context.getFlowDefinition()).id,
     nodeDefinition: node.getDefinition(),
     initialData: context.getInitialData(),
     label: await node.getLabel(context),
@@ -115,7 +118,7 @@ export async function executeEndNode(
   const step: IEndStep = {
     stepType: ImplementationNodeTypeEnum.End,
     stepId: node.getDefinition().id,
-    flowDefinitionId: context.getFlowDefinition().id,
+    flowDefinitionId: (await context.getFlowDefinition()).id,
     nodeDefinition: node.getDefinition(),
     label: await node.getLabel(context),
   };
@@ -130,7 +133,7 @@ export async function executeNarrativeNode(
   const step: INarrativeStep = {
     stepType: ImplementationNodeTypeEnum.Narrative,
     stepId: node.getDefinition().id,
-    flowDefinitionId: context.getFlowDefinition().id,
+    flowDefinitionId: (await context.getFlowDefinition()).id,
     nodeDefinition: node.getDefinition(),
     label: await node.getLabel(context),
     narrative: node.getDefinition().label || '',
@@ -146,7 +149,7 @@ export async function executeExecNode(
   const step: IExecStep = {
     stepType: ImplementationNodeTypeEnum.Exec,
     stepId: node.getDefinition().id,
-    flowDefinitionId: context.getFlowDefinition().id,
+    flowDefinitionId: (await context.getFlowDefinition()).id,
     nodeDefinition: node.getDefinition(),
     label: await node.getLabel(context),
     evaluation: await node.evaluate(context),
@@ -169,7 +172,7 @@ export async function executeEmitDataNode(
   const step: IEmitDataStep = {
     stepType: ImplementationNodeTypeEnum.EmitData,
     stepId: node.getDefinitionId(),
-    flowDefinitionId: context.getFlowDefinition().id,
+    flowDefinitionId: (await context.getFlowDefinition()).id,
     nodeDefinition: node.getDefinition(),
     label: await node.getLabel(context),
     contextData: await node.getContextData(context),

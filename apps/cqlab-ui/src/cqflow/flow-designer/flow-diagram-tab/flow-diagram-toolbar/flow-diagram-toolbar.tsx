@@ -58,7 +58,7 @@ export const NODES = [
       {
         label: 'Sub-Flow',
         nodeType: DefinitionNodeTypeEnum.SubFlow,
-        disabled: true,
+        // disabled: true,
         description:
           'A Sub-Flow is a flow embedded inside another flow. It can be used to modularize a flow diagram, and to create reusable components.',
       },
@@ -117,6 +117,7 @@ export const NODES = [
       {
         label: 'Custom Form',
         nodeType: DefinitionNodeTypeEnum.CustomForm,
+        disabled: true,
         description:
           'A fully embedable customizable form. The form itself is built on the backend flow implementation server, and is NOT built inside this UI editor. This generally serves as input for complex and dynamic form inputs such as lab results.',
       },

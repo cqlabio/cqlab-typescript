@@ -24,7 +24,7 @@ import { MockDataController } from './routes/mock-data.controller';
 import { ServeStaticModule } from '@nestjs/serve-static';
 
 import { SeedDBController } from './routes/seed-db.controller';
-import { SeedDBService  } from './routes/seed-db.service';
+import { SeedDBService } from './routes/seed-db.service';
 
 @Module({
   imports: [
@@ -52,14 +52,14 @@ import { SeedDBService  } from './routes/seed-db.service';
     LibraryController,
     VocabularyController,
     MockDataController,
-    SeedDBController
+    SeedDBController,
   ],
   providers: [
     FlowService,
     FlowImplementationService,
     FlowInstanceService,
     LibraryService,
-    SeedDBService
+    SeedDBService,
   ],
 })
 export class AppModule {}

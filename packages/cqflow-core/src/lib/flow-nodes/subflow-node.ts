@@ -20,7 +20,7 @@ export class SubFlowNode<C extends FlowContext> extends NextNode<C> {
     return def?.subFlowId || null;
   }
 
-  getSubFlowContext(context: C): FlowContext | null {
+  async getSubFlowContext(context: C): Promise<FlowContext | null> {
     return null;
   }
 }

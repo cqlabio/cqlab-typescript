@@ -62,49 +62,39 @@ type InputNodeProps = NodeProps<FlowNodeData<ITrueFalseNode>>;
 export const TrueFalseDiagramNode = memo(({ data }: InputNodeProps) => {
   const { node, editMode, validationStatus } = data;
 
-  const { selectedNodeId } = useContext(FlowDiagramContext);
+  const { selectedNodeId, creatingEdge } = useContext(FlowDiagramContext);
 
   const connectionNodeId = useStore((state) => state.connectionNodeId);
 
   // const isConnecting = !!connectionNodeId;
 
   const isTarget = connectionNodeId && connectionNodeId !== node.id;
+  const isConnectableStart = creatingEdge?.sourceId === node.id;
+
   // const label = isTarget ? 'Drop here' : 'Drag to connect';
 
   // const selectedNodeId = useFlowStore((state) => state.selectedNodeId);
 
-  const reactFlowStore = useStoreApi();
+  // const reactFlowStore = useStoreApi();
 
   const isSelected = selectedNodeId === node.id;
 
-  const clickOnTrue = () => {
-    console.log({
-      nodeId: node.id,
-      type: 'target',
-      handleId: 'hello',
-    });
+  // const clickOnTrue = () => {
+  //   console.log({
+  //     nodeId: node.id,
+  //     type: 'target',
+  //     handleId: 'hello',
+  //   });
 
-    reactFlowStore.setState({
-      connectionNodeId: node.id,
-      connectionStartHandle: {
-        nodeId: node.id,
-        type: 'source',
-        handleId: 'hello',
-      },
-    });
-
-    // console.log('clickOnTrue', edges);
-
-    // setEdges([
-    //   ...edges,
-    //   {
-    //     id: 'something',
-    //     source: "start_bwvtytlg",
-    //    type: 'smoothstep',
-    //    target: 'exec_wcfcllpa'
-    //   }
-    // ])
-  };
+  //   reactFlowStore.setState({
+  //     connectionNodeId: node.id,
+  //     connectionStartHandle: {
+  //       nodeId: node.id,
+  //       type: 'source',
+  //       handleId: 'hello',
+  //     },
+  //   });
+  // };
 
   // const isImplemented = !!flowImplementation?.nodeBindings[node.id];
 
@@ -189,7 +179,7 @@ export const TrueFalseDiagramNode = memo(({ data }: InputNodeProps) => {
             position: 'absolute',
             left: '2px',
             // top: '-100px'
-            opacity: isTarget ? 1 : 0,
+            opacity: isConnectableStart || isTarget ? 1 : 0,
           }}
         />
 
@@ -200,7 +190,7 @@ export const TrueFalseDiagramNode = memo(({ data }: InputNodeProps) => {
           isConnectable={true}
           style={{
             ...handleStyle,
-            opacity: isTarget ? 1 : 0,
+            opacity: isConnectableStart || isTarget ? 1 : 0,
             position: 'absolute',
             top: 'reset',
             bottom: '-6px',
@@ -217,7 +207,7 @@ export const TrueFalseDiagramNode = memo(({ data }: InputNodeProps) => {
           isConnectable={true}
           style={{
             ...handleStyle,
-            opacity: isTarget ? 1 : 0,
+            opacity: isConnectableStart || isTarget ? 1 : 0,
 
             position: 'absolute',
             top: 0,
@@ -232,7 +222,7 @@ export const TrueFalseDiagramNode = memo(({ data }: InputNodeProps) => {
           isConnectable={true}
           style={{
             ...handleStyle,
-            opacity: isTarget ? 1 : 0,
+            opacity: isConnectableStart || isTarget ? 1 : 0,
 
             position: 'absolute',
             bottom: '-12px',
@@ -297,7 +287,10 @@ export const TrueFalseDiagramNode = memo(({ data }: InputNodeProps) => {
             transform: 'rotate(315deg)',
           }}
         >
-          <TrueFalsePicker isSelected={isSelected} />
+          <TrueFalsePicker
+            isSelected={isSelected && !isConnectableStart}
+            sourceId={node.id}
+          />
         </Box>
 
         {editMode && (

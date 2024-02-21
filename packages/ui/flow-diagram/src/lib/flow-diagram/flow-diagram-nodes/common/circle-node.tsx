@@ -43,11 +43,15 @@ export const CircleDiagramNode = ({
 
   // const selectedNodeId = useFlowStore((state) => state.selectedNodeId);
   const connectionNodeId = useStore((state) => state.connectionNodeId);
-  const { selectedNodeId } = useContext(FlowDiagramContext);
+  const { selectedNodeId, creatingEdge } = useContext(FlowDiagramContext);
 
   const isSelected = selectedNodeId === node.id;
   const isTarget = connectionNodeId && connectionNodeId !== node.id;
-  const showDropBox = displayDropBox && isTarget;
+  const isConnectableStart = creatingEdge?.sourceId === node.id;
+
+  // const showDropBox = displayDropBox && isTarget;
+
+  // console.log('aslkjjahsdal 2', connectionNodeId)
 
   return (
     <Paper
@@ -74,7 +78,7 @@ export const CircleDiagramNode = ({
           style={{
             ...handleStyle,
             top: '-6px',
-            opacity: isTarget ? 1 : 0,
+            opacity: isConnectableStart || isTarget ? 1 : 0,
           }}
         />
 
@@ -86,7 +90,7 @@ export const CircleDiagramNode = ({
           style={{
             ...handleStyle,
             bottom: '-6px',
-            opacity: isTarget ? 1 : 0,
+            opacity: isConnectableStart || isTarget ? 1 : 0,
           }}
         />
 
@@ -98,7 +102,7 @@ export const CircleDiagramNode = ({
           style={{
             ...handleStyle,
             right: '-6px',
-            opacity: isTarget ? 1 : 0,
+            opacity: isConnectableStart || isTarget ? 1 : 0,
           }}
         />
 
@@ -110,7 +114,7 @@ export const CircleDiagramNode = ({
           style={{
             ...handleStyle,
             left: '-6px',
-            opacity: isTarget ? 1 : 0,
+            opacity: isConnectableStart || isTarget ? 1 : 0,
           }}
         />
         {/* <Box
@@ -154,7 +158,10 @@ export const CircleDiagramNode = ({
           // transform: 'rotate(315deg)',
         }}
       >
-        <NextPicker isSelected={isSelected} />
+        <NextPicker
+          isSelected={isSelected && !isConnectableStart}
+          sourceId={node.id}
+        />
       </Box>
 
       {validationStatus === ValidationEnum.VALID && (

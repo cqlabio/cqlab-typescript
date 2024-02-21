@@ -2,7 +2,7 @@
 
 **Clinical Query Lab** (CQLab) is an open source framework for building clinical algorithms, decision trees, flow charts, clinical rules, and other logical representations of clinical knowledge.
 
-The framework can be used to fully or partially automate clinical decision support recommendations, prior-authorization decisions,  computable clinical guidelines, clinical calculations, and more. The execution and UI rendering engine can be embedded in custom applications, SMART on FHIR apps, CDS hooks, EHR integrations, and other projects as a Typescript module or microservice.
+The framework can be used to fully or partially automate clinical decision support recommendations, prior-authorization decisions, computable clinical guidelines, clinical calculations, and more. The execution and UI rendering engine can be embedded in custom applications, SMART on FHIR apps, CDS hooks, EHR integrations, and other projects as a Typescript module or microservice.
 
 CQLab can be used to build JSON APIs, create stateful step by step workflows, distribute clinical rules and documentation, and automate tasks. Automation is supported by providing programmatic hooks that can leverage claims, EHR data, or other structured data if it is available.
 
@@ -37,7 +37,7 @@ First, clone this repo and ensure you have NodeJS installed. Then install the no
 npm install
 ```
 
-Then build the application. There should not be any errors during build, if there are please contact our team ASAP. 
+Then build the application. There should not be any errors during build, if there are please contact our team ASAP.
 
 ```
 npm run build
@@ -45,11 +45,20 @@ npm run build
 
 Finally, launch the server on localhost.
 
-``` 
+```
 npm run launch
 ```
 
 It should open at the following URL/Port on localhost, and the app logs should verify this is the correct url. Paste this URL into your browser.
+
 ```
 http://localhost:4201
 ```
+
+If this is your first time installing CQLab, we also suggest generating example data from CQExamples to get a feel for how different flow charts look, how they are launched in development, and how they can be configured and executed. To generate the data:
+
+```
+Navigate to the CQFlow application at: http://localhost:4200/flow
+```
+
+and then click `Generate Examples` at the top of the page.

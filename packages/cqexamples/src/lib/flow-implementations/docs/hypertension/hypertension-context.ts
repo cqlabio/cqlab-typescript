@@ -39,9 +39,9 @@ export class HypertensionContext extends InteractiveFlowContext<
 
   // Since this will be called many times by different nodes, cache the result
   async getBloodPressurePanel(): Promise<EnterBloodPressurePanelData | null> {
-    const enterPanelStep = this.getFlowStepByBindId(
+    const enterPanelStep = (await this.getFlowStepByBindId(
       BreastCancerScreeningEnum.enter_blood_pressure_panel
-    ) as ICustomFormStep<EnterBloodPressurePanelData>;
+    )) as ICustomFormStep<EnterBloodPressurePanelData>;
 
     if (!enterPanelStep) {
       return null;

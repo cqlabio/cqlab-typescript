@@ -69,7 +69,7 @@ export function LaunchDefaultInteractive({
     } catch (err) {
       console.error(err);
       alert('There was an error executing the flow' + err);
-      reset();
+      // reset();
     }
   }, [flowDefinition, flowState, updateDefaultFlowState]);
 

@@ -4,12 +4,33 @@ import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import { Handle, Position } from 'reactflow';
 import LocationSearchingIcon from '@mui/icons-material/LocationSearching';
+import { FlowDiagramContext } from '../../flow-diagram-context';
 
 type TrueFalsePickerProps = {
+  sourceId: string;
   isSelected: boolean;
 };
 
-export function TrueFalsePicker({ isSelected }: TrueFalsePickerProps) {
+export function TrueFalsePicker({
+  sourceId,
+  isSelected,
+}: TrueFalsePickerProps) {
+  const { updateCreatingEdge } = useContext(FlowDiagramContext);
+
+  const onSelectTrue = () => {
+    updateCreatingEdge({
+      sourceId: sourceId || '',
+      index: 0,
+    });
+  };
+
+  const onSelectFalse = () => {
+    updateCreatingEdge({
+      sourceId: sourceId || '',
+      index: 1,
+    });
+  };
+
   return (
     <Paper
       square
@@ -23,11 +44,15 @@ export function TrueFalsePicker({ isSelected }: TrueFalsePickerProps) {
       }}
     >
       <Box
+        onClick={onSelectTrue}
         sx={{
           display: 'flex',
-          cursor: 'default',
           position: 'relative',
           minWidth: '90px',
+          cursor: 'pointer',
+          ':hover': {
+            background: 'rgb(250,250,250)',
+          },
         }}
       >
         <Box
@@ -43,7 +68,7 @@ export function TrueFalsePicker({ isSelected }: TrueFalsePickerProps) {
           {/* icon */}
           <LocationSearchingIcon sx={{ fontSize: '14px', color: '#5E4A06' }} />
 
-          <Handle
+          {/* <Handle
             id="toolbar-onTrue"
             position={Position.Bottom}
             type="source"
@@ -62,7 +87,7 @@ export function TrueFalsePicker({ isSelected }: TrueFalsePickerProps) {
               bottom: 0,
               opacity: 0,
             }}
-          />
+          /> */}
         </Box>
         <Box sx={{ flexGrow: 1, padding: '2px 6px', textAlign: 'left' }}>
           On True
@@ -70,13 +95,17 @@ export function TrueFalsePicker({ isSelected }: TrueFalsePickerProps) {
       </Box>
       <Box
         // onClick={clickOnTrue}
+        onClick={onSelectFalse}
         sx={{
           display: 'flex',
-          cursor: 'default',
           position: 'relative',
           // borderBottom: '1px solid rgb(200,200,200)',
           minWidth: '90px',
           borderTop: '1px solid rgb(230,230,230)',
+          cursor: 'pointer',
+          ':hover': {
+            background: 'rgb(250,250,250)',
+          },
         }}
       >
         <Box
@@ -92,7 +121,7 @@ export function TrueFalsePicker({ isSelected }: TrueFalsePickerProps) {
           {/* icon */}
           <LocationSearchingIcon sx={{ fontSize: '14px', color: '#5E4A06' }} />
 
-          <Handle
+          {/* <Handle
             id="toolbar-onFalse"
             position={Position.Bottom}
             type="source"
@@ -111,7 +140,7 @@ export function TrueFalsePicker({ isSelected }: TrueFalsePickerProps) {
               bottom: 0,
               opacity: 0,
             }}
-          />
+          /> */}
         </Box>
         <Box sx={{ flexGrow: 1, padding: '2px 6px', textAlign: 'left' }}>
           On False

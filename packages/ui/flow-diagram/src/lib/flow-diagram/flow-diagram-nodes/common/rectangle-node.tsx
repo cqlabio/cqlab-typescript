@@ -81,20 +81,21 @@ const RectangleDiagramNode = ({
   border,
 }: RectangleDiagramNodeProps) => {
   const connectionNodeId = useStore((state) => state.connectionNodeId);
-  const { selectedNodeId } = useContext(FlowDiagramContext);
 
-  const isTarget = connectionNodeId && connectionNodeId !== flowNode.id;
-  // const isTarget = false;
-  const isSelected = selectedNodeId === flowNode.id;
-
-  // console.log('eerere', connectionNodeId)
-
-  let pickerType = PickerType.Unary;
+  const { selectedNodeId, creatingEdge } = useContext(FlowDiagramContext);
 
   if (!flowNode) {
     return <Box>ERROR: NODE NOT FOUND</Box>;
   }
 
+  const isTarget = connectionNodeId && connectionNodeId !== flowNode.id;
+  const isConnectableStart = creatingEdge?.sourceId === flowNode.id;
+  const isConnectableEnd = !!(
+    creatingEdge && creatingEdge.sourceId !== flowNode.id
+  );
+  const isSelected = selectedNodeId === flowNode.id;
+
+  let pickerType = PickerType.Unary;
   if (flowNode.nodeType === DefinitionNodeTypeEnum.Branch) {
     pickerType = PickerType.Multi;
   } else if (isBooleanNode(flowNode)) {
@@ -254,11 +255,13 @@ const RectangleDiagramNode = ({
         id="top"
         type="source"
         position={Position.Top}
-        isConnectable={!!isTarget}
+        // isConnectable={!!isTarget}
+        isConnectableStart={isConnectableStart}
+        isConnectableEnd={isConnectableEnd}
         style={{
           ...handleStyle,
           top: '-6px',
-          opacity: isTarget ? 1 : 0,
+          opacity: isConnectableStart || isTarget ? 1 : 0,
         }}
       />
 
@@ -266,11 +269,12 @@ const RectangleDiagramNode = ({
         id="bottom"
         type="source"
         position={Position.Bottom}
-        isConnectable={!!isTarget}
+        // isConnectable={!!isTarget}
         style={{
           ...handleStyle,
           bottom: '-6px',
-          opacity: isTarget ? 1 : 0,
+          opacity: isConnectableStart || isTarget ? 1 : 0,
+          // opacity: isTarget ? 1 : 0,
         }}
       />
 
@@ -278,11 +282,12 @@ const RectangleDiagramNode = ({
         id="right"
         type="source"
         position={Position.Right}
-        isConnectable={!!isTarget}
+        // isConnectable={!!isTarget}
         style={{
           ...handleStyle,
           right: '-6px',
-          opacity: isTarget ? 1 : 0,
+          opacity: isConnectableStart || isTarget ? 1 : 0,
+          // opacity: isTarget ? 1 : 0,
         }}
       />
 
@@ -294,7 +299,8 @@ const RectangleDiagramNode = ({
         style={{
           ...handleStyle,
           left: '-6px',
-          opacity: isTarget ? 1 : 0,
+          opacity: isConnectableStart || isTarget ? 1 : 0,
+          // opacity: isTarget ? 1 : 0,
         }}
       />
 
@@ -311,7 +317,10 @@ const RectangleDiagramNode = ({
             right: '-100px',
           }}
         >
-          <NextPicker isSelected={editMode ? isSelected : false} />
+          <NextPicker
+            isSelected={editMode && !isConnectableStart ? isSelected : false}
+            sourceId={flowNode.id}
+          />
         </Box>
       )}
       {pickerType === PickerType.Binary && (
@@ -322,7 +331,10 @@ const RectangleDiagramNode = ({
             right: '-100px',
           }}
         >
-          <TrueFalsePicker isSelected={editMode ? isSelected : false} />
+          <TrueFalsePicker
+            isSelected={editMode && !isConnectableStart ? isSelected : false}
+            sourceId={flowNode.id}
+          />
         </Box>
       )}
       {pickerType === PickerType.Multi &&
@@ -335,8 +347,9 @@ const RectangleDiagramNode = ({
             }}
           >
             <MultiChoicePicker
-              isSelected={editMode ? isSelected : false}
+              isSelected={editMode && !isConnectableStart ? isSelected : false}
               next={flowNode.next}
+              sourceId={flowNode.id}
             />
           </Box>
         )}
