@@ -113,7 +113,7 @@ interface ExecuteInteractiveFlowNewOpts<I = any, S = CQFlowExecutorStateEnum> {
 export async function executeInteractiveFlow(
   flowImplementation: InteractiveFlowImplementation,
   context: InteractiveFlowContext,
-  flowRepository: FlowRepository
+  flowRepository: FlowRepository | null
 ): Promise<IFlowStep[]> {
   // A context should have fresh steps each times its used
   context.clearSteps();
@@ -147,7 +147,7 @@ export async function recurseInteractiveFlow(
   nodes: Record<string, BaseNode>,
   context: InteractiveFlowContext,
   answers: Record<string, IFlowStepAnswer>,
-  flowRepository: FlowRepository
+  flowRepository: FlowRepository | null
 ) {
   if (!nodeId || !nodes[nodeId]) {
     return;
@@ -589,8 +589,12 @@ export async function executeInteractiveSubFlowNode(
   node: SubFlowNode<any>,
   context: InteractiveFlowContext,
   answers: Record<string, IFlowStepAnswer>,
-  flowRepository: FlowRepository
+  flowRepository: FlowRepository | null
 ): Promise<ReturnSteps> {
+  if (!flowRepository) {
+    throw new Error(`FlowRepository is required for subflow execution with id: ${node.getSubFlowId()}`);
+  }
+
   const subFlowId = node.getSubFlowId();
 
   if (!subFlowId) {

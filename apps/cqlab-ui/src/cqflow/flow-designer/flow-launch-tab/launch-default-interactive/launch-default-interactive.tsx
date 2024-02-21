@@ -11,10 +11,12 @@ import {
   IFlowStep,
   IFlowStepAnswer,
   InteractiveFlowImplementation,
+  LazyFlowDefinitionRetriever,
 } from '@cqlab/cqflow-core';
 
 // import { InteractiveFlowRenderer } from '@cqlab/ui-flow-renderer';
 import { useFlowStore } from '../../../flow-store';
+import { axiosInstance } from '../../../../data/axios-instance';
 
 function createFlowInstance(flowDefId: string, selectedPatientId: string) {
   return {
@@ -48,8 +50,28 @@ export function LaunchDefaultInteractive({
       return;
     }
 
+    class FlowDefinitionRetriever extends LazyFlowDefinitionRetriever {
+      data: Record<string, IFlowDefinition> = {};
+
+      async loadFlowDefinitionById(id: string): Promise<IFlowDefinition> {
+        if (!this.data[id]) {
+
+          const { data: flowDef } = await axiosInstance.get(`flows/${id}`);
+
+          // const flowDef = await flowServiceLocal.getDefinitionById(id);
+          if (!flowDef) {
+            throw new Error(`No flow definition for id: ${id}`);
+          }
+          this.data[id] = flowDef;
+        }
+        return this.data[id];
+      }
+    }
+
     const context = new EmptyInteractiveContext({
-      flowDefinition: flowDefinition,
+      flowDefinitionId: flowDefinition.id,
+      initialData: flowState.initialData,
+      flowDefinitionRetriever: new FlowDefinitionRetriever(),
       interactiveFlowState: flowState,
       onUpdateInteractiveState: async (newState) => {
         updateDefaultFlowState(flowDefinition.id, newState);
@@ -63,7 +85,8 @@ export function LaunchDefaultInteractive({
     try {
       const steps = await executeInteractiveFlow(
         emptyInteractiveImplementation,
-        context
+        context,
+        null
       );
       setSteps(steps);
     } catch (err) {

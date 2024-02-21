@@ -4,7 +4,7 @@
 
 The framework can be used to fully or partially automate clinical decision support recommendations, prior-authorization decisions, computable clinical guidelines, clinical calculations, and more. The execution and UI rendering engine can be embedded in custom applications, SMART on FHIR apps, CDS hooks, EHR integrations, and other projects as a Typescript module or microservice.
 
-CQLab can be used to build JSON APIs, create stateful step by step workflows, distribute clinical rules and documentation, and automate tasks. Automation is supported by providing programmatic hooks that can leverage claims, EHR data, or other structured data if it is available.
+CQLab can be used to build JSON APIs, create stateful step by step workflows, distribute clinical rules and documentation, and automate tasks. Automation is supported by providing programmatic hooks that can leverage claims, EHR data, or other structured data (if it is available). AI/ML models can also be plugged in for evaluation to work with either structured or unstructured data.
 
 Clinical algorithms commonly leverage the [FHIR](https://www.hl7.org/fhir/) data model, although other open or proprietary data models can be used as well. The SDK is modular and composable for flexibility, and allows abstract implementations to be plugged in to support custom requirements.
 

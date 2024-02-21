@@ -20,12 +20,12 @@ type SubFlowPanelProps = {
 export function SubFlowPanel({ node }: SubFlowPanelProps) {
   const { doNodeUpdates } = useContext(FlowDesignerContext);
 
-  const onUpdateSubFlowId = (subFlowId: string) => {
+  const onUpdateSubFlowId = (subFlowId: string | null) => {
     doNodeUpdates({
       op: 'update',
       node: {
         ...node,
-        subFlowId: subFlowId,
+        subFlowId: subFlowId || '',
       },
     });
   };
