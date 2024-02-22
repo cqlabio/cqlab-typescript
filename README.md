@@ -9,6 +9,7 @@ CQLab can be used to build JSON APIs, create stateful step by step workflows, di
 Clinical algorithms commonly leverage the [FHIR](https://www.hl7.org/fhir/) data model, although other open or proprietary data models can be used as well. The SDK is modular and composable for flexibility, and allows abstract implementations to be plugged in to support custom requirements.
 
 ## Online Demos
+Coming Soon
 
 ## CQLab Modules
 
@@ -62,3 +63,8 @@ Navigate to the CQFlow application at: http://localhost:4200/flow
 ```
 
 and then click `Generate Examples` at the top of the page.
+
+## Work in Progress
+CQLab is currently under active development. We are currently looking for feedback and for interested parties to get involved and to help drive prioritization of features.
+
+Feel free to build and launch the application and check out the examples, but there is still the possibility that the definition and programmatic SDK will undergo breaking changes.
