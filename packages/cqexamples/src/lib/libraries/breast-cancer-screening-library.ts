@@ -50,7 +50,7 @@ export class BreastCancerScreeningLibrary extends FhirLibrary {
     'Checks for breast cancer screening using the mammography value set'
   )
   async hadBreastCancerScreeningInLast2Years(): Promise<TernaryEnum> {
-    const valueSet = await valueSetContainer.loadValuesetById(
+    const valueSet = await valueSetContainer.loadValueSetById(
       ValueSetIdEnum.mammography
     );
     const procedures = await this.retriever.getProceduresByValueSet(valueSet);

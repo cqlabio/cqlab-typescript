@@ -1,0 +1,144 @@
+{
+  "id": "eafc5078-ba79-4687-aeab-9577d5288205",
+  "createdAt": "2024-02-21T14:13:58.000Z",
+  "bindId": "who-immunization-rotavirus",
+  "nodes": {
+    "end_fbkjxatf": {
+      "id": "end_fbkjxatf",
+      "label": "End",
+      "bindId": "end_fbkjxatf",
+      "nodeType": "End",
+      "position": {
+        "x": 687.4078311573654,
+        "y": 250.92989913752263,
+        "width": 60,
+        "height": 60
+      }
+    },
+    "end_sqvzgkdq": {
+      "id": "end_sqvzgkdq",
+      "label": "End",
+      "bindId": "end_sqvzgkdq",
+      "nodeType": "End",
+      "position": {
+        "x": 477.5035236785484,
+        "y": 789.0783779236559,
+        "width": 60,
+        "height": 60
+      }
+    },
+    "start_ojkaraeb": {
+      "id": "start_ojkaraeb",
+      "next": {
+        "id": "truefalse_eadpwbsu",
+        "type": "Unary"
+      },
+      "label": "Start",
+      "bindId": "start_ojkaraeb",
+      "nodeType": "Start",
+      "position": {
+        "x": 477,
+        "y": 89,
+        "width": 60,
+        "height": 60
+      }
+    },
+    "logictree_tlkfodxq": {
+      "id": "logictree_tlkfodxq",
+      "next": {
+        "type": "Binary",
+        "trueId": "contextdata_nfodgtib",
+        "falseId": "contextdata_jgovctoq",
+        "trueToHandle": "top",
+        "trueFromHandle": "bottom"
+      },
+      "label": "Is eligible for next Rotavirus dose",
+      "bindId": "logictree_tlkfodxq",
+      "nodeType": "LogicTree",
+      "position": {
+        "x": 314.96399329646624,
+        "y": 423.4450021128368,
+        "width": 396,
+        "height": 130
+      },
+      "logicTree": {
+        "children": [
+          {
+            "id": "truefalse_okxsqzdt",
+            "label": "Is over 6 weeks old",
+            "bindId": "is_over_6_weeks_old",
+            "nodeType": "TrueFalse",
+            "logicType": "TrueFalseLeaf"
+          },
+          {
+            "id": "truefalse_lxoutbjh",
+            "label": "Last Rotavirus vaccine was given over 4 weeks ago",
+            "bindId": "last_vaccine_given_over_4_weeks_ago",
+            "nodeType": "TrueFalse",
+            "logicType": "TrueFalseLeaf"
+          }
+        ],
+        "logicType": "And"
+      }
+    },
+    "truefalse_eadpwbsu": {
+      "id": "truefalse_eadpwbsu",
+      "next": {
+        "type": "Binary",
+        "trueId": "end_fbkjxatf",
+        "falseId": "logictree_tlkfodxq",
+        "trueToHandle": "left",
+        "falseToHandle": "top",
+        "trueFromHandle": "right",
+        "falseFromHandle": "bottom"
+      },
+      "label": "Has had required 3 doses of Rotavirus vaccine",
+      "bindId": "has_had_three_rotavirus_vaccines",
+      "nodeType": "TrueFalse",
+      "position": {
+        "x": 450.0529172002002,
+        "y": 217.63831725716855,
+        "width": 121,
+        "height": 121
+      }
+    },
+    "contextdata_jgovctoq": {
+      "id": "contextdata_jgovctoq",
+      "next": {
+        "id": "end_sqvzgkdq",
+        "type": "Unary",
+        "toHandle": "top",
+        "fromHandle": "bottom"
+      },
+      "label": "Schedule next Rotavirus vaccine",
+      "bindId": "schedule_rotavirus",
+      "nodeType": "EmitData",
+      "position": {
+        "x": 554.4933267362272,
+        "y": 658.9356547145877,
+        "width": 210,
+        "height": 60
+      },
+      "dataItems": []
+    },
+    "contextdata_nfodgtib": {
+      "id": "contextdata_nfodgtib",
+      "next": {
+        "id": "end_sqvzgkdq",
+        "type": "Unary",
+        "toHandle": "top",
+        "fromHandle": "bottom"
+      },
+      "label": "Recommend next Rotavirus vaccine",
+      "bindId": "recommend_rotavirus",
+      "nodeType": "EmitData",
+      "position": {
+        "x": 253.38782662378708,
+        "y": 659.4715404975558,
+        "width": 225,
+        "height": 60
+      },
+      "dataItems": []
+    }
+  }
+}

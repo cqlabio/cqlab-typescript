@@ -3,11 +3,11 @@ import { IndexedValueSet } from './indexed-valueset';
 export class ValueSetContainer {
   valuesets: Record<string, IndexedValueSet> = {};
 
-  addValueset(vs: IndexedValueSet) {
+  addValueSet(vs: IndexedValueSet) {
     this.valuesets[vs.getId()] = vs;
   }
 
-  getValuesetById(id: string): IndexedValueSet {
+  getValueSetById(id: string): IndexedValueSet {
     return this.valuesets[id];
   }
 

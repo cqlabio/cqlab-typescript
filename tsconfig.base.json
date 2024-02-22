@@ -14,12 +14,15 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
+    "resolveJsonModule": true,
     "paths": {
       "@cqlab/cqdefine": ["packages/cqdefine/src/index.ts"],
       "@cqlab/cqexamples": ["packages/cqexamples/src/index.ts"],
       "@cqlab/cqflow-core": ["packages/cqflow-core/src/index.ts"],
       "@cqlab/cqmockdata": ["packages/cqmockdata/src/index.ts"],
-      "@cqlab/cqvocabulary": ["packages/cqvocabulary/src/index.ts"]
+      "@cqlab/cqvocabulary": ["packages/cqvocabulary/src/index.ts"],
+      "@cqlab/ui-flow-diagram": ["packages/ui/flow-diagram/src/index.ts"],
+      "@cqlab/ui-flow-renderer": ["packages/ui/flow-renderer/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

@@ -1,4 +1,4 @@
-import { FlowContext } from './flow-context';
+import { FlowContext, LazyFlowDefinitionRetriever } from './flow-context';
 import { IFlowStepAnswer, IYesNoAnswer } from '../flow-steps/answers';
 import { CQFlowExecutorStateEnum, ActionStatusEnum } from '../enums';
 import { InteractiveFlowState } from '../flow-executor/interactive-flow-state';
@@ -17,7 +17,7 @@ export interface CQFlowExecutorStatefulAnswer {
 //   actionsTaken: Record<string, boolean>;
 // }
 
-type OnUpdateInteractiveState<I> = (
+export type OnUpdateInteractiveState<I> = (
   interactiveFlowState: InteractiveFlowState<I>
 ) => Promise<InteractiveFlowState<I>>;
 
@@ -53,10 +53,19 @@ interface ContextStateLoader {
 } 
 */
 
-export interface InteractiveFlowContextOptions<I = any> {
-  flowDefinition: IFlowDefinition;
-  interactiveFlowState: InteractiveFlowState<I>;
+// export abstract class LazyFlowDefinitionRetriever {
+//   abstract loadFlowDefinitionById(id: string): Promise<IFlowDefinition>
+// }
+
+export interface InteractiveFlowContextOptions<
+  I = any,
+  S = CQFlowExecutorStateEnum
+> {
+  flowDefinitionId: string;
+  flowDefinitionRetriever: LazyFlowDefinitionRetriever;
+  interactiveFlowState: InteractiveFlowState<I, S>;
   onUpdateInteractiveState: OnUpdateInteractiveState<I>;
+  initialData: I;
 }
 
 export abstract class InteractiveFlowContext<
@@ -69,18 +78,19 @@ export abstract class InteractiveFlowContext<
 
   constructor(opts: InteractiveFlowContextOptions<I>) {
     super({
-      flowDefinition: opts.flowDefinition,
-      initialData: opts.interactiveFlowState.initialData,
+      flowDefinitionId: opts.flowDefinitionId,
+      flowDefinitionRetriever: opts.flowDefinitionRetriever,
+      initialData: opts.initialData,
     });
     this.interactiveFlowState = opts.interactiveFlowState;
     this.onUpdateInteractiveState = opts.onUpdateInteractiveState;
   }
 
-  async getInteractiveFlowStateeStatus(): Promise<CQFlowExecutorStateEnum> {
+  async getInteractiveFlowStateStatus(): Promise<CQFlowExecutorStateEnum> {
     return this.interactiveFlowState.status;
   }
 
-  async _updateInteractiveFlowStatee(
+  async _updateInteractiveFlowState(
     interactiveFlowState: InteractiveFlowState<I>
   ): Promise<void> {
     this.interactiveFlowState = await this.onUpdateInteractiveState(
@@ -88,12 +98,12 @@ export abstract class InteractiveFlowContext<
     );
   }
 
-  async updateInteractiveFlowStateeStatus(
+  async updateInteractiveFlowStateStatus(
     status: CQFlowExecutorStateEnum
   ): Promise<void> {
     const nextInstance = cloneDeep(this.interactiveFlowState);
     nextInstance.status = status;
-    await this._updateInteractiveFlowStatee(nextInstance);
+    await this._updateInteractiveFlowState(nextInstance);
   }
 
   async wasActionTaken(stepId: string): Promise<boolean> {
@@ -107,7 +117,7 @@ export abstract class InteractiveFlowContext<
       this.interactiveFlowState.actionsTaken = {};
     }
     this.interactiveFlowState.actionsTaken[nodeId] = ActionStatusEnum.Success;
-    await this._updateInteractiveFlowStatee(nextInstance);
+    await this._updateInteractiveFlowState(nextInstance);
   }
 
   getMergedAnswers(): Record<string, IFlowStepAnswer> {
@@ -123,8 +133,10 @@ export abstract class InteractiveFlowContext<
     return currentAnswers;
   }
 
-  getAnswerByNodeBinding(nodeBinding: string): IFlowStepAnswer | null {
-    const node = this.getFlowDefinitionNodeByBindId(nodeBinding);
+  async getAnswerByNodeBinding(
+    nodeBinding: string
+  ): Promise<IFlowStepAnswer | null> {
+    const node = await this.getFlowDefinitionNodeByBindId(nodeBinding);
     const answers = this.getMergedAnswers();
     return (node && answers[node.id]) || null;
   }

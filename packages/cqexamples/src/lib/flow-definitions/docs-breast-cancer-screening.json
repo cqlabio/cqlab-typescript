@@ -1,0 +1,115 @@
+{
+  "id": "7b2a366a-f2ae-4495-8081-64b64608ee79",
+  "createdAt": "2024-02-15T18:49:46.000Z",
+  "bindId": "docs-breast-cancer-screening",
+  "nodes": {
+    "end_taemrzwt": {
+      "id": "end_taemrzwt",
+      "label": "End",
+      "bindId": "end_taemrzwt",
+      "nodeType": "End",
+      "position": {
+        "x": 1073.8580975686589,
+        "y": 392.83455285593215,
+        "width": 60,
+        "height": 60
+      }
+    },
+    "start_gkhjglgd": {
+      "id": "start_gkhjglgd",
+      "next": {
+        "id": "truefalse_qgriynff",
+        "type": "Unary"
+      },
+      "label": "Start",
+      "bindId": "start_gkhjglgd",
+      "nodeType": "Start",
+      "position": {
+        "x": 411.01900640979846,
+        "y": 62.63759155604794,
+        "width": 60,
+        "height": 60
+      }
+    },
+    "truefalse_hegecwii": {
+      "id": "truefalse_hegecwii",
+      "next": {
+        "type": "Binary",
+        "trueId": "end_taemrzwt",
+        "falseId": "contextdata_yjvwqwfv",
+        "falseFromHandle": "right",
+        "falseToHandle": "left",
+        "trueFromHandle": "bottom",
+        "trueToHandle": "left"
+      },
+      "label": "Has had Breast Cancer Screening in the last 2 years",
+      "bindId": "has_had_breast_cancer_screening_in_last_2_years",
+      "nodeType": "TrueFalse",
+      "position": {
+        "x": 808.9517092230577,
+        "y": 185.86521209196627,
+        "width": 128,
+        "height": 128
+      }
+    },
+    "truefalse_pzfoshqc": {
+      "id": "truefalse_pzfoshqc",
+      "next": {
+        "type": "Binary",
+        "trueId": "truefalse_hegecwii",
+        "falseId": "end_taemrzwt",
+        "trueFromHandle": "right",
+        "trueToHandle": "left",
+        "falseFromHandle": "bottom",
+        "falseToHandle": "left"
+      },
+      "label": "Is over 45 years old",
+      "bindId": "is_over_45_years_old",
+      "nodeType": "TrueFalse",
+      "position": {
+        "x": 592.6824259944681,
+        "y": 201.4774004356678,
+        "width": 100,
+        "height": 100
+      }
+    },
+    "truefalse_qgriynff": {
+      "id": "truefalse_qgriynff",
+      "next": {
+        "type": "Binary",
+        "trueId": "truefalse_pzfoshqc",
+        "falseId": "end_taemrzwt",
+        "trueFromHandle": "right",
+        "trueToHandle": "left",
+        "falseFromHandle": "bottom",
+        "falseToHandle": "left"
+      },
+      "label": "Is Female",
+      "bindId": "is_female",
+      "nodeType": "TrueFalse",
+      "position": {
+        "x": 402.4137306758197,
+        "y": 208.43336181621802,
+        "width": 80,
+        "height": 80
+      }
+    },
+    "contextdata_yjvwqwfv": {
+      "id": "contextdata_yjvwqwfv",
+      "next": {
+        "id": "end_taemrzwt",
+        "type": "Unary"
+      },
+      "label": "Recommend Breast Cancer Screening",
+      "bindId": "recommend_breast_cancer_screening",
+      "nodeType": "EmitData",
+      "position": {
+        "x": 1030.296934093716,
+        "y": 206.18963335078303,
+        "width": 150,
+        "height": 78
+      },
+      "dataItems": []
+    }
+  }
+}

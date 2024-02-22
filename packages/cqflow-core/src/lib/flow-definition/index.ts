@@ -4,7 +4,8 @@ import { IFlowDefinitionNode } from './flow-definition-node';
 
 export interface IFlowDefinition {
   id: string;
+  createdAt?: string;
   bindId?: string;
   nodes: Record<string, IFlowDefinitionNode>;
-  version: string;
+  version?: string;
 }
