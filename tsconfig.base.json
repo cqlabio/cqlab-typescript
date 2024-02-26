@@ -14,6 +14,7 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
+    "types": ["fhir"],
     "resolveJsonModule": true,
     "paths": {
       "@cqlab/cqdefine": ["packages/cqdefine/src/index.ts"],
